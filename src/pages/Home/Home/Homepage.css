@@ -1,0 +1,134 @@
+.content {
+    display: grid;
+    height: max-content;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 100%;
+}
+
+.homepage-card {
+    display: block;
+    width: 100%;
+    justify-content: center;
+    height: auto;
+    border-radius: 10px;
+}
+
+.homepage-card-position {
+    align-items: center;
+    margin-top: 250px;
+}
+
+.calendar-pos {
+    margin-top: 250px;
+    display: flex;
+    justify-content: end;
+}
+
+.calendar-card {
+    display: block;
+    justify-content: start;
+    width: 93%;
+    height: 50%;
+    border-radius: 10px;
+}
+
+.p {
+    font-size: x-large;
+    font-family: poppins;
+    font-weight: 500;
+    color: black;
+    margin-left: 10px;
+}
+
+.recent-news {
+    height: auto;
+}
+
+ion-col {
+    display: flex;
+}
+
+.mission {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: max-content;
+}
+
+.mission-card {
+    border-radius: 10px;
+    height: 100%;
+}
+
+.mission-card-header {
+    font-size: large;
+    font-family: poppins;
+    font-weight: 500;
+    color: black;
+}
+
+.footer-toolbar {
+    display: block;
+    align-items: center;
+    justify-content: start;
+    background-color: #000;
+
+    .s-font {
+        font-size: x-large;
+        font-family: poppins;
+        font-weight: 500;
+        margin-left: 10px;
+        color: white;
+    }
+
+    .f-font {
+        font-size: x-large;
+        font-family: poppins;
+        font-weight: 400;
+        margin-left: 10px;
+        color: white;
+    }
+
+    .a-font {
+        font-size: large;
+        font-family: poppins;
+        font-weight: 300;
+        color: white;
+    }
+}
+ .footer1 {
+    margin-top: 20px;
+ }
+
+.about {
+    padding: 10px;
+}
+
+.logo-size1 {
+    display: flex;
+    width: 500px;
+}
+
+.logo-w-name {
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.allrights {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.p1 {
+    font-size: 10pt;
+    color: black;
+    text-align: justify ;
+}
+
+
+
