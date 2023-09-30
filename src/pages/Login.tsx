@@ -1,4 +1,4 @@
-import { useIonAlert, IonButton, IonCard, IonContent, IonImg, IonInput, IonLabel, IonPage, IonText, IonIcon, IonPopover, IonFooter, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonCard, IonContent, IonImg, IonInput, IonPage, IonIcon } from '@ionic/react';
 import './Login.css';
 import { mailOutline } from 'ionicons/icons';
 

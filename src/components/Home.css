@@ -39,7 +39,6 @@ ion-tab-bar {
 
     position: static;
     margin: 0 auto !important;
-    border-bottom: none;
 }
 
 ion-tab-button {

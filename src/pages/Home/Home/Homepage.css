@@ -35,7 +35,7 @@
 .p {
     font-size: x-large;
     font-family: poppins;
-    font-weight: 500;
+    font-weight:bold;
     color: black;
     margin-left: 10px;
 }
@@ -106,7 +106,7 @@ ion-col {
 
 .logo-size1 {
     display: flex;
-    width: 500px;
+    width: 450px;
 }
 
 .logo-w-name {
