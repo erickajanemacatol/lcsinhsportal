@@ -1,6 +1,15 @@
-.my-activity-card {
-    height: 95%;
+.add-activity-card {
+    height: 80%;
+    width: 80%;
     border-radius: 10px;
+}
+
+.add-activity-card-position {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
 }
 
 .my-activity-text {

@@ -22,16 +22,18 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Login from './pages/Login';
 import Home from './components/Home';
+import  AddActivity  from './pages/Home/Activities/AddActivity';
 import { Activities } from './pages/Home/Activities/Activities';
 import { Attendance } from './pages/Home/Attendance/Attendance';
 import { Grades } from './pages/Home/Grades/Grades';
-import  Homepage from './pages/Home/Home/Homepage';
+import Homepage from './pages/Home/Home/Homepage';
+import { Profile } from './pages/Home/Profile/Profile';
 
 
 setupIonicReact();
 
 const App: React.FC = () => (
-  
+
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
@@ -42,12 +44,19 @@ const App: React.FC = () => (
           <Redirect to="/login" />
         </Route>
 
-        <Route path="/login" component={Login} exact/>
-        <Route path="/home" exact={true} component={Home}/>
-        
+        <Route path="/login" component={Login} exact />
+        <Route path="/home" exact={true} component={Home} />
+        <Route path="/student-activities/add-activity" exact={true} component={AddActivity} />
+        <Route path="/student-home" component={Homepage} exact={true} />
+        <Route path="/student-activities" component={Activities} exact={true} />
+        <Route path="/student-attendance" component={Attendance} exact={true} />
+        <Route path="/student-grades" component={Grades} exact={true} />
+        <Route path="/student-profile" component={Profile} exact={true} />
+
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
 );
+
 
 export default App;

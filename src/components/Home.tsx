@@ -31,7 +31,7 @@ const Home: React.FC = () => {
 
         <IonPage>
             <div>
-                <IonHeader className="ion-no-border">
+                <IonHeader className="ion-no-border" >
                     <IonToolbar className="new-ion-header">
                         <div className="header-items">
                             <IonButton fill="clear" href="home">

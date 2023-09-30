@@ -18,25 +18,25 @@ const Homepage = () => {
 
                             <p className="p">School Announcements</p>
                             <IonCard className="recent-news">
-                                <IonCardHeader>announcements</IonCardHeader>
+                                <IonCardHeader>announcement</IonCardHeader>
                             </IonCard>
                             <IonCard className="recent-news">
-                                <IonCardHeader>announcements</IonCardHeader>
+                                <IonCardHeader>announcement</IonCardHeader>
                             </IonCard>
                             <IonCard className="recent-news">
-                                <IonCardHeader>announcements</IonCardHeader>
+                                <IonCardHeader>announcement</IonCardHeader>
                             </IonCard>
                             <IonCard className="recent-news">
-                                <IonCardHeader>announcements</IonCardHeader>
+                                <IonCardHeader>announcement</IonCardHeader>
                             </IonCard>
                             <IonCard className="recent-news">
-                                <IonCardHeader>announcements</IonCardHeader>
+                                <IonCardHeader>announcement</IonCardHeader>
                             </IonCard>
                             <IonCard className="recent-news">
-                                <IonCardHeader>announcements</IonCardHeader>
+                                <IonCardHeader>announcement</IonCardHeader>
                             </IonCard>
                             <IonCard className="recent-news">
-                                <IonCardHeader>announcements</IonCardHeader>
+                                <IonCardHeader>announcement</IonCardHeader>
                             </IonCard>
                         </IonCard>
                     </div>
@@ -44,9 +44,7 @@ const Homepage = () => {
                         <IonCard className='calendar-card'>
 
                             <p className="p">School Calendar</p>
-                            <IonCard className="recent-news">
-                                <IonCardHeader>news</IonCardHeader>
-                            </IonCard>
+                            
                         </IonCard>
                     </div>
                 </div>
