@@ -12,6 +12,9 @@
           "meta[name=color-scheme]"
         ]
       }
-    ]
+    ],
+    "compat-api/css": "off",
+    "typescript-config/strict": "off",
+    "typescript-config/consistent-casing": "off"
   }
 }

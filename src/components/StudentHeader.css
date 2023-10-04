@@ -1,0 +1,45 @@
+.header-display {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 50% 40% 10%;
+    grid-template-rows: max-content;
+}
+
+.title-and-logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-btn-size {
+    width: 100px;
+}
+
+.title-label {
+    font-family: 'poppins';
+    font-weight: 600;
+    font-size: 15pt;
+}
+
+.tabs-display {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.tab-btn {
+    width: 100px;
+    height: 50px;
+    font-size: medium;
+}
+
+.profile-btn-pos{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-right: 25px;
+}
+
+.profile-btn-size{
+    height: 50px;
+}
+

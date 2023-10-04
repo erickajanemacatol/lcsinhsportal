@@ -1,24 +1,89 @@
 .add-activity-card {
-    height: 80%;
-    width: 80%;
+    display: flex;
+    height: 70vh;
+    width: 95%;
+    margin: auto;
     border-radius: 10px;
+    box-shadow: none!important;
+
 }
 
-.add-activity-card-position {
+.activity-label {
     display: flex;
+    justify-self: start;
+    margin: 10px;
     align-items: center;
-    justify-content: center;
-
-
 }
 
 .my-activity-text {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    text-align: center;
-    font-weight: bolder;
+    font-weight: bold;
     font-size: 20pt;
     font-family: poppins;
     color: black;
+}
+
+.act-text-pos {
+    justify-content: start;
+}
+
+.back-button-size {
+    height: 50px;
+    width: 50px;
+    color: black;
+}
+
+.cards {
+    margin-top: 80px;
+    display: grid;
+    grid-template-columns: 30% 68%;
+    grid-template-rows: max-content;
+}
+
+.cancel-button {
+    --color: #757575 ;
+    --border-color: #757575;
+    width: max-content;
+    height: 40px;
+    --border-radius: 10px;
+}
+
+.submit-button {
+    --background: #000000 ;
+    width: max-content;
+    height: 40px;
+    --border-radius: 10px;
+}
+
+.submit-button-pos {
+    display: flex;
+    justify-content: end;
+}
+
+.enter-task-card {
+    width: 80%;
+    display: block;
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-left: 10%;
+    justify-content: center;
+}
+
+.enter-task {
+    justify-content: center;
+    height:70%;    
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+ion-datetime {
+    --background: #ffffff;
+    --background-rgb: 255, 241, 242;
+
+    border-radius: 10px;
 }

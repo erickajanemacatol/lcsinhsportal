@@ -78,17 +78,18 @@ http://ionicframework.com/docs/theming/ */
 
 
 @font-face {
-  font-family: "poppins";
-  src: url("../assets/fonts/poppins.ttf")
+  font-family: 'Poppins';
+  src: url('../fonts/Poppins.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "lato";
-  src: url("../assets/fonts/lato.ttf")
+  font-family: 'Lato';
+  src: url('../fonts/Lato.ttf') format('truetype');
 }
 
+
 *{
-    font-family: "lato";
+    font-family: "Lato";
  }
 
 @media (prefers-color-scheme: dark) {

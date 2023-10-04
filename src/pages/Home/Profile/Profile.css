@@ -1,0 +1,84 @@
+.top-placement {
+    display: flex;
+}
+
+.my-profile-top {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 50%;
+
+}
+
+.logout {
+    display: flex;
+    justify-content: end;
+    width: 50%;
+}
+
+.my-profile-text {
+    font-weight: bold;
+    font-size: 20pt;
+    font-family: poppins;
+    color: black;
+
+}
+
+.my-profile-card {
+    display: block;
+    height: 95%;
+    border-radius: 10px;
+    box-shadow: none!important;
+}
+
+.avatar-center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.avatar {
+    height: 150px;
+    width: 150px;
+    --border-radius: 5px;
+}
+
+.card-border {
+    border-radius: 20px;
+    height: 345px;
+    width: 80%;
+}
+
+.cards-column {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: max-content;
+    
+}
+
+.but-col {
+    display: flex;
+}
+
+.buttons-appearance {
+    display: flex;
+    justify-content: start;
+    --border-radius: 20px;
+    --background: #ffffff;
+    --color:#000;
+    --border-color: #000;
+    --background-hover: #000063;
+    width: 90%;
+    height: 70px;
+    font-family: 'poppins';
+    font-size: larger;
+    font-weight: 400;
+}
+
+.buttons-label {
+    font-family: 'poppins';
+}
+
+.icon-size {
+    font-size: 30px;
+}

@@ -1,9 +1,21 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonContent, IonFooter, IonImg, IonInput, IonItem, IonLabel, IonPage, IonToolbar } from "@ionic/react";
+import { IonCard, 
+    IonCardContent, 
+    IonCardHeader, 
+    IonContent, 
+    IonFooter, 
+    IonImg, 
+    IonLabel, 
+    IonPage, 
+    IonToolbar } from "@ionic/react";
 import './Homepage.css'
+import StudentHeader from "../../../components/StudentHeader";
+
 
 const Homepage = () => {
     return (
         <IonPage >
+            <StudentHeader />
+
             <IonContent color={'dark'} >
 
 
@@ -44,7 +56,7 @@ const Homepage = () => {
                         <IonCard className='calendar-card'>
 
                             <p className="p">School Calendar</p>
-                            
+
                         </IonCard>
                     </div>
                 </div>
@@ -89,7 +101,7 @@ const Homepage = () => {
                                     </div>
 
                                 </div>
-                                
+
                                 <div className="logo-w-name">
                                     <IonImg className="logo-size1" src="/src/imgs/footer-logo.png"></IonImg>                                </div>
 
@@ -107,4 +119,4 @@ const Homepage = () => {
     );
 };
 
-export default Homepage;
+export { Homepage };

@@ -1,0 +1,43 @@
+/*Height*/
+
+.spacer-h-xs {
+    height: 10px;
+}
+
+.spacer-h-s {
+    height: 15px;
+}
+
+.spacer-h-m {
+    height: 25px;
+}
+
+.spacer-h-l {
+    height: 40px;
+}
+
+.spacer-h-xl {
+    height: 60px;
+}
+
+/*Width*/
+
+.spacer-w-xs {
+    width: 10px;
+}
+
+.spacer-w-s {
+    width: 15px;
+}
+
+.spacer-w-m {
+    width: 25px;
+}
+
+.spacer-w-l {
+    width: 40px;
+}
+
+.spacer-w-xl {
+    width: 60px;
+}

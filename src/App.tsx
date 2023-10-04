@@ -21,13 +21,18 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import Login from './pages/Login';
-import Home from './components/Home';
-import  AddActivity  from './pages/Home/Activities/AddActivity';
+import AddActivity from './pages/Home/Activities/AddActivity';
 import { Activities } from './pages/Home/Activities/Activities';
 import { Attendance } from './pages/Home/Attendance/Attendance';
 import { Grades } from './pages/Home/Grades/Grades';
-import Homepage from './pages/Home/Home/Homepage';
+import {Homepage} from './pages/Home/Home/Homepage';
 import { Profile } from './pages/Home/Profile/Profile';
+import HomeTabs from './components/HomeTabs';
+import { fAttendance } from './pages/Faculty/fAttendance';
+import { fGrades } from './pages/Faculty/fGrades';
+import { fRegistration } from './pages/Faculty/fRegistration';
+import { Announcements } from './pages/Admin/Announcements';
+import { addAnnouncement } from './pages/Admin/AddAnnouncement';
 
 
 setupIonicReact();
@@ -44,16 +49,22 @@ const App: React.FC = () => (
           <Redirect to="/login" />
         </Route>
 
-        <Route path="/login" component={Login} exact />
-        <Route path="/home" exact={true} component={Home} />
-        <Route path="/student-activities/add-activity" exact={true} component={AddActivity} />
-        <Route path="/student-home" component={Homepage} exact={true} />
-        <Route path="/student-activities" component={Activities} exact={true} />
-        <Route path="/student-attendance" component={Attendance} exact={true} />
-        <Route path="/student-grades" component={Grades} exact={true} />
-        <Route path="/student-profile" component={Profile} exact={true} />
+        <Route exact path="/tabs" component={HomeTabs} />
+        <Route exact path="/home" component={Homepage} />
+        <Route exact path="/activities" component={Activities} />
+        <Route path="/activities/add-activity" exact={true} component={AddActivity} />
+        <Route exact path="/attendance" component={Attendance} />
+        <Route exact path="/grades" component={Grades} />
+        <Route exact path="/profile" component={Profile} />
 
-      </IonRouterOutlet>
+        <Route exact path="/faculty/attendance" component={fAttendance}/>
+        <Route exact path="/faculty/grades" component={fGrades}/>
+        <Route exact path="/faculty/registrationlist" component={fRegistration}/>
+
+        <Route exact path="/admin/announcements" component={Announcements}/>
+        <Route exact path="/admin/announcement-details" component={addAnnouncement}/>
+
+              </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
 );

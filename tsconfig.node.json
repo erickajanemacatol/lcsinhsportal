@@ -1,8 +1,12 @@
+
 {
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",
+    "target": "ESNext", // Specify your target version here
+    "jsx": "react-jsx", // If you are using React
+    "lib": ["ESNext", "DOM"], // Include the necessary libraries
     "allowSyntheticDefaultImports": true
   },
   "include": ["vite.config.ts"]

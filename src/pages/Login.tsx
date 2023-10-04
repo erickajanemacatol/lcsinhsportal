@@ -1,8 +1,8 @@
-import { IonButton, IonCard, IonContent, IonImg, IonInput, IonPage, IonIcon } from '@ionic/react';
+import { IonButton, IonCard, IonContent, IonImg, IonInput, IonPage, IonIcon} from '@ionic/react';
 import './Login.css';
 import { mailOutline } from 'ionicons/icons';
 
-const Login = () => {
+const Login: React.FC = () => {
 
   return (
     <IonPage>
@@ -22,12 +22,24 @@ const Login = () => {
 
         <div className='login-card-position'>
           <IonCard className='login-card'>
+
             <div className='login-form-container'>
               <p className='login-text'>Log In</p>
               <div>
-                <IonInput fill="outline" label="Username" labelPlacement="floating" size={50}></IonInput>
+                <IonInput fill="outline"
+                  label="Username"
+                  labelPlacement="floating"
+                  size={50}
+                ></IonInput>
                 <br></br>
-                <IonInput fill="outline" label="Password" labelPlacement="floating" type='password'></IonInput>
+
+                <IonInput
+                  fill="outline"
+                  label="Password"
+                  labelPlacement="floating"
+                  type="password"
+                ></IonInput>
+
                 <div className='forgot'>
                   <IonButton fill="clear" color="light">Forgot Password?</IonButton>
                 </div>
@@ -41,6 +53,7 @@ const Login = () => {
         </div>
 
       </IonContent>
+
     </IonPage>
   );
 };

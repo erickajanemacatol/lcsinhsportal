@@ -2,7 +2,6 @@ ion-button {
     text-transform: none;
     --background-hover: var(--background);
     --ripple-color: transparent;
-    align-items: center;
 }
 
 .logo-with-name-container {
