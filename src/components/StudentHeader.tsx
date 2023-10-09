@@ -1,5 +1,5 @@
 import {
-    IonContent, IonPage, IonImg,
+    IonImg,
     IonButton,
     IonToolbar, IonLabel,
     IonHeader,

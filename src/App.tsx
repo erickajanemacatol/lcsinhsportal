@@ -25,9 +25,8 @@ import AddActivity from './pages/Home/Activities/AddActivity';
 import { Activities } from './pages/Home/Activities/Activities';
 import { Attendance } from './pages/Home/Attendance/Attendance';
 import { Grades } from './pages/Home/Grades/Grades';
-import {Homepage} from './pages/Home/Home/Homepage';
+import { Homepage } from './pages/Home/Home/Homepage';
 import { Profile } from './pages/Home/Profile/Profile';
-import HomeTabs from './components/HomeTabs';
 import { fAttendance } from './pages/Faculty/fAttendance';
 import { fGrades } from './pages/Faculty/fGrades';
 import { fRegistration } from './pages/Faculty/fRegistration';
@@ -49,7 +48,6 @@ const App: React.FC = () => (
           <Redirect to="/login" />
         </Route>
 
-        <Route exact path="/tabs" component={HomeTabs} />
         <Route exact path="/home" component={Homepage} />
         <Route exact path="/activities" component={Activities} />
         <Route path="/activities/add-activity" exact={true} component={AddActivity} />
@@ -68,6 +66,5 @@ const App: React.FC = () => (
     </IonReactRouter>
   </IonApp>
 );
-
 
 export default App;
