@@ -1,15 +1,20 @@
-.my-activity-card {
-    height: 95%;
-    border-radius: 10px;
+
+.activity-card {
+    border-radius: 20px;
+    border-color: rgb(198, 198, 198);
+    border-style: solid;
+    border-width: 1px;
+    width: 95%
 }
 
-.my-activity-text {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    text-align: center;
+.my-act-title{
+    margin-left: 20px;
     font-weight: bolder;
-    font-size: 20pt;
-    font-family: poppins;
+    font-size: 22pt;
     color: black;
+}
+
+.fab-pos {
+    margin-right: 30px;
+    margin-bottom: 20px;
 }

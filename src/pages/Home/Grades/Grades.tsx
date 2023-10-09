@@ -77,27 +77,30 @@ const Grades = () => {
                                     series={chartData.series}
                                     type="line"
                                     width="100%"
-                                    height={250} />
+                                    height={200} />
                             </IonCardContent>
                         </IonCard>
 
-                        <div className="spacer-h-m"></div>    
+                        <div className="spacer-h-m"></div>
                         <div className="cards-pos">
                             <IonCard className="cards-size">
                                 <IonCardContent>
                                     <IonLabel className="label-appearance">Past Average:</IonLabel>
                                 </IonCardContent>
                             </IonCard>
+
                             <IonCard className="cards-size">
                                 <IonCardContent>
                                     <IonLabel className="label-appearance">Current Average:</IonLabel>
                                 </IonCardContent>
                             </IonCard>
+
                             <IonCard className="cards-size">
                                 <IonCardContent>
                                     <IonLabel className="label-appearance">Overall Average:</IonLabel>
                                 </IonCardContent>
                             </IonCard>
+
                             <IonCard className="cards-size">
                                 <IonCardContent>
                                     <IonLabel className="label-appearance">Expected Average:</IonLabel>

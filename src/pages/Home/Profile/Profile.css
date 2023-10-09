@@ -16,7 +16,13 @@
     width: 50%;
 }
 
+.logout-effect {
+    --background-hover: transparent;
+    --ripple-color: transparent;
+}
+
 .my-profile-text {
+    justify-content: center;
     font-weight: bold;
     font-size: 20pt;
     font-family: poppins;
@@ -28,7 +34,7 @@
     display: block;
     height: 95%;
     border-radius: 10px;
-    box-shadow: none!important;
+    box-shadow: none !important;
 }
 
 .avatar-center {
@@ -53,11 +59,20 @@
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: max-content;
-    
+    width: 100%;    
+    justify-content: center;
+    align-items: center;
+}
+
+.content-center {
+    display: flexbox;
+    margin: 0;
 }
 
 .but-col {
     display: flex;
+    width: 70%;
+    align-items: center;
 }
 
 .buttons-appearance {
@@ -65,10 +80,10 @@
     justify-content: start;
     --border-radius: 20px;
     --background: #ffffff;
-    --color:#000;
+    --color: #000;
     --border-color: #000;
     --background-hover: #000063;
-    width: 90%;
+    width: 98%;
     height: 70px;
     font-family: 'poppins';
     font-size: larger;
@@ -80,5 +95,5 @@
 }
 
 .icon-size {
-    font-size: 30px;
+    font-size: 2rem;
 }

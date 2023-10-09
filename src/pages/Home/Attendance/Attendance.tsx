@@ -6,11 +6,11 @@ const Attendance = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar class="toolbar-height">
-                    <Header title="hello"></Header>
+                    <Header/>
                 </IonToolbar>
             </IonHeader>
             <IonContent color={'dark'} scrollX={false}>
-                <IonCard className="my-activity-card">
+                <IonCard className="my-grades-card">
                     <IonCardContent>
                         <IonLabel className="my-activity-text">My Classes</IonLabel>
                     </IonCardContent>
