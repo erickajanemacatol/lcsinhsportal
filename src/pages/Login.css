@@ -1,3 +1,4 @@
+/*DESKTOP*/
 ion-button {
     text-transform: none;
     --ripple-color: transparent;
@@ -79,7 +80,6 @@ ion-button {
     justify-content: end;
     margin-right: 10px;
     margin-top: 10px;
-
 }
 
 .contact-button {
@@ -88,9 +88,89 @@ ion-button {
     --background-hover: var(--background);
 }
 
-.footer {
+
+/*MOBILE*/
+.mobile-logo-with-name-container {
+    display: block;
+    justify-content: center;
+}
+
+.m-logo-size {
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100px;
+    width: 100px;
+}
+
+.m-lcsinhs-title {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12pt;
+    font-family: poppins;
+    color: black;
+}
+
+.m-login-card {
+    display: flex;
+    justify-content: center;
+    width: 320px;
+    height: 245px;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.m-login-card-position {
     display: flex;
     align-items: center;
-    justify-content: start;
-    padding-left: 10px;
+    justify-content: center;
+
+}
+
+.m-login-text {
+    font-weight: 300;
+    font-size: 12pt;
+    color: black;
+    margin: auto;
+}
+
+.m-login-form-container {
+    display: block;
+    align-items: center;
+}
+
+.m-forgot {
+    display: flex;
+    height: 30px;
+    align-items: center;
+    justify-content: end;
+}
+
+.m-forgot-text-size {
+    font-size: 10pt;
+}
+
+.m-submit {
+    display: flex;
+    font-size: 12pt;
+    align-items: center;
+    justify-content: end;
+}
+
+.m-contact {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.m-contact-button {
+    width: auto;
+    --ripple-color: transparent;
+    --background-hover: var(--background);
 }
