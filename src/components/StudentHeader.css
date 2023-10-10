@@ -32,14 +32,66 @@
     font-size: medium;
 }
 
-.profile-btn-pos{
+.profile-btn-pos {
     display: flex;
     justify-content: end;
     align-items: center;
     margin-right: 25px;
 }
 
-.profile-btn-size{
+.profile-btn-size {
     height: 50px;
 }
 
+/*MOBILE HEADER CSS*/
+
+.m-header-display {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.top-head {
+    display: flex;
+    height: 80px;
+    width: auto;
+}
+
+.m-title-and-logo {
+    display: flex;
+    align-items: center;
+    width:80%;
+}
+
+.m-logo-btn-size {
+    width: 90px;
+    height: 90px;
+}
+
+.m-title-label {
+    font-family: 'poppins';
+    font-weight: 600;
+    font-size: 14pt;
+    margin: none;
+}
+
+.m-tabs-display {
+    display: flex;
+    align-items: center;
+}
+
+.m-tab-btn {
+    width: 100px;
+    height: 50px;
+    font-size: small;
+}
+
+.m-profile-btn-pos {
+    display: flex;
+    margin: auto;
+    align-items: center;
+}
+
+.m-profile-btn-size {
+    height: 30px;
+}
