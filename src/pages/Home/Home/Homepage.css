@@ -58,14 +58,25 @@ ion-col {
 .mission-card {
     border-radius: 10px;
     height: 100%;
+    background-color: black;
+    border-width: 1px;
+    border-color: grey;
+    border-style: solid;
 }
 
 .mission-card-header {
     font-size: large;
     font-family: poppins;
     font-weight: 500;
-    color: black;
+    color: white;
 }
+
+.p1 {
+    font-size: 11pt;
+    color: white;
+    text-align: justify;
+}
+
 
 .footer-toolbar {
     display: block;
@@ -76,7 +87,7 @@ ion-col {
     .s-font {
         font-size: x-large;
         font-family: poppins;
-        font-weight: 500;
+        font-weight: bold;
         margin-left: 10px;
         color: white;
     }
@@ -90,7 +101,7 @@ ion-col {
     }
 
     .a-font {
-        font-size: large;
+        font-size: medium;
         font-family: poppins;
         font-weight: 300;
         color: white;
@@ -107,7 +118,7 @@ ion-col {
 
 .logo-size1 {
     display: flex;
-    width: 450px;
+    width: 350px;
 }
 
 .logo-w-name {
@@ -125,16 +136,11 @@ ion-col {
     padding-bottom: 50px;
 }
 
-.p1 {
-    font-size: 10pt;
-    color: black;
-    text-align: justify;
-}
 
 
 /*MOBILE CSS*/
 
-.m-content {
+.m-display-block {
     display: block;
 }
 
@@ -173,32 +179,36 @@ ion-col {
     height: auto;
 }
 
-.m-mission {
-    display: block;
-}
-
 .m-mission-card {
     border-radius: 10px;
     height: 100%;
+    background-color: black;
+    border-width: 1px;
+    border-color: grey;
+    border-style: solid;
 }
 
 .m-mission-card-header {
     font-size: medium;
     font-family: poppins;
     font-weight: 500;
-    color: black;
+    color: white;
+}
+
+.m-p1 {
+    font-size: 9pt;
+    color: white;
+    text-align: justify;
 }
 
 .m-footer-toolbar {
     display: block;
-    align-items: center;
-    justify-content: start;
-    background-color: #000;
+    background-color:black;
 
     .m-s-font {
-        font-size: x-large;
+        font-size: large;
         font-family: poppins;
-        font-weight: 500;
+        font-weight: bold;
         margin-left: 10px;
         color: white;
     }
@@ -212,7 +222,7 @@ ion-col {
     }
 
     .m-a-font {
-        font-size: large;
+        font-size: small;
         font-family: poppins;
         font-weight: 300;
         color: white;
@@ -242,8 +252,3 @@ ion-col {
     justify-content: center;
 }
 
-.m-p1 {
-    font-size: 9pt;
-    color: black;
-    text-align: justify;
-}

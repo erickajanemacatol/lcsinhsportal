@@ -5,6 +5,8 @@ import {
     IonContent,
     IonFooter,
     IonImg,
+    IonItem,
+    IonItemDivider,
     IonLabel,
     IonPage,
     IonToolbar
@@ -22,7 +24,7 @@ const Homepage = () => {
         <IonPage >
             <StudentHeader />
 
-            <IonContent color={'dark'} >
+            <IonContent color={'light'}>
                 {isDesktop ?
                     <><div className="content">
                         <div className='homepage-card-position'>
@@ -51,7 +53,7 @@ const Homepage = () => {
                                 <IonToolbar>
                                     <div className='footer-toolbar'>
                                         <div className="about">
-                                            <IonLabel className="s-font">About LCSINHS</IonLabel>
+                                            <div className="s-font">About LCSINHS</div>
                                             <div className="mission">
                                                 <div>
                                                     <IonCard className="mission-card">
@@ -90,7 +92,7 @@ const Homepage = () => {
                                             <IonImg className="logo-size1" src="/src/imgs/footer-logo.png"></IonImg>                                </div>
 
                                         <div className="allrights">
-                                            <IonLabel className="a-font">© LCSINHS Portal. All rights reserved.</IonLabel>
+                                            <IonLabel className="a-font">All rights reserved.</IonLabel>
                                         </div>
                                     </div>
 
@@ -124,53 +126,57 @@ const Homepage = () => {
 
                             </IonCard>
                         </div>
-                    </div><div className="m-footer1">
-                            <IonFooter className="m-ion-no-border" color={"dark"}>
-                                <IonToolbar>
-                                    <div className='m-footer-toolbar'>
-                                        <div className="m-about">
-                                            <div className="spacer-h-s"/>
-                                            <IonLabel className="m-s-font">About LCSINHS</IonLabel>
+                    </div>
 
-                                            <IonCard className="m-mission-card">
-                                                <IonCardHeader className="m-mission-card-header">Mission</IonCardHeader>
-                                                <IonCardContent className="m-p1">
-                                                    The LCSINHS shall enhance maturity and mold students inclincation
-                                                    in Science and Techonology for them to be productive citizens and be future
-                                                    leaders who will direct and help the country towards new undertakings and
-                                                    goals. The concept, objectives, goals, and educational performance of the
-                                                    LCSINHS can contribute a lot in the quality and standard education.
-                                                </IonCardContent>
-                                            </IonCard>
+                        <div className="spacer-h-s" />
 
-                                            <IonCard className="m-mission-card">
-                                                <IonCardHeader className="m-mission-card-header">Vision</IonCardHeader>
-                                                <IonCardContent className="m-p1">
-                                                    A school to turn Filipino youth with desirable traits, who are scientifically-inclined
-                                                    and can compete with other graduates and can serve as efficient future leaders.
-                                                </IonCardContent>
-                                            </IonCard>
+                        <IonFooter className="ion-no-border" color={"light"}>
+                            <IonToolbar>
+                                <div className='m-footer-toolbar'>
+                                    <div className="m-about">
+                                        <div className="spacer-h-s" />
+                                        <div className="m-s-font">About LCSINHS</div>
 
-                                            <IonCard className="m-mission-card">
-                                                <IonCardHeader className="m-mission-card-header">Motto</IonCardHeader>
-                                                <IonCardContent className="m-p1">
-                                                    "Excellence is not our goal, it is our standard."
-                                                </IonCardContent>
-                                            </IonCard>
-                                        </div>
+                                        <IonCard className="m-mission-card">
+                                            <IonCardHeader className="m-mission-card-header">Mission</IonCardHeader>
+                                            <IonCardContent className="m-p1">
+                                                The LCSINHS shall enhance maturity and mold students inclincation
+                                                in Science and Techonology for them to be productive citizens and be future
+                                                leaders who will direct and help the country towards new undertakings and
+                                                goals. The concept, objectives, goals, and educational performance of the
+                                                LCSINHS can contribute a lot in the quality and standard education.
+                                            </IonCardContent>
+                                        </IonCard>
 
-                                        <div className="m-logo-w-name">
-                                            <IonImg className="m-logo-size1" src="/src/imgs/footer-logo.png"></IonImg>                                </div>
+                                        <IonCard className="m-mission-card">
+                                            <IonCardHeader className="m-mission-card-header">Vision</IonCardHeader>
+                                            <IonCardContent className="m-p1">
+                                                A school to turn Filipino youth with desirable traits, who are scientifically-inclined
+                                                and can compete with other graduates and can serve as efficient future leaders.
+                                            </IonCardContent>
+                                        </IonCard>
 
-                                        <div className="m-allrights">
-                                            <IonLabel className="m-a-font">All rights reserved.</IonLabel>
-                                        </div>
-                                        <div className="spacer-h-l"/>
+                                        <IonCard className="m-mission-card">
+                                            <IonCardHeader className="m-mission-card-header">Motto</IonCardHeader>
+                                            <IonCardContent className="m-p1">
+                                                "Excellence is not our goal, it is our standard."
+                                            </IonCardContent>
+                                        </IonCard>
                                     </div>
 
-                                </IonToolbar>
-                            </IonFooter>
-                        </div></>
+                                    <div className="m-logo-w-name">
+                                        <IonImg className="m-logo-size1" src="/src/imgs/footer-logo.png"></IonImg>                                </div>
+
+                                    <div className="m-allrights">
+                                        <IonLabel className="m-a-font">All rights reserved.</IonLabel>
+                                    </div>
+                                    <div className="spacer-h-m" />
+
+                                </div>
+
+                            </IonToolbar>
+                        </IonFooter>
+                    </>
                 }
 
 
