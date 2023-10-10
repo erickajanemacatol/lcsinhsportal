@@ -1,5 +1,9 @@
 /*Height*/
 
+.spacer-h-xxs {
+    height: 5px;
+}
+
 .spacer-h-xs {
     height: 10px;
 }

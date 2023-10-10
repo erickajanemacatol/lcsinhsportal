@@ -47,32 +47,32 @@ const StudentHeader: React.FC = () => {
                                 <IonButton className="logo-btn-size" fill="clear">
                                     <IonImg src="/src/imgs/logo.png"></IonImg>
                                 </IonButton>
-                                <IonLabel className="title-label" color={"light"}>Lipa City Science Integrated National High School Portal</IonLabel>
+                                <IonLabel className="title-label" color={"dark"}>Lipa City Science Integrated National High School Portal</IonLabel>
                             </div>
                             <div className="tabs-display">
                                 <IonButton fill="clear" className="tab-btn"
-                                    color={"light"}
+                                    color={"dark"}
                                     style={getButtonStyle('home')}
                                     href="/home">Home
                                 </IonButton>
 
                                 <IonButton fill="clear" className="tab-btn"
-                                    color={"light"} href="/activities"
+                                    color={"dark"} href="/activities"
                                     style={getButtonStyle('activities')}>Activities
                                 </IonButton>
 
                                 <IonButton fill="clear" className="tab-btn"
-                                    color={"light"} href="/attendance"
+                                    color={"dark"} href="/attendance"
                                     style={getButtonStyle('attendance')}>Attendance
                                 </IonButton>
 
                                 <IonButton fill="clear" className="tab-btn"
-                                    color={"light"} href="/grades"
+                                    color={"dark"} href="/grades"
                                     style={getButtonStyle('grades')}>Grades
                                 </IonButton>
                             </div>
                             <div className="profile-btn-pos">
-                                <IonButton fill="clear" color={"light"} size="large" href="/profile">
+                                <IonButton fill="clear" color={"dark"} size="large" href="/profile">
                                     <IonIcon icon={personCircle} size="large" ></IonIcon>
                                 </IonButton>
                             </div>
@@ -89,11 +89,11 @@ const StudentHeader: React.FC = () => {
                                     <IonButton className="m-logo-btn-size" fill="clear" href="/home" size="default">
                                         <IonImg src="/src/imgs/logo.png"></IonImg>
                                     </IonButton>
-                                    <IonText className="m-title-label" color={"light"}>LCSINHS Portal</IonText>
+                                    <IonText className="m-title-label" color={"dark"}>LCSINHS Portal</IonText>
                                 </div>
 
                                 <div className="m-profile-btn-pos">
-                                    <IonButton fill="clear" color={"light"} size="large" href="/profile">
+                                    <IonButton fill="clear" color={"dark"} size="large" href="/profile">
                                         <IonIcon icon={personCircle} size="large" ></IonIcon>
                                     </IonButton>
                                 </div>
@@ -102,23 +102,23 @@ const StudentHeader: React.FC = () => {
 
                             <div className="m-tabs-display">
                                 <IonButton fill="clear" className="m-tab-btn"
-                                    color={"light"}
+                                    color={"dark"}
                                     style={getButtonStyle('home')}
                                     href="/home">Home
                                 </IonButton>
 
                                 <IonButton fill="clear" className="m-tab-btn"
-                                    color={"light"} href="/activities"
+                                    color={"dark"} href="/activities"
                                     style={getButtonStyle('activities')}>Activities
                                 </IonButton>
 
                                 <IonButton fill="clear" className="m-tab-btn"
-                                    color={"light"} href="/attendance"
+                                    color={"dark"} href="/attendance"
                                     style={getButtonStyle('attendance')}>Attendance
                                 </IonButton>
 
                                 <IonButton fill="clear" className="m-tab-btn"
-                                    color={"light"} href="/grades"
+                                    color={"dark"} href="/grades"
                                     style={getButtonStyle('grades')}>Grades
                                 </IonButton>
                             </div>
@@ -132,8 +132,6 @@ const StudentHeader: React.FC = () => {
 
     );
 
-
 };
-
 
 export default StudentHeader;
