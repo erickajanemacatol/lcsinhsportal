@@ -3,8 +3,6 @@ import './Login.css';
 import { mailOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive'
-import axios from 'axios';
-import { error, log } from 'console';
 
 
 const Login: React.FC = () => {
