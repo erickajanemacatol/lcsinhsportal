@@ -5,6 +5,7 @@ import {
     IonHeader,
     IonIcon,
     IonText,
+    IonButtons,
 } from "@ionic/react";
 import './StudentHeader.css';
 import { personCircle } from "ionicons/icons";
@@ -40,7 +41,7 @@ const StudentHeader: React.FC = () => {
     return (
         <div>
             {isDesktop ?
-                <><IonHeader>
+                <><IonHeader class="ion-no-border">
                     <IonToolbar>
                         <div className="header-display">
                             <div className="title-and-logo">
@@ -49,30 +50,34 @@ const StudentHeader: React.FC = () => {
                                 </IonButton>
                                 <IonLabel className="title-label" color={"dark"}>Lipa City Science Integrated National High School Portal</IonLabel>
                             </div>
+
                             <div className="tabs-display">
-                                <IonButton fill="clear" className="tab-btn"
-                                    color={"dark"}
-                                    style={getButtonStyle('home')}
-                                    href="/home">Home
-                                </IonButton>
+                                <IonButtons>
+                                    <IonButton fill="clear" className="tab-btn"
+                                        color={"dark"}
+                                        style={getButtonStyle('home')}
+                                        href="/home">Home
+                                    </IonButton>
 
-                                <IonButton fill="clear" className="tab-btn"
-                                    color={"dark"} href="/activities"
-                                    style={getButtonStyle('activities')}>Activities
-                                </IonButton>
+                                    <IonButton fill="clear" className="tab-btn"
+                                        color={"dark"} href="/activities"
+                                        style={getButtonStyle('activities')}>Activities
+                                    </IonButton>
 
-                                <IonButton fill="clear" className="tab-btn"
-                                    color={"dark"} href="/attendance"
-                                    style={getButtonStyle('attendance')}>Attendance
-                                </IonButton>
+                                    <IonButton fill="clear" className="tab-btn"
+                                        color={"dark"} href="/attendance"
+                                        style={getButtonStyle('attendance')}>Attendance
+                                    </IonButton>
 
-                                <IonButton fill="clear" className="tab-btn"
-                                    color={"dark"} href="/grades"
-                                    style={getButtonStyle('grades')}>Grades
-                                </IonButton>
+                                    <IonButton fill="clear" className="tab-btn"
+                                        color={"dark"} href="/grades"
+                                        style={getButtonStyle('grades')}>Grades
+                                    </IonButton>
+                                </IonButtons>
                             </div>
+
                             <div className="profile-btn-pos">
-                                <IonButton fill="clear" color={"dark"} size="large" href="/profile">
+                                <IonButton fill="clear" color={"dark"} size="default" href="/profile">
                                     <IonIcon icon={personCircle} size="large" ></IonIcon>
                                 </IonButton>
                             </div>
@@ -81,52 +86,50 @@ const StudentHeader: React.FC = () => {
                 </IonHeader></>
                 :
                 /*MOBILE VIEW*/
-                <><IonHeader>
-                    <IonToolbar>
-                        <div className="m-header-display">
-                            <div className="top-head">
-                                <div className="m-title-and-logo">
-                                    <IonButton className="m-logo-btn-size" fill="clear" href="/home" size="default">
-                                        <IonImg src="/src/imgs/logo.png"></IonImg>
+                <>
+
+                    <IonHeader class="ion-no-border">
+                        <IonToolbar >
+                            <div className="m-header-display">
+                                <div className="top-head">
+                                    <div className="m-title-and-logo">
+                                        <IonButton className="m-logo-btn-size" fill="clear" href="/home" size="default">
+                                            <IonImg src="/src/imgs/logo.png"></IonImg>
+                                        </IonButton>
+                                        <IonText className="m-title-label" color={"dark"}>LCSINHS Portal</IonText>
+                                    </div>
+
+                                    <IonButton className="m-profile-btn-size" fill="clear" color={"dark"} size="small" href="/profile">
+                                        <IonIcon slot="icon-only" icon={personCircle}></IonIcon>
                                     </IonButton>
-                                    <IonText className="m-title-label" color={"dark"}>LCSINHS Portal</IonText>
+
                                 </div>
 
-                                <div className="m-profile-btn-pos">
-                                    <IonButton fill="clear" color={"dark"} size="large" href="/profile">
-                                        <IonIcon icon={personCircle} size="large" ></IonIcon>
+                                <div className="m-tabs-display">
+                                    <IonButton fill="clear" className="m-tab-btn"
+                                        color={"dark"}
+                                        style={getButtonStyle('home')}
+                                        href="/home">Home
+                                    </IonButton>
+
+                                    <IonButton fill="clear" className="m-tab-btn"
+                                        color={"dark"} href="/activities"
+                                        style={getButtonStyle('activities')}>Activities
+                                    </IonButton>
+
+                                    <IonButton fill="clear" className="m-tab-btn"
+                                        color={"dark"} href="/attendance"
+                                        style={getButtonStyle('attendance')}>Attendance
+                                    </IonButton>
+
+                                    <IonButton fill="clear" className="m-tab-btn"
+                                        color={"dark"} href="/grades"
+                                        style={getButtonStyle('grades')}>Grades
                                     </IonButton>
                                 </div>
                             </div>
-
-
-                            <div className="m-tabs-display">
-                                <IonButton fill="clear" className="m-tab-btn"
-                                    color={"dark"}
-                                    style={getButtonStyle('home')}
-                                    href="/home">Home
-                                </IonButton>
-
-                                <IonButton fill="clear" className="m-tab-btn"
-                                    color={"dark"} href="/activities"
-                                    style={getButtonStyle('activities')}>Activities
-                                </IonButton>
-
-                                <IonButton fill="clear" className="m-tab-btn"
-                                    color={"dark"} href="/attendance"
-                                    style={getButtonStyle('attendance')}>Attendance
-                                </IonButton>
-
-                                <IonButton fill="clear" className="m-tab-btn"
-                                    color={"dark"} href="/grades"
-                                    style={getButtonStyle('grades')}>Grades
-                                </IonButton>
-                            </div>
-
-
-                        </div>
-                    </IonToolbar>
-                </IonHeader></>
+                        </IonToolbar>
+                    </IonHeader></>
             }
         </div>
 
