@@ -1,20 +1,106 @@
+.display-flex {
+    display: flex;
+    align-items: center;
+}
 
-.activity-card {
-    border-radius: 20px;
+.add-pos {
+    display: flex;
+    justify-content: end;
+    width: 50%;
+    margin-right: 2%;
+}
+
+.add-btn-properties {
+    font-weight: lighter;
+}
+
+.header-properties{
+    border-radius: 10px;
     border-color: rgb(198, 198, 198);
     border-style: solid;
     border-width: 1px;
-    width: 95%
+    width: 95%;
+    box-shadow: none;
+    height: auto;
 }
 
-.my-act-title{
-    margin-left: 20px;
+.activity-card {
+    border-radius: 10px;
+    border-color: rgb(198, 198, 198);
+    border-style: solid;
+    border-width: 1px;
+    width: 95%;
+    box-shadow: none;
+    height: auto;
+}
+
+.my-act-title {
+    font-family: poppins;
+    width: 50%;
     font-weight: bolder;
     font-size: 22pt;
     color: black;
 }
 
-.fab-pos {
-    margin-right: 30px;
-    margin-bottom: 20px;
+ion-radio {
+    --border-radius: 4px;
+    --inner-border-radius: 4px;
+  
+    --color: #ddd;
+    --color-checked: #000201;
+  }
+  
+  ion-radio.ios::part(container) {
+    width: 20px;
+    height: 20px;
+  
+    border: 2px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .radio-checked.ios::part(container) {
+    border-color: #6815ec;
+  }
+
+  /*MOBILE*/
+
+  
+.m-add-pos {
+    display: flex;
+    justify-content: end;
+    width: 50%;
+    margin-right: 2%;
 }
+
+.m-add-btn-properties {
+    font-weight: lighter;
+}
+
+.m-header-properties{
+    border-radius: 10px;
+    border-color: rgb(198, 198, 198);
+    border-style: solid;
+    border-width: 1px;
+    width: 95%;
+    box-shadow: none;
+    height: auto;
+}
+
+.m-activity-card {
+    border-radius: 10px;
+    border-color: rgb(198, 198, 198);
+    border-style: solid;
+    border-width: 1px;
+    width: 95%;
+    box-shadow: none;
+    height: auto;
+    padding-bottom: 10px;
+}
+
+.m-my-act-title {
+    font-family: poppins;
+    font-weight: bolder;
+    font-size: 18pt;
+    color: black;
+}
+
