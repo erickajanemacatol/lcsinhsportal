@@ -81,10 +81,10 @@ const Grades = () => {
                                             <IonCol class="col-border-header" size="2.5">
                                                 Subject Code
                                             </IonCol>
-                                            <IonCol class="col-border-header" size="3">
+                                            <IonCol class="col-border-header" size="3.5">
                                                 Subject Teacher
                                             </IonCol>
-                                            <IonCol class="col-border-header" size="4">
+                                            <IonCol class="col-border-header" size="3.5">
                                                 Subject Name
                                             </IonCol>
                                             <IonCol class="col-border-header" >
@@ -98,10 +98,10 @@ const Grades = () => {
                                             <IonCol class="col-border" size="2.5">
                                                 FIL101
                                             </IonCol>
-                                            <IonCol class="col-border" size="3">
+                                            <IonCol class="col-border" size="3.5">
                                                 Ms. Ericka
                                             </IonCol>
-                                            <IonCol class="col-border" size="4">
+                                            <IonCol class="col-border" size="3.5">
                                                 Filipino
                                             </IonCol>
                                             <IonCol class="col-border" >
