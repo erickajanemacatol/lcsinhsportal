@@ -62,9 +62,8 @@ ion-button {
 
 .top-head {
     display: flex;
-    height: 60px;
-    width: auto;
 }
+
 
 .m-title-and-logo {
     display: flex;

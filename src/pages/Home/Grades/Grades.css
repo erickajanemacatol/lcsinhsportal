@@ -1,9 +1,21 @@
+.top-title {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: max-content;
+}
+
+.top2 {
+    display: flex;
+    justify-content: end;
+    margin-right: 10px;
+}
+
 .grid-border {
     text-align: center;
     color: rgb(0, 0, 0);
     align-items: center;
     justify-items: center;
-    font-size: 12pt;
+    
 }
 
 .col-border-header {
@@ -11,16 +23,21 @@
     border-style: solid;
     border-color: rgb(184, 184, 184);
     background-color:beige;
+    font-size: 13pt;
+    font-weight: 600;
+    font-family: 'lato';
 }
 
 .col-border {
     border-width: 1px;
     border-style: solid;
     border-color: rgb(184, 184, 184);
+    font-size: 12pt;
+    font-weight: 300;
 }
 
 .my-grades-card {
-    height: 85%;
+    height: auto;
     border-radius: 10px;
 }
 
@@ -35,6 +52,19 @@
 
 
 /*MOBILE*/
+
+.m-top-title {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: max-content;
+}
+
+.m-top2 {
+    display: flex;
+    justify-content: end;
+    margin-right: 5px;
+}
+
 .grid-border {
     text-align: center;
     color: rgb(0, 0, 0);
@@ -57,7 +87,7 @@
 }
 
 .m-grades-card {
-    height: 85%;
+    height: auto;
     border-radius: 10px;
 }
 

@@ -18,7 +18,7 @@ import { useMediaQuery } from "react-responsive";
 
 const Homepage = () => {
 
-    const isDesktop = useMediaQuery({ minWidth: 992 })
+    const isDesktop = useMediaQuery({ minWidth: 1050 })
 
     return (
         <IonPage >

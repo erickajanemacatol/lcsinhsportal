@@ -13,7 +13,7 @@ import React, { useState, useEffect } from "react";
 import { useMediaQuery } from 'react-responsive'
 
 const StudentHeader: React.FC = () => {
-    const isDesktop = useMediaQuery({ minWidth: 992 })
+    const isDesktop = useMediaQuery({ minWidth: 1050 })
 
     const [activePage, setActivePage] = useState(''); // State to track the active page
 
@@ -98,9 +98,9 @@ const StudentHeader: React.FC = () => {
                                         </IonButton>
                                         <IonText className="m-title-label" color={"dark"}>LCSINHS Portal</IonText>
                                     </div>
-
+                            
                                     <IonButton className="m-profile-btn-size" fill="clear" color={"dark"} size="small" href="/profile">
-                                        <IonIcon slot="icon-only" icon={personCircle}></IonIcon>
+                                        <IonIcon slot="icon-only" icon={personCircle} size="large"></IonIcon>
                                     </IonButton>
 
                                 </div>

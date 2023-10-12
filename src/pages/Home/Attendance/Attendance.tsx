@@ -1,11 +1,10 @@
-import { IonButton, IonCard, IonCardContent, IonCheckbox, IonChip, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonLabel, IonPage, IonToolbar } from "@ionic/react";
+import { IonContent, IonLabel, IonPage } from "@ionic/react";
 import Header from "../../../components/StudentHeader";
 import './Attendance.css'
-import { addSharp, ellipse, create, trash, add } from "ionicons/icons";
 import { useMediaQuery } from "react-responsive";
 
 const Attendance = () => {
-    const isDesktop = useMediaQuery({ minWidth: 992 })
+    const isDesktop = useMediaQuery({ minWidth: 1050 })
 
     return (
 

@@ -13,7 +13,7 @@ import { useMediaQuery } from "react-responsive";
 console.log("Activities component rendered")
 
 const Activities = () => {
-    const isDesktop = useMediaQuery({ minWidth: 992 })
+    const isDesktop = useMediaQuery({ minWidth: 1050 })
 
     return (
 

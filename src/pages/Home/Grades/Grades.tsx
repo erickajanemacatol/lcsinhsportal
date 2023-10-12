@@ -1,11 +1,19 @@
-import { IonCard, IonCardContent, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonLabel, IonPage, IonRow, IonToggle, IonToolbar } from "@ionic/react";
+import {
+    IonButton,
+    IonCard, IonCardContent, IonChip, IonCol,
+    IonContent, IonGrid, IonIcon, IonLabel,
+    IonList,
+    IonListHeader,
+    IonPage, IonRow
+} from "@ionic/react";
 import Header from "../../../components/StudentHeader";
 import './Grades.css'
 import { useMediaQuery } from "react-responsive";
+import { filter, funnel } from "ionicons/icons";
 
 const Grades = () => {
 
-    const isDesktop = useMediaQuery({ minWidth: 992 })
+    const isDesktop = useMediaQuery({ minWidth: 1050 })
 
     return (
 
@@ -16,12 +24,22 @@ const Grades = () => {
                 <>
                     <IonContent color={'light'} scrollX={false}>
                         <div className="spacer-h-m" />
-                        <IonLabel className="my-grades-text">My Grades</IonLabel>
+                        <div className="top-title">
+                            <div>
+                                <IonLabel className="my-grades-text">My Grades</IonLabel>
+                            </div>
+
+                            <div className="top2">
+                                <IonButton fill="clear"  color={'medium'}>
+                                    <IonIcon icon={funnel}></IonIcon>
+                                    <div className="spacer-w-xs" />
+                                    Filter
+                                </IonButton>
+                            </div>
+                        </div>
 
                         <IonCard className="my-grades-card">
                             <IonCardContent>
-
-                                <div className="spacer-h-m"></div>
 
                                 <div>
                                     <IonGrid className="grid-border">
@@ -64,16 +82,26 @@ const Grades = () => {
                     </IonContent>
                 </>
                 :
+
                 /*MOBILE VIEW*/
                 <>
                     <IonContent color={'light'} scrollX={false}>
                         <div className="spacer-h-s" />
-                        <IonLabel className="m-grades-text">My Grades</IonLabel>
+                        <div className="m-top-title">
+                            <div>
+                                <IonLabel className="m-grades-text">My Grades</IonLabel>
+                            </div>
+
+                            <div className="m-top2">
+                                <IonButton fill="clear" shape="round" color={'medium'}>
+                                    <IonIcon icon={funnel}></IonIcon>                                    
+                                </IonButton>
+                            </div>
+                        </div>
+
 
                         <IonCard className="m-grades-card">
                             <IonCardContent>
-
-                                <div className="spacer-h-s"></div>
 
                                 <div>
                                     <IonGrid className="grid-border">
