@@ -1,116 +1,121 @@
-import { IonCard, IonCardContent, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonLabel, IonPage, IonToggle, IonToolbar } from "@ionic/react";
+import { IonCard, IonCardContent, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonLabel, IonPage, IonRow, IonToggle, IonToolbar } from "@ionic/react";
 import Header from "../../../components/StudentHeader";
-import Chart from "react-apexcharts";
 import './Grades.css'
+import { useMediaQuery } from "react-responsive";
 
 const Grades = () => {
-    const chartData = {
-        options: {
-            chart: {
-                id: "basic-bar",
-                type: "line",
-                toolbar: {
-                    show: false
-                }
-            },
-            xaxis: {
-                type: "datetime"
-            },
-            stroke: {
-                curve: "straight"
-            }
-        },
-        series: [
-            {
-                name: "Series 1",
-                data: [
-                    {
-                        x: "2022-01-01",
-                        y: 0
-                    },
-                    {
-                        x: "2022-03-02",
-                        y: 5
-                    },
-                    {
-                        x: "2022-04-15",
-                        y: 3
-                    },
-                    {
-                        x: "2022-05-09",
-                        y: 2
-                    },
-                    {
-                        x: "2022-06-19",
-                        y: 0
-                    }
-                ]
-            }
-        ]
-    };
+
+    const isDesktop = useMediaQuery({ minWidth: 992 })
 
     return (
+
         <IonPage>
             <Header />
 
-            <IonContent color={'dark'} scrollX={false}>
-                <IonCard className="my-grades-card">
-                    <IonCardContent>
+            {isDesktop ?
+                <>
+                    <IonContent color={'light'} scrollX={false}>
+                        <div className="spacer-h-m" />
+                        <IonLabel className="my-grades-text">My Grades</IonLabel>
 
-                        <div className="top-place">
-                            <div>
-                                <IonLabel className="my-activity-text">My Grades</IonLabel>
-                            </div>
-
-                            <div className="div-toggle">
-                                View Grades by Semester
-                                <div className="spacer-w-s"></div>
-                                <IonToggle aria-label="View Grades"></IonToggle>
-                            </div>
-                        </div>
-
-                        <div className="spacer-h-m"></div>
-
-                        <IonCard>
+                        <IonCard className="my-grades-card">
                             <IonCardContent>
-                                <Chart options={chartData.options}
-                                    series={chartData.series}
-                                    type="line"
-                                    width="100%"
-                                    height={200} />
+
+                                <div className="spacer-h-m"></div>
+
+                                <div>
+                                    <IonGrid className="grid-border">
+                                        <IonRow>
+                                            <IonCol class="col-border-header" size="2">
+                                                Subject Code
+                                            </IonCol>
+                                            <IonCol class="col-border-header" size="3">
+                                                Subject Teacher
+                                            </IonCol>
+                                            <IonCol class="col-border-header" size="4">
+                                                Subject Name
+                                            </IonCol>
+                                            <IonCol class="col-border-header" >
+                                                Grade
+                                            </IonCol>
+                                        </IonRow>
+
+                                        {/*RETURN GRADES HERE*/}
+                                        <div className="spacer-h-xss"></div>
+                                        <IonRow>
+                                            <IonCol class="col-border" size="2">
+                                                FIL101
+                                            </IonCol>
+                                            <IonCol class="col-border" size="3">
+                                                Ms. Ericka
+                                            </IonCol>
+                                            <IonCol class="col-border" size="4">
+                                                Filipino
+                                            </IonCol>
+                                            <IonCol class="col-border" >
+                                                98
+                                            </IonCol>
+                                        </IonRow>
+                                    </IonGrid>
+                                </div>
+
                             </IonCardContent>
                         </IonCard>
+                    </IonContent>
+                </>
+                :
+                /*MOBILE VIEW*/
+                <>
+                    <IonContent color={'light'} scrollX={false}>
+                        <div className="spacer-h-s" />
+                        <IonLabel className="m-grades-text">My Grades</IonLabel>
 
-                        <div className="spacer-h-m"></div>
-                        <div className="cards-pos">
-                            <IonCard className="cards-size">
-                                <IonCardContent>
-                                    <IonLabel className="label-appearance">Past Average:</IonLabel>
-                                </IonCardContent>
-                            </IonCard>
+                        <IonCard className="m-grades-card">
+                            <IonCardContent>
 
-                            <IonCard className="cards-size">
-                                <IonCardContent>
-                                    <IonLabel className="label-appearance">Current Average:</IonLabel>
-                                </IonCardContent>
-                            </IonCard>
+                                <div className="spacer-h-s"></div>
 
-                            <IonCard className="cards-size">
-                                <IonCardContent>
-                                    <IonLabel className="label-appearance">Overall Average:</IonLabel>
-                                </IonCardContent>
-                            </IonCard>
+                                <div>
+                                    <IonGrid className="grid-border">
+                                        <IonRow>
+                                            <IonCol class="col-border-header" size="2.5">
+                                                Subject Code
+                                            </IonCol>
+                                            <IonCol class="col-border-header" size="3">
+                                                Subject Teacher
+                                            </IonCol>
+                                            <IonCol class="col-border-header" size="4">
+                                                Subject Name
+                                            </IonCol>
+                                            <IonCol class="col-border-header" >
+                                                Grade
+                                            </IonCol>
+                                        </IonRow>
 
-                            <IonCard className="cards-size">
-                                <IonCardContent>
-                                    <IonLabel className="label-appearance">Expected Average:</IonLabel>
-                                </IonCardContent>
-                            </IonCard>
-                        </div>
+                                        {/*RETURN GRADES HERE*/}
+                                        <div className="spacer-h-xss"></div>
+                                        <IonRow>
+                                            <IonCol class="col-border" size="2.5">
+                                                FIL101
+                                            </IonCol>
+                                            <IonCol class="col-border" size="3">
+                                                Ms. Ericka
+                                            </IonCol>
+                                            <IonCol class="col-border" size="4">
+                                                Filipino
+                                            </IonCol>
+                                            <IonCol class="col-border" >
+                                                98
+                                            </IonCol>
+                                        </IonRow>
+                                    </IonGrid>
+                                </div>
 
-                    </IonCardContent>
-                </IonCard>
-            </IonContent>
+                            </IonCardContent>
+                        </IonCard>
+                    </IonContent>
+                </>}
+
         </IonPage>
     );
 };

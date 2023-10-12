@@ -1,39 +1,70 @@
+.grid-border {
+    text-align: center;
+    color: rgb(0, 0, 0);
+    align-items: center;
+    justify-items: center;
+    font-size: 12pt;
+}
+
+.col-border-header {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(184, 184, 184);
+    background-color:beige;
+}
+
+.col-border {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(184, 184, 184);
+}
+
 .my-grades-card {
-    height: 95%;
+    height: 85%;
     border-radius: 10px;
 }
 
-.top-place {
-    display: grid;
-    align-items: center;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: max-content;
-}
-
-.div-toggle {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    margin-right: 20px;
-    margin-top: 30px;
-}
-
-.cards-pos {
-    display: flex;
-    width: 100%;
-    height: auto;
-    justify-content: center;
-    align-items: center;
-}
-
-.cards-size {
-    width: 200px;
-    height: 200px;
-    border-radius: 20px;
-}
-
-.label-appearance {
-    font-size: large;
+.my-grades-text {
+    font-family: poppins;
+    width: 50%;
+    font-weight: bolder;
+    font-size: 22pt;
     color: black;
-    font-weight: 500;
 }
+
+
+
+/*MOBILE*/
+.grid-border {
+    text-align: center;
+    color: rgb(0, 0, 0);
+    align-items: center;
+    justify-items: center;
+    font-size: 10pt;
+}
+
+.col-border-header {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(184, 184, 184);
+    background-color:beige;
+}
+
+.col-border {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(184, 184, 184);
+}
+
+.m-grades-card {
+    height: 85%;
+    border-radius: 10px;
+}
+
+.m-grades-text {
+    font-family: poppins;
+    font-weight: bolder;
+    font-size: 17pt;
+    color: black;
+}
+
