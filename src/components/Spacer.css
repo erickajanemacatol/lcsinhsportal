@@ -26,6 +26,10 @@
 
 /*Width*/
 
+.spacer-w-xxs {
+    width: 5px;
+}
+
 .spacer-w-xs {
     width: 10px;
 }
