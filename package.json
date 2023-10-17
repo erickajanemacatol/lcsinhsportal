@@ -13,6 +13,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@capacitor/android": "5.4.1",
     "@capacitor/app": "5.0.6",
     "@capacitor/core": "5.4.1",
     "@capacitor/haptics": "5.0.6",
@@ -26,12 +27,15 @@
     "@types/react-router-dom": "^5.3.3",
     "apex-grid": "^1.0.1",
     "axios": "^1.5.1",
+    "cors": "^2.8.5",
     "firebase": "^10.4.0",
     "ionicons": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mysqli": "^3.1.4",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
+    "react-responsive": "^9.0.2",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4"
   },
