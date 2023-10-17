@@ -6,3 +6,9 @@
     width: 90%;
     border-radius: 20px;
 }
+
+.body-display{
+    display: block;
+    margin: auto;
+    width: 90%;
+}
