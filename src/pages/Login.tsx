@@ -1,15 +1,42 @@
-import { IonButton, IonCard, IonContent, IonImg, IonInput, IonPage, IonIcon, IonLabel, IonHeader, IonFooter, IonToolbar } from '@ionic/react';
+import {
+  IonButton, IonCard, IonContent,
+  IonImg, IonInput, IonPage, IonIcon, IonLabel,
+  IonFooter, IonToolbar, useIonToast, IonButtons, IonHeader, IonModal, IonTitle, IonCardContent
+} from '@ionic/react';
 import './Login.css';
-import { mailOutline } from 'ionicons/icons';
-import { useState } from 'react';
+import { arrowBack, close, home, mailOutline } from 'ionicons/icons';
+import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive'
+import { useHistory } from 'react-router-dom';
+import Loading from '../components/utils/Loading';
+import axios from 'axios';
 
 
 const Login: React.FC = () => {
-  
+  const isDesktop = useMediaQuery({ minWidth: 992 })
+  const [isLoading, setIsLoading] = useState(false);
+  const [showForgotPass, setShowForgotPass] = useState(false);
+
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    axios.get('http://localhost/login.php')
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+  }, []);
+
+  const history = useHistory();
+
   const [loginData, setLoginData] = useState({
-    username: null,
-    password: null
+    username: '',
+    password: '',
   });
 
   const handleInputChange = (e: any) => {
@@ -23,20 +50,104 @@ const Login: React.FC = () => {
 
   }
 
+  const [presentToast, dismissToast] = useIonToast();
+  const showToast = (message: string, color: string) => {
+    presentToast({
+      message: message,
+      duration: 2000, // 2 seconds
+      color: color,
+    });
+  };
+
+  const clearInputFields = () => {
+    setLoginData({
+      username: '',
+      password: '',
+    });
+  };
+
   const login = () => {
-    console.log(loginData, 'loginData')
+    if (!navigator.onLine) {
+      // Handle the case when there is no internet connection
+      showToast('No internet connection. Please check your network.', 'danger');
+    } else if (loginData.username === '' || loginData.password === '') {
+      showToast('Username and password cannot be empty', 'danger');
+    } else {
+      console.log(loginData, 'loginData');
+
+      setIsLoading(true); // Show loading indicator after login button is clicked
+
+      axios
+        .post('http://localhost/login.php', JSON.stringify(loginData), {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          setIsLoading(false); // Hide loading indicator after a simulated delay
+
+          console.log(response.data);
+          const data = response.data;
+          if (data.success) {
+            localStorage.setItem('username', loginData.username);
+            showToast('Login successful. Welcome to LCSINHS Portal!', 'success'); // Show success toast
+            switch (data.role_id) {
+              case 0:
+                history.push('/home');
+                break;
+              case 1:
+                history.push('/admin/announcements');
+                break;
+              case 2:
+                history.push('/faculty/attendance');
+                break;
+              default:
+                console.log('Unexpected role:', data.role_id);
+            }
+          } else {
+            showToast('Login failed. Check your credentials.', 'danger');
+            clearInputFields();
+          }
+        })
+        .catch((error) => {
+          console.error('API Call Error:', error);
+          setIsLoading(false); // Hide loading indicator on error
+          showToast('API Call Error. Please try again.', 'danger');
+        });
+    }
+  };
+
+  const modal = useRef<HTMLIonModalElement>(null);
+  const page = useRef(null);
+
+  const [presentingElement, setPresentingElement] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setPresentingElement(page.current);
+  }, []);
+
+  function dismiss() {
+    modal.current?.dismiss();
   }
 
-  const isDesktop = useMediaQuery({ minWidth: 992 })
+  async function canDismiss(data?: any, role?: string) {
+    return role !== 'gesture';
+  }
 
   return (
-    <IonPage>
-
+    <IonPage ref={page}>
       {isDesktop ?
         <>
           <IonContent scrollY={false} fullscreen={true}>
             <div className='contact'>
-              <IonButton className="contact-button" fill="clear" color='medium' id="trigger-button">
+              <IonButton 
+              className="contact-button" 
+              fill="clear" color='medium' 
+              id="open-modal"
+              onClick={() => {
+                setShowForgotPass(true);
+              }}
+              >
                 Contact Us
                 <IonIcon slot="end" color="medium" icon={mailOutline}></IonIcon>
               </IonButton>
@@ -60,11 +171,13 @@ const Login: React.FC = () => {
                       label="Username"
                       labelPlacement="floating"
                       size={50}
+                      type="text"
                       name="username"
                       value={loginData.username}
                       onInput={(e) => handleInputChange(e)}
                     ></IonInput>
-                    <br></br>
+
+                    <div className='spacer-h-s' />
 
                     <IonInput
                       fill="outline"
@@ -78,10 +191,46 @@ const Login: React.FC = () => {
 
                     <div className='forgot'>
                       <IonButton
+                        id="open-modal"
                         fill="clear"
-                        color={'medium'}>Forgot Password?
+                        color={'medium'}
+                        onClick={() => {
+                          setShowForgotPass(true);
+                          modal.current?.present();
+                        }}
+                      >Forgot Password?
                       </IonButton>
                     </div>
+
+                    {/*HELP CENTER*/}
+                    <IonModal className="modal-design " ref={modal} trigger="open-modal" canDismiss={canDismiss} presentingElement={presentingElement!}>
+                      <IonHeader>
+                        <IonToolbar>
+                          <IonTitle class='header-title'>Help Center</IonTitle>
+                          <IonButtons slot="end">
+                            <IonButton onClick={() => dismiss()}><IonIcon icon={close} /></IonButton>
+                          </IonButtons>
+                        </IonToolbar>
+                      </IonHeader>
+                      <IonContent className="ion-padding">
+                        <p>
+                          For any portal login concerns, contact us through the following email addresses:
+                        </p>
+
+                        <IonCard className='card'>
+                          <IonCardContent>
+                            <IonLabel className='email-1'>
+                              <IonIcon icon={home} /> Official Email Address
+                            </IonLabel>
+                            <br></br>
+                            <div className='spacer-h-xxs' />
+                            <IonLabel className='email-2'>
+                              <IonIcon icon={mailOutline} /> lipacityscienceinhs@gmail.com
+                            </IonLabel>
+                          </IonCardContent>
+                        </IonCard>
+                      </IonContent>
+                    </IonModal>
 
                     <div className='spacer-h-xs' />
                     <IonButton
@@ -91,6 +240,7 @@ const Login: React.FC = () => {
                       onClick={login}
                     >Submit
                     </IonButton>
+                    <Loading isOpen={isLoading} message="Logging in..."></Loading>
                   </div>
                 </div>
 
@@ -147,11 +297,14 @@ const Login: React.FC = () => {
                     <div className='spacer-h-xs' />
                     <div className='m-forgot'>
                       <IonButton className="m-forgot-text-size"
+                        id="open-modal"
                         fill="clear"
                         color="medium"
-                        size='small'>
+                        size='small'
+                        onClick={() => {
+                          setShowForgotPass(true);
+                        }}>Forgot Password?
                       </IonButton>
-                      Forgot Password?
                     </div>
 
                     <div className='spacer-h-s' />
@@ -161,6 +314,7 @@ const Login: React.FC = () => {
                       color="dark"
                       onClick={login}
                     >Submit
+                      <Loading isOpen={isLoading} message="Logging in..."></Loading>
                     </IonButton>
 
                     <div className='spacer-h-xxs' />
@@ -174,16 +328,52 @@ const Login: React.FC = () => {
           <IonFooter className='ion-no-border'>
             <IonToolbar >
               <div className='m-contact'>
-                <IonButton className="m-contact-button" fill="clear" color='medium' id="trigger-button">
+                <IonButton
+                  id="open-modal"
+                  className="m-contact-button"
+                  fill="clear" color='medium'
+                  onClick={() => {
+                    setShowForgotPass(true);
+                    modal.current?.present();
+                  }}
+                >
                   Contact Us
                 </IonButton>
               </div>
             </IonToolbar>
-
           </IonFooter>
+
+          {/*HELP CENTER*/}
+          <IonModal  ref={modal} trigger="open-modal" canDismiss={canDismiss} presentingElement={presentingElement!}>
+            <IonHeader>
+              <IonToolbar>
+                <IonTitle class='header-title'>Help Center</IonTitle>
+                <IonButtons slot="start">
+                  <IonButton onClick={() => dismiss()}><IonIcon icon={arrowBack} /></IonButton>
+                </IonButtons>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent className="ion-padding">
+              <p>
+                For any portal login concerns, contact us through the following email addresses:
+              </p>
+
+              <IonCard className='card'>
+                <IonCardContent>
+                  <IonLabel className='email-1'>
+                    <IonIcon icon={home} /> Official Email Address
+                  </IonLabel>
+                  <br></br>
+                  <div className='spacer-h-xxs' />
+                  <IonLabel className='email-2'>
+                    <IonIcon icon={mailOutline} /> lipacityscienceinhs@gmail.com
+                  </IonLabel>
+                </IonCardContent>
+              </IonCard>
+            </IonContent>
+          </IonModal>
         </>
       }
-
 
     </IonPage >
   );

@@ -89,6 +89,35 @@ ion-button {
     --background-hover: var(--background);
 }
 
+/*modal css*/
+.modal-design {
+    --border-radius: 10px;
+}
+
+.header-title {
+    font-weight: bold;
+    font-family: poppins;
+}
+
+.card {
+    display: block;
+    border-radius: 10px;
+    box-shadow: none;
+    border-width: 1px;
+    border-color: gray;
+    border-style: solid;
+}
+
+.email-1 {
+    color: rgb(0, 88, 35);
+
+}
+
+.email-2 {
+    color: black;
+    font-size: large;
+    font-weight: bold;
+}
 
 /*MOBILE*/
 .mobile-logo-with-name-container {
