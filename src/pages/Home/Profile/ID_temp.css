@@ -1,0 +1,114 @@
+.cards-pref {
+    display: flex;
+}
+
+.card-size {
+    display: block;
+    width: 204px;
+    height: 321px;
+    border-width: 1px;
+    border-color: gray;
+    border-style: solid;
+}
+
+.card-content {
+    background: url('/src/imgs/idfront_jhs.png');
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+
+.avatar-post {
+    position: absolute;
+    top: 34%;
+    left: 29%;
+    transform: translate(-50%, -50%);
+    /* Center the text within the container */
+}
+
+.avatar-size {
+    width: 80px;
+    height: 80px;
+}
+
+.name-over-image {
+    position: absolute;
+    top: 72%;
+    /* Adjust this value to vertically center the text */
+    left: 50%;
+    /* Adjust this value to horizontally center the text */
+    transform: translate(-50%, -50%);
+    /* Center the text within the container */
+    font-size: 16px;
+    color: white;
+}
+
+.name-size {
+    font-size: 8.5pt;
+    font-weight: bolder;
+}
+
+.lrn-over-image {
+    position: absolute;
+    bottom: 13.5%;
+    /* Adjust this value to vertically center the text */
+    left: 58%;
+    /* Adjust this value to horizontally center the text */
+    transform: translate(-50%, -50%);
+    /* Center the text within the container */
+    font-size: 16px;
+    color: white;
+}
+
+.lrn-size {
+    font-size: 8pt;
+    font-weight: bolder;
+}
+
+/*BACK*/
+.poc-over-image {
+    position: absolute;
+    top: 32%;
+    /* Adjust this value to vertically center the text */
+    left: 30%;
+    /* Adjust this value to horizontally center the text */
+    transform: translate(-50%, -50%);
+    /* Center the text within the container */
+    font-size: 16px;
+    color: black;
+}
+
+.poc-size {
+    font-size: 7pt;
+    font-weight: bolder;
+}
+
+.add-over-image {
+    position: absolute;
+    top: 35%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    color: black;
+}
+
+.add-size {
+    font-size: 5pt;
+    font-weight: bolder;
+}
+
+.num-over-image {
+    position: absolute;
+    top: 38%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    color: black;
+}
+
+.num-size {
+    font-size: 5pt;
+    font-weight: bolder;
+}

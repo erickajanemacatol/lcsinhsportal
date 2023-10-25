@@ -8,16 +8,21 @@ import { arrowBack, close, home, mailOutline } from 'ionicons/icons';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive'
 import { useHistory } from 'react-router-dom';
-import Loading from '../components/utils/Loading';
 import axios from 'axios';
+import CustomLoading from '../components/utils/Loading';
 
 
 const Login: React.FC = () => {
   const isDesktop = useMediaQuery({ minWidth: 992 })
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showForgotPass, setShowForgotPass] = useState(false);
-
   const [data, setData] = useState<any>(null);
+  const history = useHistory();
+  const [presentToast, dismissToast] = useIonToast();
+  const modal = useRef<HTMLIonModalElement>(null);
+  const page = useRef(null);
+  const [presentingElement, setPresentingElement] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     axios.get('http://localhost/login.php')
@@ -31,8 +36,6 @@ const Login: React.FC = () => {
 
   useEffect(() => {
   }, []);
-
-  const history = useHistory();
 
   const [loginData, setLoginData] = useState({
     username: '',
@@ -50,7 +53,6 @@ const Login: React.FC = () => {
 
   }
 
-  const [presentToast, dismissToast] = useIonToast();
   const showToast = (message: string, color: string) => {
     presentToast({
       message: message,
@@ -68,14 +70,13 @@ const Login: React.FC = () => {
 
   const login = () => {
     if (!navigator.onLine) {
-      // Handle the case when there is no internet connection
       showToast('No internet connection. Please check your network.', 'danger');
     } else if (loginData.username === '' || loginData.password === '') {
       showToast('Username and password cannot be empty', 'danger');
     } else {
       console.log(loginData, 'loginData');
 
-      setIsLoading(true); // Show loading indicator after login button is clicked
+      setIsLoading(true);
 
       axios
         .post('http://localhost/login.php', JSON.stringify(loginData), {
@@ -84,28 +85,33 @@ const Login: React.FC = () => {
           },
         })
         .then((response) => {
-          setIsLoading(false); // Hide loading indicator after a simulated delay
 
-          console.log(response.data);
+          setIsLoading(false);
           const data = response.data;
+
           if (data.success) {
+
             localStorage.setItem('username', loginData.username);
-            showToast('Login successful. Welcome to LCSINHS Portal!', 'success'); // Show success toast
+            localStorage.setItem('role', data.role_id);
+            setIsLoggedIn(true);
+
+            showToast('Login successful. Welcome to LCSINHS Portal!', 'dark');
             switch (data.role_id) {
               case 0:
-                history.push('/home');
+                history.replace('/home');
                 break;
               case 1:
-                history.push('/admin/announcements');
+                history.replace('/admin/news');
                 break;
               case 2:
-                history.push('/faculty/attendance');
+                history.replace('/faculty/attendance');
                 break;
               default:
                 console.log('Unexpected role:', data.role_id);
             }
           } else {
             showToast('Login failed. Check your credentials.', 'danger');
+            console.log(response);
             clearInputFields();
           }
         })
@@ -117,10 +123,38 @@ const Login: React.FC = () => {
     }
   };
 
-  const modal = useRef<HTMLIonModalElement>(null);
-  const page = useRef(null);
+  useEffect(() => {
+    axios.get('http://localhost/login.php')
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }, []);
 
-  const [presentingElement, setPresentingElement] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    // Check if the user is already logged in
+    const username = localStorage.getItem('username');
+    if (username) {
+      // User is already logged in, redirect them to the appropriate page
+      const role = localStorage.getItem('role');
+      switch (role) {
+        case '0':
+          history.replace('/home');
+          break;
+        case '1':
+          history.replace('/admin/news');
+          break;
+        case '2':
+          history.replace('/faculty/attendance');
+          break;
+        default:
+          // Handle unexpected roles
+          history.replace('/default');
+      }
+    }
+  }, [history]);
 
   useEffect(() => {
     setPresentingElement(page.current);
@@ -134,120 +168,131 @@ const Login: React.FC = () => {
     return role !== 'gesture';
   }
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+
   return (
     <IonPage ref={page}>
       {isDesktop ?
         <>
-          <IonContent scrollY={false} fullscreen={true}>
-            <div className='contact'>
-              <IonButton 
-              className="contact-button" 
-              fill="clear" color='medium' 
-              id="open-modal"
-              onClick={() => {
-                setShowForgotPass(true);
-              }}
-              >
-                Contact Us
-                <IonIcon slot="end" color="medium" icon={mailOutline}></IonIcon>
-              </IonButton>
-            </div>
+          {isLoading ? (
+            <CustomLoading isOpen={isLoading} delay={10000} />
+          ) : (
+            <IonContent scrollY={false} fullscreen={true}>
+              <div className='contact'>
+                <IonButton
+                  className="contact-button"
+                  fill="clear" color='medium'
+                  id="open-modal"
+                  onClick={() => {
+                    setShowForgotPass(true);
+                  }}
+                >
+                  Contact Us
+                  <IonIcon slot="end" color="medium" icon={mailOutline}></IonIcon>
+                </IonButton>
+              </div>
 
-            <div className='logo-with-name-container'>
-              <IonImg className='logo-size' src="/src/imgs/logo.png" alt='logo'></IonImg>
-              <div className='spacer-h-xxs' />
-              <div className='lcsinhs-title'>Lipa City Science Integrated National High School Portal</div>
-              <div className='spacer-h-s' />
-            </div>
+              <div className='logo-with-name-container'>
+                <IonImg className='logo-size' src="/src/imgs/logo.png" alt='logo'></IonImg>
+                <div className='spacer-h-xxs' />
+                <div className='lcsinhs-title'>Welcome to LCSINHS Portal</div>
+                <div className='spacer-h-s' />
+              </div>
 
-            <div className='login-card-position'>
-              <IonCard className='login-card'>
+              <div className='login-card-position'>
+                <IonCard className='login-card'>
 
-                <div className='login-form-container'>
-                  <p className='login-text'>Log In</p>
+                  <div className='login-form-container'>
+                    <p className='login-text'>Log In</p>
 
-                  <div>
-                    <IonInput fill="outline"
-                      label="Username"
-                      labelPlacement="floating"
-                      size={50}
-                      type="text"
-                      name="username"
-                      value={loginData.username}
-                      onInput={(e) => handleInputChange(e)}
-                    ></IonInput>
+                    <div>
+                      <IonInput fill="outline"
+                        label="Username"
+                        labelPlacement="floating"
+                        size={50}
+                        type="text"
+                        name="username"
+                        value={loginData.username}
+                        onInput={(e) => handleInputChange(e)}
+                      ></IonInput>
 
-                    <div className='spacer-h-s' />
+                      <div className='spacer-h-s' />
 
-                    <IonInput
-                      fill="outline"
-                      label="Password"
-                      labelPlacement="floating"
-                      type="password"
-                      name="password"
-                      value={loginData.password}
-                      onInput={(e) => handleInputChange(e)}
-                    ></IonInput>
+                      <IonInput
+                        fill="outline"
+                        label="Password"
+                        labelPlacement="floating"
+                        type="password"
+                        name="password"
+                        value={loginData.password}
+                        onInput={(e) => handleInputChange(e)}
+                      ></IonInput>
 
-                    <div className='forgot'>
+                      <div className='forgot'>
+                        <IonButton
+                          id="open-modal"
+                          fill="clear"
+                          color={'medium'}
+                          onClick={() => {
+                            setShowForgotPass(true);
+                            modal.current?.present();
+                          }}
+                        >Forgot Password?
+                        </IonButton>
+                      </div>
+
+                      {/*HELP CENTER*/}
+                      <IonModal className="modal-design " ref={modal} trigger="open-modal" canDismiss={canDismiss} presentingElement={presentingElement!}>
+                        <IonHeader>
+                          <IonToolbar>
+                            <IonTitle class='header-title'>Help Center</IonTitle>
+                            <IonButtons slot="end">
+                              <IonButton onClick={() => dismiss()}><IonIcon icon={close} /></IonButton>
+                            </IonButtons>
+                          </IonToolbar>
+                        </IonHeader>
+                        <IonContent className="ion-padding">
+                          <p>
+                            For any portal login concerns, contact us through the following email addresses:
+                          </p>
+
+                          <IonCard className='card-email'>
+                            <IonCardContent>
+                              <IonLabel className='email-1'>
+                                <IonIcon icon={home} /> Official Email Address
+                              </IonLabel>
+                              <br></br>
+                              <div className='spacer-h-xxs' />
+                              <IonLabel className='email-2'>
+                                <IonIcon icon={mailOutline} /> lipacityscienceinhs@gmail.com
+                              </IonLabel>
+                            </IonCardContent>
+                          </IonCard>
+                        </IonContent>
+                      </IonModal>
+
+                      <div className='spacer-h-xs' />
                       <IonButton
-                        id="open-modal"
-                        fill="clear"
-                        color={'medium'}
-                        onClick={() => {
-                          setShowForgotPass(true);
-                          modal.current?.present();
-                        }}
-                      >Forgot Password?
+                        className='submit'
+                        fill='solid'
+                        color="dark"
+                        onClick={login}
+                      >Submit
                       </IonButton>
                     </div>
-
-                    {/*HELP CENTER*/}
-                    <IonModal className="modal-design " ref={modal} trigger="open-modal" canDismiss={canDismiss} presentingElement={presentingElement!}>
-                      <IonHeader>
-                        <IonToolbar>
-                          <IonTitle class='header-title'>Help Center</IonTitle>
-                          <IonButtons slot="end">
-                            <IonButton onClick={() => dismiss()}><IonIcon icon={close} /></IonButton>
-                          </IonButtons>
-                        </IonToolbar>
-                      </IonHeader>
-                      <IonContent className="ion-padding">
-                        <p>
-                          For any portal login concerns, contact us through the following email addresses:
-                        </p>
-
-                        <IonCard className='card'>
-                          <IonCardContent>
-                            <IonLabel className='email-1'>
-                              <IonIcon icon={home} /> Official Email Address
-                            </IonLabel>
-                            <br></br>
-                            <div className='spacer-h-xxs' />
-                            <IonLabel className='email-2'>
-                              <IonIcon icon={mailOutline} /> lipacityscienceinhs@gmail.com
-                            </IonLabel>
-                          </IonCardContent>
-                        </IonCard>
-                      </IonContent>
-                    </IonModal>
-
-                    <div className='spacer-h-xs' />
-                    <IonButton
-                      className='submit'
-                      fill='solid'
-                      color="dark"
-                      onClick={login}
-                    >Submit
-                    </IonButton>
-                    <Loading isOpen={isLoading} message="Logging in..."></Loading>
                   </div>
-                </div>
 
-              </IonCard>
+                </IonCard>
 
-            </div>
-          </IonContent>
+              </div>
+
+
+            </IonContent>
+          )}
         </>
         :
         <>
@@ -314,7 +359,6 @@ const Login: React.FC = () => {
                       color="dark"
                       onClick={login}
                     >Submit
-                      <Loading isOpen={isLoading} message="Logging in..."></Loading>
                     </IonButton>
 
                     <div className='spacer-h-xxs' />
@@ -344,7 +388,7 @@ const Login: React.FC = () => {
           </IonFooter>
 
           {/*HELP CENTER*/}
-          <IonModal  ref={modal} trigger="open-modal" canDismiss={canDismiss} presentingElement={presentingElement!}>
+          <IonModal ref={modal} trigger="open-modal" canDismiss={canDismiss} presentingElement={presentingElement!}>
             <IonHeader>
               <IonToolbar>
                 <IonTitle class='header-title'>Help Center</IonTitle>
@@ -374,7 +418,6 @@ const Login: React.FC = () => {
           </IonModal>
         </>
       }
-
     </IonPage >
   );
 };

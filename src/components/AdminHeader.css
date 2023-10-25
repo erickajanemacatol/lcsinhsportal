@@ -1,4 +1,7 @@
-
+.custom-menu {
+    width: 250px;
+    /* Adjust the width as needed */
+}
 
 .tab-button {
     width: 150px;
@@ -6,9 +9,41 @@
     font-size: medium;
 }
 
-
 .m-tabs {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+ion-menu::part(backdrop) {
+    background-color: rgba(55, 65, 75, 0.5);
+}
+
+.a-logo-btn-size {
+    width: 150px;
+}
+
+.a-tab-btn {
+    width: 200px;
+    height: 50px;
+    font-size: large;
+
+    --background-hover: var(--background);
+}
+
+.scrollable-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* Hide the scrollbar for Webkit-based browsers */
+.scrollable-container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+/* Hide scrollbar track for Webkit-based browsers */
+.scrollable-container::-webkit-scrollbar-track {
+    display: none;
 }

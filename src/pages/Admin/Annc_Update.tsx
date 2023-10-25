@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { IonButton, IonInput, IonModal } from '@ionic/react';
+import { IonButton, IonInput, IonModal, IonTextarea } from '@ionic/react';
+import './Announcements.css'
 
 export interface Announcement {
   title: string;
@@ -55,18 +56,28 @@ const UpdateAnnouncement: React.FC<UpdateAnnouncementProps> = ({
   };
 
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={onClose}>
-      <h2>Update Announcement</h2>
-      <IonInput
-        value={updatedTitle}
-        onIonChange={(e) => setUpdatedTitle(e.detail.value!)}
-      ></IonInput>
-      <IonInput
-        value={updatedDescription}
-        onIonChange={(e) => setUpdatedDescription(e.detail.value!)}
-      ></IonInput>
-      <IonButton onClick={handleUpdate}>Update</IonButton>
-      <IonButton onClick={onClose}>Close</IonButton> {/* Close button */}
+    <IonModal className='modal-des' isOpen={isOpen} onDidDismiss={onClose}>
+      <div className='modal-view'>
+        <h3><b>Update Announcement</b></h3>
+        <div className='spacer-h-l' />
+        Title
+        <div className='spacer-h-xs' />
+        <IonInput fill={'outline'}
+          value={updatedTitle}
+          onIonChange={(e) => setUpdatedTitle(e.detail.value!)}
+        ></IonInput>
+        <div className='spacer-h-m' />
+        Description
+        <div className='spacer-h-xs' />
+        <IonTextarea fill='outline'
+          value={updatedDescription}
+          onIonChange={(e) => setUpdatedDescription(e.detail.value!)}
+        ></IonTextarea>
+      </div>
+      <div className='buttons-pos'>
+        <IonButton expand="block" onClick={handleUpdate}>Update</IonButton>
+        <IonButton  expand="block" onClick={onClose} color={'danger'}>Close</IonButton> {/* Close button */}
+      </div>
     </IonModal>
   );
 };

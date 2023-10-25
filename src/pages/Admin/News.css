@@ -1,0 +1,65 @@
+.card {
+    border: 1px solid #ccc;
+    margin: 10px;
+    display: inline-block;
+    height: 250px; /* Set the desired fixed height for the IonCard */
+    width: 200px; /* Set the desired width for the IonCard */
+    position: relative; /* Set position to relative for positioning the trash button */
+}
+
+.image-container {
+    width: 100%;
+    height: 100%; /* Set the image container height to 100% of the IonCard height */
+}
+
+img {
+    max-height: 100%; /* Set a maximum height relative to the container's height */
+    width: auto; /* Allow the image to maintain its aspect ratio */
+    object-fit: cover;
+}
+
+.trash-button {
+    position: absolute;
+    top: 10px; /* Adjust the top position as needed */
+    right: 10px; /* Adjust the right position as needed */
+}
+
+
+
+.div-title-n {
+    display: flex;
+    width: 100%;
+}
+
+.title-pl {
+    display: flex;
+}
+
+.upload-pl {
+    display: block;
+    align-items: center;
+    justify-content: end;
+    width: 80%;
+}
+
+.upload-card {
+    border-color: rgb(218, 218, 218);
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: none !important  ;
+}
+
+.upload-card-cont{
+    display: flex;
+    align-items: center;
+}
+
+.select-file-text {
+    width: 50%;
+}
+
+.select-file-but {
+    display: flex;
+    justify-content: end;
+    width: 50%;
+}

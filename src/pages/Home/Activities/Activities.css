@@ -26,11 +26,8 @@
 
 .activity-card {
     border-radius: 10px;
-    border-color: rgb(198, 198, 198);
-    border-style: solid;
-    border-width: 1px;
+    box-shadow:#6815ec;
     width: 95%;
-    box-shadow: none;
     height: auto;
 }
 

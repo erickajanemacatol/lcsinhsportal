@@ -85,7 +85,6 @@ ion-button {
 
 .m-tabs-display {
     display: flex;
-    justify-content: start;
     align-items: center;
 }
 

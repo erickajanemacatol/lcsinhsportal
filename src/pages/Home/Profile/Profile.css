@@ -50,7 +50,7 @@
 }
 
 .card-border {
-    border-radius: 20px;
+    border-radius: 10px;
     height: 345px;
     width: 80%;
 }
@@ -59,7 +59,7 @@
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: max-content;
-    width: 100%;    
+    width: 60%;
     justify-content: center;
     align-items: center;
 }
@@ -71,20 +71,23 @@
 
 .but-col {
     display: flex;
-    width: 70%;
+    width: 90%;
     align-items: center;
 }
 
 .buttons-appearance {
     display: flex;
     justify-content: start;
-    --border-radius: 20px;
+    --border-radius: 10px;
     --background: #ffffff;
     --color: #000;
-    --border-color: #000;
+    --border-color: #c8c8c8;
+    --border-width: 1px;
+    --border-style: solid;
+    --box-shadow: none;
     --background-hover: #000063;
     width: 98%;
-    height: 70px;
+    height: 80px;
     font-family: 'poppins';
     font-size: larger;
     font-weight: 400;
@@ -96,4 +99,143 @@
 
 .icon-size {
     font-size: 2rem;
+}
+
+.qr-code-modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.qr-code-img {
+    width: 200px;
+    /* Adjust the size as needed */
+    height: 200px;
+    /* Adjust the size as needed */
+}
+
+.modal-css {
+    display: block;
+    margin: 10px
+}
+
+/*MOBILE*/
+
+.top-placement {
+    display: flex;
+}
+
+.m-logout {
+    display: flex;
+    justify-content: end;
+}
+
+.m-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.logout-effect {
+    --background-hover: transparent;
+    --ripple-color: transparent;
+}
+
+.m-profile-text {
+    font-weight: bold;
+    font-size: 15pt;
+    font-family: poppins;
+    color: black;
+}
+
+.my-profile-card {
+    display: block;
+    height: 95%;
+    border-radius: 10px;
+    box-shadow: none !important;
+}
+
+.m-avatar-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.m-avatar {
+    height: 100px;
+    width: 100px;
+    --border-radius: 5px;
+}
+
+.m-cards-column {
+    display: grid;
+    grid-template-columns: 45% 45%;
+    grid-template-rows: max-content;
+    width: 95%;
+    justify-content: center;
+    align-items: center;
+}
+
+.m-card-border {
+    border-radius: 10px;
+    width: 100%;
+    box-shadow: none;
+}
+
+.m-but-col {
+    display: flex;
+    width: 80%;
+    align-items: center;
+}
+
+.m-icon-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.m-button-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.m-buttons-appearance {
+    align-items: center;
+    justify-content: start;
+    --border-radius: 10px;
+    --background: #ffffff;
+    --color: #000;
+    --border-color: #979797;
+    --border-width: 1px;
+    --border-style: solid;
+    --box-shadow: none;
+    width: 95%;
+    height: 100px;
+    font-family: 'poppins';
+    font-size: medium;
+    font-weight: 400;
+}
+
+.buttons-label {
+    font-family: 'poppins';
+}
+
+.m-icon-size {
+    font-size: 30pt;
+}
+
+.block-display {
+    display: block;
+    width: 50%;
+    justify-content:center ;
+}
+
+.close-but {
+    display: flex;
+    justify-content: end;
 }

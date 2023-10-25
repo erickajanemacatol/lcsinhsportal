@@ -22,7 +22,7 @@ ion-button {
     margin-top: 10px;
     text-align: center;
     font-weight: bold;
-    font-size: 15pt;
+    font-size: 18pt;
     font-family: poppins;
     color: black;
 }
@@ -45,7 +45,6 @@ ion-button {
     justify-content: center;
 
 }
-
 
 .login-text {
     font-weight: 300;
@@ -99,7 +98,7 @@ ion-button {
     font-family: poppins;
 }
 
-.card {
+.card-email {
     display: block;
     border-radius: 10px;
     box-shadow: none;

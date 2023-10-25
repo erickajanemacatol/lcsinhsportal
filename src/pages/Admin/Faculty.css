@@ -1,0 +1,19 @@
+.buttons-pref {
+    display: flex;
+    justify-content: end;
+}
+
+.search-bar {
+    display: block;
+    width: 55%;
+    margin: auto;
+}
+
+.search-desc {
+    display: flex;
+    justify-content: center;
+}
+
+.search-desc-size {
+    font-size: small;
+}

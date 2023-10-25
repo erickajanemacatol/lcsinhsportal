@@ -1,0 +1,43 @@
+.upload-cal-button {
+    display: flex;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.display-cal-button {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.event-card {
+    box-shadow: none !important;
+}
+
+.custom-date-input {
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    border-color: antiquewhite;
+    border-width: 1px;
+    padding: 8px;
+    font-size: 16px;
+    width: 150px;
+}
+
+.event-custom-input {
+    width: 350px;
+    padding: 12px;
+    margin-right: 10px;
+}
+
+.desc-custom-input {
+    width: 550px;
+    padding: 12px;
+    margin-right: 10px;
+}
+
+.month-year {
+    font-family: poppins;
+    font-size: 18pt;
+}
+  

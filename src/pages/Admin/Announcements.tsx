@@ -1,8 +1,8 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonContent, IonIcon, IonLabel, IonPage, useIonToast } from "@ionic/react";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonModal, IonNote, IonPage, IonText, IonTitle, IonToolbar, useIonToast } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import './Announcements.css';
 import AdminHeader from "../../components/AdminHeader";
-import { add } from "ionicons/icons";
+import { add, create, trash } from "ionicons/icons";
 import axios from 'axios'; // Import axios for making HTTP requests.
 import { useMediaQuery } from "react-responsive";
 import UpdateAnnouncement, { Announcement } from './Annc_Update';
@@ -12,8 +12,8 @@ interface UpdateAnnouncementProps {
     onClose: () => void;
     announcement?: Announcement | null;
     onUpdate: (updatedAnnouncement: Announcement) => void;
-
 }
+
 
 const Announcements: React.FC = () => {
     const isDesktop = useMediaQuery({ minWidth: 1050 });
@@ -39,7 +39,6 @@ const Announcements: React.FC = () => {
 
     const closeUpdateModal = () => {
         setUpdateModal(false);
-        // Reset the selectedAnnouncement when closing the modal
         setSelectedAnnouncement(null);
     };
 
@@ -93,38 +92,36 @@ const Announcements: React.FC = () => {
 
     const handleDeleteAnnouncement = (id) => {
         const confirmed = window.confirm('Are you sure you want to delete this announcement?');
-      
+
         if (confirmed) {
-          // Send a DELETE request to your PHP script with the announcement ID
-          axios
-            .delete(`http://localhost/annc-delete.php`, {
-              data: { id },
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            })
-            .then((response) => {
-              if (response.data && response.data.success) {
-                showToast('Announcement Deleted', 'success');
-                // Handle successful deletion
-                // You may want to update the list of announcements in the state.
-                const updatedAnnouncements = announcements.filter((ann) => ann.annc_id !== id);
-                setAnnouncements(updatedAnnouncements);
-              } else {
-                console.error('Deletion failed:', response.data);
-                showToast('Announcement Deletion Failed', 'danger');
-              }
-            })
-            .catch((error) => {
-              console.error('Axios Error:', error);
-              showToast('Announcement Deletion Failed', 'danger');
-            });
+            // Send a DELETE request to your PHP script with the announcement ID
+            axios
+                .delete(`http://localhost/annc-delete.php`, {
+                    data: { id },
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then((response) => {
+                    if (response.data && response.data.success) {
+                        showToast('Announcement Deleted', 'success');
+
+                        const updatedAnnouncements = announcements.filter((ann) => ann.annc_id !== id);
+                        setAnnouncements(updatedAnnouncements);
+                    } else {
+                        console.error('Deletion failed:', response.data);
+                        showToast('Announcement Deletion Failed', 'danger');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Axios Error:', error);
+                    showToast('Announcement Deletion Failed', 'danger');
+                });
         }
-      };
-      
+    };
+
 
     useEffect(() => {
-        // Fetch announcements from your API endpoint when the component mounts.
         axios
             .get('http://localhost/annc-fetch.php')
             .then((response) => {
@@ -138,55 +135,57 @@ const Announcements: React.FC = () => {
     return (
         <IonPage>
             <AdminHeader />
+
             {isDesktop ?
                 <>
-                    <IonContent>
-                        <div className="spacer-h-l"></div>
-                        <div className="spacer-h-m"></div>
+                    <IonContent >
 
-                        <div className="create-button">
-                            <IonButton size="default" href="/admin/announcement-details">
-                                <IonIcon icon={add} />
-                                Create
-                            </IonButton>
+                        <div className="spacer-h-l"></div>
+                        <div className="div-title">
+                            <div className="title-pl">
+                                <IonLabel className="annc-title">Announcements</IonLabel>
+                            </div>
+                            <div className="create-button">
+                                <IonButton size="default" href="/admin/announcement-details" color={'dark'}>
+                                    <IonIcon icon={add} />
+                                    Create
+                                </IonButton>
+                            </div>
                         </div>
 
-                        {announcements.map((announcement, index) => (
-                            <IonCard key={index}>
-                                <IonCardHeader color="light">
-                                    Title: {announcement.title}
-                                    <div className="spacer-w-xl" />
-                                    Date and Time: {(announcement.dateandtime)} {/* Format the timestamp */}
-                                </IonCardHeader>
-                                <div className="spacer-h-xxs" />
-                                <IonCardContent>
-                                    <IonLabel> Description: {announcement.description}</IonLabel>
-                                </IonCardContent>
-                                <IonButtons>
-                                    <IonButton color="primary" onClick={() => handleUpdateClick(announcement.annc_id)}>
-                                        Update
-                                    </IonButton>
-                                    <IonButton color="danger" onClick={() => handleDeleteAnnouncement(announcement.annc_id)}>
-                                        Delete
-                                    </IonButton>
-                                </IonButtons>
-                            </IonCard>
-                        ))}
+                        <div className="spacer-h-m"></div>
 
-                        <UpdateAnnouncement
-                            isOpen={updateModal}
-                            onClose={closeUpdateModal}
-                            announcement={selectedAnnouncement}
-                            onUpdate={(updatedAnnouncement) => handleUpdateAnnouncement(updatedAnnouncement, selectedAnnouncement.annc_id)}
-                        />
+                        {announcements.map((announcement, index) => (
+                            <IonItem key={index}>
+                                <IonLabel>
+                                    <h2><b>{announcement.title}</b></h2>
+                                    <div className="spacer-w-xl" />
+                                    <p color="medium">{announcement.dateandtime}</p> {/* Set the color to "medium" */}
+                                    <div className="spacer-w-xl" />
+                                    <p>Details: {announcement.description}</p>
+                                </IonLabel>
+
+                                    <IonButtons slot="end">
+                                        <IonButton color="primary" size="default" onClick={() => handleUpdateClick(announcement.annc_id)}>
+                                            Update
+                                        </IonButton>
+                                        <IonButton color="danger" size="default" onClick={() => handleDeleteAnnouncement(announcement.annc_id)}>
+                                            Delete
+                                        </IonButton>
+                                    </IonButtons>
+                            </IonItem>
+                        ))}
 
 
                     </IonContent>
                 </> : <>
+
                     {/*MOBILE*/}
                     <IonContent>
+
                         <div className="spacer-h-l"></div>
-                        <div className="spacer-h-m"></div>
+                        <IonLabel className="annc-title">Announcements</IonLabel>
+                        <div className="spacer-h-xs"></div>
 
                         <div className="create-button">
                             <IonButton size="default" href="/admin/announcement-details">
@@ -195,39 +194,49 @@ const Announcements: React.FC = () => {
                             </IonButton>
                         </div>
 
+                        <div className="spacer-h-m"></div>
+
                         {announcements.map((announcement, index) => (
                             <IonCard key={index}>
-                                <IonCardHeader color="light">
-                                    Title: {announcement.title}
-                                    <div className="spacer-w-xl" />
-                                    Date and Time: {(announcement.dateandtime)} {/* Format the timestamp */}
+                                <IonCardHeader className="header-disp">
+                                    <div className="header-disp">
+                                        <div className="title-poss">
+                                            <IonText className="title-format">{announcement.title}</IonText>
+                                            <div className="spacer-w-xl" />
+                                            {(announcement.dateandtime)}
+                                        </div>
+                                        <div className="m-button-pos">
+                                            <IonButtons>
+                                                <IonButton color="primary" onClick={() => handleUpdateClick(announcement.annc_id)}>
+                                                    <IonIcon icon={create} />
+                                                </IonButton>
+                                                <IonButton color="danger" onClick={() => handleDeleteAnnouncement(announcement.annc_id)}>
+                                                    <IonIcon icon={trash} />
+                                                </IonButton>
+                                            </IonButtons>
+                                        </div>
+
+                                    </div>
+
                                 </IonCardHeader>
-                                <div className="spacer-h-xxs" />
+
                                 <IonCardContent>
-                                    <IonLabel> Description: {announcement.description}</IonLabel>
+                                    <IonText color={'dark'}>Description: {announcement.description}</IonText>
                                 </IonCardContent>
-                                <IonButtons>
-                                    <IonButton color="primary" onClick={() => handleUpdateClick(announcement.annc_id)}>
-                                        Update
-                                    </IonButton>
-                                    <IonButton color="danger" onClick={() => handleDeleteAnnouncement(announcement.annc_id)}>
-                                        Delete
-                                    </IonButton>
-                                </IonButtons>
+
                             </IonCard>
                         ))}
-
-                        <UpdateAnnouncement
-                            isOpen={updateModal}
-                            onClose={closeUpdateModal}
-                            announcement={selectedAnnouncement}
-                            onUpdate={(updatedAnnouncement) => handleUpdateAnnouncement(updatedAnnouncement, selectedAnnouncement.annc_id)}
-                        />
-
 
                     </IonContent>
                 </>
             }
+
+            <UpdateAnnouncement
+                isOpen={updateModal}
+                onClose={closeUpdateModal}
+                announcement={selectedAnnouncement}
+                onUpdate={(updatedAnnouncement) => handleUpdateAnnouncement(updatedAnnouncement, selectedAnnouncement.annc_id)}
+            />
         </IonPage>
     );
 };

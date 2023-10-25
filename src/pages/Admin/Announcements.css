@@ -1,5 +1,26 @@
+.annc-title {
+    font-family: poppins;
+    width: 50%;
+    font-weight: bolder;
+    font-size: 18pt;
+    color: black;
+}
+
+.div-title {
+    display: flex;
+    width: 100%;
+}
+
+.title-pl {
+    display: flex;
+    width: 100%;
+}
+
 .create-button {
-    margin-left: 30px;
+    width: auto;
+    justify-content: end;
+    align-items: center;
+    margin-right: 30px;
 }
 
 .ann-deets-size {
@@ -11,4 +32,50 @@
     display: block;
     margin: auto;
     width: 90%;
+}
+
+.modal-des {
+    --border-radius: 20px;
+}
+
+.modal-view {
+    display: block;
+    padding: 20px;
+}
+
+.buttons-pos {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+/*card des*/
+.title-format {
+    font-weight: bold;
+    font-size: 14pt;
+}
+
+.title-poss {
+    width: 50%;
+
+}
+
+.button-pos {
+    display: flex;
+    justify-content: end;
+} 
+
+.m-button-pos {
+    display: flex;
+    width: 50%;
+    justify-content: end;
+}
+
+.header-disp {
+    display: flex;
+    width: 100%;
+}
+
+.mobile-display {
+    display: block;
 }

@@ -1,0 +1,15 @@
+{
+    "name": "vendor/lcsinhsportal",
+    "autoload": {
+        "psr-4": {
+            "Vendor\\Lcsinhsportal\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "erickajanemacatol",
+            "email": "erickajanemacs@gmail.com"
+        }
+    ],
+    "require": {}
+}

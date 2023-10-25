@@ -87,7 +87,6 @@ const StudentHeader: React.FC = () => {
                 :
                 /*MOBILE VIEW*/
                 <>
-
                     <IonHeader class="ion-no-border">
                         <IonToolbar >
                             <div className="m-header-display">
@@ -105,7 +104,7 @@ const StudentHeader: React.FC = () => {
 
                                 </div>
 
-                                <div className="m-tabs-display">
+                                <div className="m-tabs">
                                     <IonButton fill="clear" className="m-tab-btn"
                                         color={"dark"}
                                         style={getButtonStyle('home')}

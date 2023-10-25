@@ -2,3 +2,27 @@
     --min-height: 95px;
 }
 
+.attendance-item {
+    display: grid;
+    grid-template-columns: 30% 30% auto;
+    grid-template-rows: 100%;
+    align-items: center;
+}
+
+.item-div {
+    width: 100%;
+}
+
+.lrn-grid {
+    grid-column: 1;
+    margin-right: 5px;
+}
+
+.name-grid {
+    grid-column: 2;
+}
+
+.time-grid {
+    grid-column: 3;
+    text-align: right;
+}

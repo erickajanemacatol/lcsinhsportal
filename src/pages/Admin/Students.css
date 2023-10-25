@@ -1,0 +1,105 @@
+.buttons-align {
+    display: block;
+}
+
+.grid-border {
+    text-align: center;
+    color: rgb(0, 0, 0);
+    align-items: center;
+    justify-items: center;
+
+}
+
+.col-border-header {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(184, 184, 184);
+    background-color: beige;
+    font-size: 13pt;
+    font-weight: 600;
+    font-family: 'lato';
+}
+
+.col-border {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(184, 184, 184);
+    font-size: 12pt;
+    font-weight: 300;
+}
+
+/* Add this to your CSS/SCSS file */
+.column-lrn {
+    justify-content: start;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(184, 184, 184);
+    font-size: 9pt;
+    font-weight: 300;
+    /* Adjust the width as needed */
+}
+
+.column-name {
+    justify-content: start;
+    width: 300px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(184, 184, 184);
+    font-size: 10pt;
+    font-weight: 300;
+    /* Adjust the width as needed */
+}
+
+.column-upload {
+    justify-content: start;
+    width: 300px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(184, 184, 184);
+    font-size: 10pt;
+    font-weight: 300;
+    /* Adjust the width as needed */
+}
+
+.div-card {
+    display: block;
+    width: 100%;
+}
+
+.div-card2 {
+    display: block;
+    width: 50%;
+    justify-content: end;
+}
+
+.card-pref {
+    box-shadow: none;
+    border-width: 1px;
+    border-color: gray;
+    border-style: solid;
+    display: block;
+    align-items: center;
+}
+
+.input-width {
+    display: block;
+    width: 200px;
+}
+
+.submit-button-pref {
+    margin: auto;
+    height: 40px;
+}
+
+.search-bar-size {
+    display: block;
+    width: 50%;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-bar-desc {
+    display: flex;
+    justify-content: center;
+}

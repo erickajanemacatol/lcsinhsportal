@@ -1,0 +1,17 @@
+.disp-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.disp-flex {
+    display: flex;
+    width: 70%;;
+}
+
+.disp-center-flex {
+    display: flex;
+    justify-content: center;
+    width: 100%;;
+}

@@ -1,8 +1,15 @@
 .content {
     display: grid;
     height: max-content;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 60% 40%;
     grid-template-rows: 100%;
+}
+
+.home-background {
+    --background: url("/src/imgs/bg.jpg") 100%; 
+    -webkit-background-size: 100%;
+    -moz-background-size: 100%;
+    background-size: 100%;
 }
 
 .homepage-card {
@@ -18,6 +25,110 @@
     margin-top: 250px;
 }
 
+.recent-news-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 16px;
+}
+
+/*FOR SCROLLABLE CARDS*/
+.scrollable-container {
+    width: 100%;
+    overflow: auto; /* Use "auto" for horizontal scrolling */
+    white-space: nowrap;
+    display: flex; /* Add this to enable side-by-side cards */
+    padding-bottom: 20px; /* Reserve space for the scrollbar */
+    scroll-behavior: smooth; /* Add a smooth scrolling effect */
+    scrollbar-width: thin; /* Display scrollbar on browsers that support it */
+}
+
+.news-card {
+    flex: 0 0 auto;
+    width: 50%; /* Adjust the card width for two cards per row */
+    margin-right: 10px; /* Add spacing between cards */
+    transition: transform 0.3s; /* Add a smooth transition effect */
+}
+/* Add this to your CSS stylesheet */
+.news-slider {
+    overflow: hidden;
+    position: relative;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    scrollbar-width: thin; /* Display scrollbar on browsers that support it */
+}
+
+.news-items {
+    display: inline-flex;
+    transition: transform 0.5s ease-in-out;
+    padding-bottom: 5px; 
+}
+
+.news-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.news-card {
+    flex: 0 0 calc(50% - 20px);
+    margin: 0 10px; 
+    scroll-snap-align: center; 
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+.news-card:nth-child(2n) {
+    margin-right: 0;
+}
+
+.scrollable-parent {
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: thin;
+}
+
+/* Webkit-based browsers scrollbar */
+.scrollable-parent::-webkit-scrollbar {
+    width: 12px;
+}
+
+.scrollable-parent::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Track color */
+}
+
+.scrollable-parent::-webkit-scrollbar-thumb {
+    background: #888; /* Thumb color */
+}
+
+.scrollable-parent::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Thumb color on hover */
+}
+
+
+::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Track color */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* Thumb color */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Thumb color on hover */
+}
+
+
+/*ANNOUNCEMENT*/
+.anncm-card {
+    box-shadow: none !important;
+}
+
+/*CALENDAR*/
+
 .calendar-pos {
     margin-top: 250px;
     display: flex;
@@ -31,6 +142,16 @@
     height: 50%;
     border-radius: 10px;
 }
+
+.cal-cont{
+    margin: 20px;
+}
+
+.events {
+    overflow-y: auto;
+    max-height: 200px;
+  }
+  
 
 .p {
     font-size: x-large;
@@ -136,12 +257,14 @@ ion-col {
     padding-bottom: 50px;
 }
 
-
-
 /*MOBILE CSS*/
 
 .m-display-block {
     display: block;
+}
+
+.m-content {
+    --background: red;
 }
 
 .m-homepage-card {
