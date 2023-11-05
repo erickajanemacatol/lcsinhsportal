@@ -1,18 +1,33 @@
-import { IonAvatar, IonButton, IonCard, IonCardContent, IonContent, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonModal, IonPage, IonText, IonToolbar, useIonToast } from "@ionic/react";
-import { arrowBack, close, documentText, folderOpen, idCard, list, logOut, person, qrCode, school, time } from "ionicons/icons";
+import {
+    IonAvatar, IonButton, IonCard, IonCardContent, IonChip, IonContent, IonHeader, IonIcon, IonImg,
+    IonInput, IonItem, IonLabel, IonModal, IonPage, IonText, IonTitle, IonToolbar,
+    useIonToast
+} from "@ionic/react";
+import { arrowBack, close, closeOutline, documentText, folderOpen, idCard, list, logOut, person, qrCode, school, time } from "ionicons/icons";
 import { useMediaQuery } from "react-responsive";
 import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import QRCode from 'qrcode.react';
 import './Profile.css'
 import '/src/components/Spacer.css'
-import { useHistory } from "react-router-dom";
-import { SiGoogleforms } from "react-icons/si";
 
 interface UserData {
-    student_lrn: string; // Adjust the data type if it's not a string
-    // Include other properties from your actual userData object
+    student_lrn: string;
+    f_name: string;
+    l_name: string;
+    CoR: string;
+    form_137: string;
+    good_moral: string;
+    CoEnrolment: string;
+    CoRanking: string;
 }
+
+interface SubjectModel {
+    semester: number;
+    subject_name: string;
+}
+
 
 const Profile = () => {
     const isDesktop = useMediaQuery({ minWidth: 992 })
@@ -21,7 +36,7 @@ const Profile = () => {
     const [showDocs, setShowDocs] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const history = useHistory();
-    const [avatarFile, setAvatarFile] = useState(null);
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [emergencyContact, setEmergencyContact] = useState("");
     const [emergencyNumber, setEmergencyNumber] = useState("");
     const [emergencyAddress, setEmergencyAddress] = useState("");
@@ -34,6 +49,12 @@ const Profile = () => {
     );
     const [surveyLink, setSurveyLink] = useState("");
     const [enrolLink, setEnrolLink] = useState("");
+    const [enrollmentLink, setEnrollmentLink] = useState("");
+    const [showSubjectsModal, setShowSubjectsModal] = useState(false);
+    const [showSubjectsJHSModal, setShowSubjectsJHSModal] = useState(false);
+    const [gradeLevel, setGradeLevel] = useState<number | null>(null);
+    const [subjects, setSubjects] = useState<SubjectModel[]>([]);
+    const [subjectsJHS, setSubjectsJHS] = useState<[]>([]);
 
     const showToast = (message: string, color: string) => {
         presentToast({
@@ -43,8 +64,229 @@ const Profile = () => {
         });
     };
 
-    const [userData, setUserData] = useState<UserData>({ student_lrn: '' });
-    const username = localStorage.getItem('username');
+    const [userData, setUserData] = useState<UserData>({
+        student_lrn: '', f_name: '', l_name: '', CoR: '',
+        form_137: '',
+        good_moral: '',
+        CoEnrolment: '',
+        CoRanking: '',
+    });
+    const username = localStorage.getItem('username') || ''; // Use an empty string as the fallback if null
+
+    const uploadAvatar = () => {
+        if (avatarFile) {
+            const formData = new FormData();
+            formData.append("profile_pic", avatarFile);
+            formData.append("username", username);
+
+            axios
+                .post("https://studentportal.lcsinhs.com/scripts/upload-avatar.php", formData)
+                .then((response) => {
+                    console.log(response.data);
+                    showToast("Avatar uploaded successfully", "success");
+                    setProfilePicturePath(response.data);
+                    setHasUploadedPicture(true);
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    showToast("Error uploading avatar", "danger");
+                });
+        } else {
+            showToast("Please select an avatar file", "danger");
+        }
+    };
+
+    const submitEmergencyContact = () => {
+        if (!emergencyContact || !emergencyNumber || !emergencyAddress) {
+            showToast("Please fill in all fields.", "danger");
+            return;
+        }
+
+        const newData = {
+            emergencyContact,
+            emergencyNumber,
+            emergencyAddress,
+            username,
+        };
+
+        axios
+            .post("https://studentportal.lcsinhs.com/scripts/submit-emergency-contact.php", JSON.stringify(newData))
+            .then((response) => {
+                if (response.data.success) {
+                    showToast('Information Updated.', 'success');
+                    closeInfoModal();
+                    setHasSubmittedInfo(true);
+                } else {
+                    showToast('Error.', 'danger');
+                    setHasSubmittedInfo(false);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                showToast("Error submitting emergency contact information", "danger");
+            });
+    };
+
+    const handleViewClick = (documentPath: string) => {
+        if (!documentPath) {
+            showToast("No document available.", "warning");
+            return;
+        }
+
+        const viewUrl = `https://studentportal.lcsinhs.com/scripts/file-fetch-profile.php?file=${documentPath}`;
+
+        // Open the document URL in a new tab
+        const printWindow = window.open(viewUrl, '_blank');
+
+        if (printWindow) {
+            // Listen for the tab to be loaded
+            printWindow.onload = () => {
+                printWindow.print(); // Trigger the print dialog
+            };
+        }
+    };
+
+    const handlePrintClick = (documentPath: string) => {
+        if (!documentPath) {
+            showToast("No document available.", "warning");
+            return;
+        }
+
+        const viewUrl = `https://studentportal.lcsinhs.com/scripts/file-fetch-profile.php?file=${documentPath}`;
+        const printWindow = window.open(viewUrl, '_blank');
+        if (printWindow) {
+            printWindow.print();
+        } else {
+            showToast("Failed to open print dialog.", "error");
+        }
+    };
+
+    const handleAnswerSurvey = () => {
+        if (surveyLink) {
+            window.open(surveyLink, '_blank'); // Open the survey link in a new tab
+        } else {
+            window.alert("No survey link available.");
+        }
+    };
+
+    const handleEnrolForm = () => {
+        if (enrolLink) {
+            window.open(enrolLink, '_blank'); // Open the survey link in a new tab
+        } else {
+            window.alert("Enrollment is closed.");
+        }
+    };
+
+    useEffect(() => {
+        if (username) {
+            axios
+                .get('https://studentportal.lcsinhs.com/scripts/survey-fetch.php') // Replace with the actual endpoint to fetch the survey link
+                .then((response) => {
+                    // Assuming your API response contains a property named 'surveyLink'
+                    const fetchedSurveyLink = response.data.surveyLink;
+                    if (fetchedSurveyLink) {
+                        setSurveyLink(fetchedSurveyLink);
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [username]);
+
+    useEffect(() => {
+        if (username) {
+            axios
+                .get('https://studentportal.lcsinhs.com/scripts/enrolment-fetch.php') // Replace with the actual endpoint to fetch the enrollment link
+                .then((response) => {
+                    const fetchedEnrolForm = response.data.enrolLink;
+                    if (fetchedEnrolForm) {
+                        setEnrollmentLink(fetchedEnrolForm);
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [username]);
+
+    useEffect(() => {
+        if (username) {
+            axios
+                .post('https://studentportal.lcsinhs.com/scripts/profile.php', { username: username })
+                .then((response) => {
+                    console.log(response.data)
+                    if (response.data.profile_pic) {
+                        const profilePicturePath = `https://studentportal.lcsinhs.com/scripts/fetch_profile_pic.php?file=${response.data.profile_pic}`;
+                        setProfilePicturePath(profilePicturePath);
+                        setHasUploadedPicture(true);
+                    } else {
+                        setHasUploadedPicture(false);
+                    }
+
+                    setEmergencyContact(response.data.emergency_co || '');
+                    setEmergencyNumber(response.data.emergency_no || '');
+                    setEmergencyAddress(response.data.emergency_add || '');
+
+                    // Check if the response contains the student's grade level
+                    if (response.data.grade_level) {
+                        setGradeLevel(response.data.grade_level);
+                        console.log("Grade Level: " + response.data.grade_level);
+
+                        // Determine the appropriate API endpoint based on the grade level
+                        let apiEndpoint;
+                        if (response.data.grade_level >= 7 && response.data.grade_level <= 10) {
+                            // Grade 7-10 API endpoint
+                            apiEndpoint = 'https://studentportal.lcsinhs.com/scripts/subjects-fetch.php';
+                        } else if (response.data.grade_level >= 11 && response.data.grade_level <= 12) {
+                            // Grade 11-12 API endpoint (for subjects_shs table)
+                            apiEndpoint = 'https://studentportal.lcsinhs.com/scripts/subjects-shs-fetch.php';
+                        } else {
+                            console.error('Invalid grade level');
+                            return;
+                        }
+
+                        axios
+                            .get(`${apiEndpoint}?gradeLevel=${response.data.grade_level}`) // Use response.data.grade_level here
+                            .then((subjectsResponse) => {
+                                setSubjects(subjectsResponse.data);
+                                setSubjectsJHS(subjectsResponse.data);
+                                console.log("Subjects: " + subjectsResponse.data);
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    } else {
+                        console.error('Failed to fetch grade level');
+                    }
+
+                    // Check if the response contains a survey link and set it in the state
+                    const savedSurveyLink = localStorage.getItem("surveyLink");
+                    if (savedSurveyLink) {
+                        setSurveyLink(savedSurveyLink);
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [username])
+
+    useEffect(() => {
+        if (username) {
+            axios
+                .post('https://studentportal.lcsinhs.com/scripts/profile.php', { username: username })
+                .then((response) => {
+                    setUserData(response.data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [username]);
+
+    console.log('Grade Level:', gradeLevel);
+    console.log('Subjects:', subjects);
 
     const openQRCodeModal = () => {
         setShowQRCodeModal(true);
@@ -70,152 +312,27 @@ const Profile = () => {
         setShowInfo(false);
     };
 
-    const uploadAvatar = () => {
-        const formData = new FormData();
-        formData.append("profile_pic", avatarFile);
-        formData.append("username", username);
-
-        axios
-            .post("http://localhost/upload-avatar.php", formData)
-            .then((response) => {
-                console.log(response.data);
-                showToast("Avatar uploaded successfully", "success");
-                setProfilePicturePath(response.data);
-                setHasUploadedPicture(true);
-                window.location.reload();
-            })
-            .catch((error) => {
-                showToast("Error uploading avatar", "danger");
-            });
-    };
-
-    const submitEmergencyContact = () => {
-        if (!emergencyContact || !emergencyNumber || !emergencyAddress) {
-            showToast("Please fill in all fields.", "danger");
-            return;
-        }
-
-        const newData = {
-            emergencyContact,
-            emergencyNumber,
-            emergencyAddress,
-            username,
-        };
-        console.log(newData);
-
-        axios
-            .post("http://localhost/submit-emergency-contact.php", JSON.stringify(newData))
-            .then((response) => {
-                if (response.data.success) {
-                    showToast('Information Updated.', 'success');
-                    closeInfoModal();
-                    setHasSubmittedInfo(true);
-                } else {
-                    showToast('Error.', 'danger');
-                    setHasSubmittedInfo(false);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                showToast("Error submitting emergency contact information", "danger");
-            });
-    };
-
-    const handleViewClick = (documentPath: string) => {
-        if (!documentPath) {
-            showToast("No document available.", "warning");
-            return;
-        }
-
-        const viewUrl = `http://localhost/file-fetch-profile.php?file=${documentPath}`;
-        window.open(viewUrl, '_blank');
-    };
-
-    const handleAnswerSurvey = () => {
-        if (surveyLink) {
-            window.open(surveyLink, '_blank'); // Open the survey link in a new tab
-        } else {
-            window.alert("No survey link available.");
+    const openSubjectsModal = () => {
+        if (gradeLevel !== null) {
+            if (gradeLevel >= 7 && gradeLevel <= 10) {
+                setShowSubjectsJHSModal(true);
+            } else if (gradeLevel >= 11 && gradeLevel <= 12) {
+                setShowSubjectsModal(true);
+            }
         }
     };
 
-    const handleEnrolForm = () => {
-        if (enrolLink) {
-            window.open(enrolLink, '_blank'); // Open the survey link in a new tab
-        } else {
-            window.alert("Enrollment is closed.");
-        }
+    const closeSubjectsModal = () => {
+        setShowSubjectsModal(false);
     };
 
-    useEffect(() => {
-        if (username) {
-            axios
-                .get('http://localhost/survey-fetch.php') // Replace with the actual endpoint to fetch the survey link
-                .then((response) => {
-                    // Assuming your API response contains a property named 'surveyLink'
-                    const fetchedSurveyLink = response.data.surveyLink;
-                    if (fetchedSurveyLink) {
-                        setSurveyLink(fetchedSurveyLink);
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    }, [username]);
-
-    useEffect(() => {
-        if (username) {
-            axios
-                .get('http://localhost/enrolment-fetch.php') // Replace with the actual endpoint to fetch the survey link
-                .then((response) => {
-                    const fetchedEnrolForm = response.data.enrolLink;
-                    if (fetchedEnrolForm) {
-                        setEnrolLink(fetchedEnrolForm);
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    }, [username]);
-
-
-    useEffect(() => {
-        if (username) {
-            axios
-                .post('http://localhost/profile.php', { username: username })
-                .then((response) => {
-                    console.log(response);
-                    setUserData(response.data);
-
-                    if (response.data.profile_pic) {
-                        // User has uploaded an avatar; display it
-                        const profilePicturePath = `http://localhost/file-fetch-profile.php?file=${response.data.profile_pic}`;
-                        setProfilePicturePath(profilePicturePath);
-                        setHasUploadedPicture(true);
-                    } else {
-                        setHasUploadedPicture(false);
-                    }
-
-                    const savedSurveyLink = localStorage.getItem("surveyLink");
-                    if (savedSurveyLink) {
-                        setSurveyLink(savedSurveyLink);
-                    }
-
-                    setEmergencyContact(response.data.emergency_co || '');
-                    setEmergencyNumber(response.data.emergency_no || '');
-                    setEmergencyAddress(response.data.emergency_add || '');
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    }, [username]);
+    const closeSubjectsJHSModal = () => {
+        setShowSubjectsJHSModal(false);
+    };
 
     const handleLogout = () => {
         // Clear the user's identifier from localStorage
-        localStorage.removeItem('username'); // Replace 'username' with the identifier you use
+        localStorage.removeItem('username');
         history.push('/login');
         console.log('Logged out');
     };
@@ -284,39 +401,50 @@ const Profile = () => {
                                 onClick={openQRCodeModal}>
                                 <div className="but-col">
                                     <IonIcon className="icon-size" icon={qrCode}></IonIcon>
+                                    <div className="spacer-w-xs" />
                                     <IonLabel>QR Code</IonLabel>
                                 </div>
                             </IonButton>
                             <div>
                                 <IonButton className="buttons-appearance"
-                                    href={'/school_id?print=true'} target="_blank" rel="noopener noreferrer">
+                                    href={gradeLevel && (gradeLevel >= 7 && gradeLevel <= 10) ? '/school_id?print=true' : '/school_id_shs?print=true'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     <div className="but-col">
                                         <IonIcon className="icon-size" icon={idCard}></IonIcon>
+                                        <div className="spacer-w-xs" />
                                         <IonLabel>Student ID</IonLabel>
                                     </div>
                                 </IonButton>
                             </div>
+
                             <div>
                                 <IonButton className="buttons-appearance">
                                     <div className="but-col">
                                         <IonIcon className="icon-size" icon={time}></IonIcon>
+                                        <div className="spacer-w-xs" />
                                         <IonLabel>Class Schedule</IonLabel>
                                     </div>
                                 </IonButton>
                             </div>
                             <div>
-                                <IonButton className="buttons-appearance">
-                                    <div className="but-col">
-                                        <IonIcon className="icon-size" icon={school}></IonIcon>
-                                        <IonLabel>Subjects</IonLabel>
-                                    </div>
-                                </IonButton>
+                                <div>
+                                    <IonButton className="buttons-appearance" onClick={openSubjectsModal}>
+                                        <div className="but-col">
+                                            <IonIcon className="icon-size" icon={school}></IonIcon>
+                                            <div className="spacer-w-xs" />
+                                            <IonLabel>Subjects</IonLabel>
+                                        </div>
+                                    </IonButton>
+                                </div>
                             </div>
                             <div>
                                 <IonButton className="buttons-appearance"
                                     onClick={openDocsModal}>
                                     <div className="but-col">
                                         <IonIcon className="icon-size" icon={folderOpen}></IonIcon>
+                                        <div className="spacer-w-xs" />
                                         <IonLabel>Documents</IonLabel>
                                     </div>
                                 </IonButton>
@@ -325,6 +453,7 @@ const Profile = () => {
                                 <IonButton className="buttons-appearance" onClick={handleAnswerSurvey}>
                                     <div className="but-col">
                                         <IonIcon className="icon-size" icon={list}></IonIcon>
+                                        <div className="spacer-w-xs" />
                                         <IonLabel>Answer Survey</IonLabel>
                                     </div>
                                 </IonButton>
@@ -333,6 +462,7 @@ const Profile = () => {
                                 <IonButton className="buttons-appearance" onClick={handleEnrolForm}>
                                     <div className="but-col">
                                         <IonIcon className="icon-size" icon={documentText}></IonIcon>
+                                        <div className="spacer-w-xs" />
                                         <IonLabel>Enrollment Form</IonLabel>
                                     </div>
                                 </IonButton>
@@ -378,11 +508,18 @@ const Profile = () => {
 
                         <div className="spacer-h-m"></div>
                         <div className="avatar-center">
-                            <IonAvatar className="m-avatar">
-                                <img alt="Student Avatar" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-                            </IonAvatar>
+                            {hasUploadedPicture ? (
+                                <IonAvatar className="avatar">
+                                    <IonImg alt="Student Avatar" src={profilePicturePath} />
+                                </IonAvatar>
+
+                            ) : (
+                                <IonAvatar className="avatar">
+                                    <IonImg alt="Student Avatar" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+                                </IonAvatar>
+                            )}
                         </div>
-                        <div className="spacer-h-m"></div>
+                        <div className="spacer-h-s"></div>
                         <div className="avatar-center">
                             <IonLabel className="m-profile-text">{userData.f_name} {userData.l_name}</IonLabel>
                         </div>
@@ -407,7 +544,8 @@ const Profile = () => {
 
                                 <div>
                                     <IonButton className="m-buttons-appearance"
-                                        href={'/school_id?print=true'} target="_blank" rel="noopener noreferrer">
+                                        href={gradeLevel && (gradeLevel >= 7 && gradeLevel <= 10) ? '/school_id?print=true' : '/school_id_shs?print=true'}
+                                    >
                                         <div className="m-button-content">
                                             <IonIcon className="m-icon-size" icon={idCard}></IonIcon>
                                             <div className="spacer-h-xs" />
@@ -425,7 +563,7 @@ const Profile = () => {
                                     </IonButton>
                                 </div>
                                 <div>
-                                    <IonButton className="m-buttons-appearance">
+                                    <IonButton className="m-buttons-appearance" onClick={openSubjectsModal}>
                                         <div className="m-button-content">
                                             <IonIcon className="m-icon-size" icon={school}></IonIcon>
                                             <div className="spacer-h-xs" />
@@ -480,8 +618,8 @@ const Profile = () => {
                             <IonIcon slot="icon-only" icon={close} />
                         </IonButton>
                     </div>
-                    <div className="spacer-h-xl"/>
-                    <div className="spacer-h-xl"/>
+                    <div className="spacer-h-xl" />
+                    <div className="spacer-h-xl" />
                     <div className="avatar-center">
                         <QRCode size={300}
                             value={userData.student_lrn} />
@@ -504,15 +642,15 @@ const Profile = () => {
                         </div>
                         <div className="display-block">
                             <div>
-                                <p>Upload Avatar:</p>
+                                <p>Upload 1x1 Picture:</p>
                             </div>
                             <div>
                                 <IonItem>
                                     <label htmlFor="avatar"></label>
                                     <input
                                         type="file"
-                                        id="avatar"
-                                        onChange={(e) => setAvatarFile(e.target.files[0])}
+                                        id="avatarInput"
+                                        onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
                                     />
                                     <IonButton onClick={uploadAvatar} slot="end" color={'dark'}>
                                         {hasUploadedPicture ? 'Reupload' : 'Upload'}
@@ -577,7 +715,7 @@ const Profile = () => {
                                     <input
                                         type="file"
                                         id="avatar"
-                                        onChange={(e) => setAvatarFile(e.target.files[0])}
+                                        onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
                                     />
                                     <IonButton size="small" onClick={uploadAvatar} color={'dark'}>
                                         {hasUploadedPicture ? 'Reupload' : 'Upload'}
@@ -624,34 +762,115 @@ const Profile = () => {
                 isOpen={showDocs}
                 onDidDismiss={closeDocsModal}
             >   <div className="spacer-h-xxl" />
-                <div className="center"><h2>Documents</h2></div>
-                <IonItem>
-                    <IonLabel>Certificate of Registration</IonLabel>
-                    <IonButton onClick={() => handleViewClick(userData.CoR)}
-                    >View</IonButton>
-                </IonItem>
-                <IonItem>
-                    <IonLabel>Form 137</IonLabel>
-                    <IonButton onClick={() => handleViewClick(userData.form_137)}
-                    >View</IonButton>
-                </IonItem>
-                <IonItem>
-                    <IonLabel>Good Moral</IonLabel>
-                    <IonButton onClick={() => handleViewClick(userData.good_moral)}
-                    >View</IonButton>
-                </IonItem>
-                <IonItem>
-                    <IonLabel>Certificate of Enrolment</IonLabel>
-                    <IonButton onClick={() => handleViewClick(userData.CoEnrolment)}
-                    >View</IonButton>
-                </IonItem>
-                <IonItem>
-                    <IonLabel>Certificate of Ranking</IonLabel>
-                    <IonButton onClick={() => handleViewClick(userData.CoRanking)}
-                    >View</IonButton>
-                </IonItem>
-                <IonButton onClick={closeDocsModal}>Close Documents</IonButton>
+                <IonToolbar>
+                    <IonTitle>
+                        Documents
+                    </IonTitle>
+                    <IonButton fill="clear" color={'dark'} slot="end" onClick={closeDocsModal} >
+                        <IonIcon icon={closeOutline} slot="icon-only" />
+                    </IonButton>
+                </IonToolbar>
+
+                <div className="spacer-h-l" />
+
+                <IonContent>
+                    <IonItem>
+                        <IonLabel>Certificate of Registration</IonLabel>
+                        <IonButton fill="outline" onClick={() => handleViewClick(userData.CoR)}
+                        >View</IonButton>
+                        <IonButton onClick={() => handlePrintClick(userData.CoR)}
+                        >Print</IonButton>
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel>Form 137</IonLabel>
+                        <IonButton fill="outline" onClick={() => handleViewClick(userData.form_137)}
+                        >View</IonButton>
+                        <IonButton onClick={() => handlePrintClick(userData.form_137)}
+                        >Print</IonButton>
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel>Good Moral</IonLabel>
+                        <IonButton fill="outline" onClick={() => handleViewClick(userData.good_moral)}
+                        >View</IonButton>
+                        <IonButton onClick={() => handlePrintClick(userData.good_moral)}
+                        >Print</IonButton>
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel>Certificate of Enrolment</IonLabel>
+                        <IonButton fill="outline" onClick={() => handleViewClick(userData.CoEnrolment)}
+                        >View</IonButton>
+                        <IonButton onClick={() => handlePrintClick(userData.CoEnrolment)}
+                        >Print</IonButton>
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel>Certificate of Ranking</IonLabel>
+                        <IonButton fill="outline" onClick={() => handleViewClick(userData.CoRanking)}
+                        >View</IonButton>
+                        <IonButton onClick={() => handlePrintClick(userData.CoRanking)}
+                        >Print</IonButton>
+                    </IonItem>
+                </IonContent>
             </IonModal>
+
+            {/*MODAL FOR G11-G12)*/}
+            <IonModal isOpen={showSubjectsModal} onDidDismiss={closeSubjectsModal}>
+                <IonToolbar>
+                    <IonTitle>Subjects</IonTitle>
+                    <IonButton fill="clear" color={'dark'} slot="end" onClick={closeSubjectsModal} >
+                        <IonIcon icon={closeOutline} slot="icon-only" />
+                    </IonButton>
+                </IonToolbar>
+
+                <IonContent>
+                    {subjects.length > 0 ? (
+                        subjects.map((subject: SubjectModel, index) => (
+                            <IonCard key={index}>
+                                <IonItem className="font-subj">
+                                    <IonLabel>{subject.subject_name}</IonLabel>
+                                    <IonText slot="end">
+                                        {subject.semester === 1
+                                            ? <IonChip color={'success'}>1st Sem</IonChip>
+                                            : subject.semester === 2
+                                                ? <IonChip color={'success'}>2nd Sem</IonChip>
+                                                : <IonChip color={'danger'}>Unknown Semester</IonChip>
+                                        }
+                                    </IonText>
+
+                                </IonItem>
+                            </IonCard>
+                        ))
+                    ) : (
+                        <IonText>No subjects available for grade level {gradeLevel}</IonText>
+                    )}
+                </IonContent>
+            </IonModal>
+
+
+            {/*MODAL FOR G7-G10)*/}
+            <IonModal isOpen={showSubjectsJHSModal} onDidDismiss={closeSubjectsJHSModal}>
+                <IonToolbar>
+                    <IonTitle>Subjects</IonTitle>
+                    <IonButton fill="clear" color={'dark'} slot="end" onClick={closeSubjectsJHSModal} >
+                        <IonIcon icon={closeOutline} slot="icon-only" />
+                    </IonButton>
+                </IonToolbar>
+
+                <IonContent>
+                    {subjectsJHS.length > 0 ? (
+                        subjectsJHS.map((subjects) => (
+                            <IonCard >
+                                <IonItem className="font-subj">
+                                    <IonLabel>{subjects}</IonLabel>
+                                </IonItem>
+                            </IonCard>
+                        ))
+                    ) : (
+                        <IonText>No subjects available for grade level {gradeLevel}</IonText>
+                    )}
+                </IonContent>
+
+            </IonModal>
+
         </IonPage >
     );
 };

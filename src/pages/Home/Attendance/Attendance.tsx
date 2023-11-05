@@ -1,82 +1,126 @@
-import { IonCard, IonCardContent, IonContent, IonItem, IonLabel, IonPage } from "@ionic/react";
+import { IonCard, IonCardContent, IonContent, IonIcon, IonItem, IonLabel, IonPage, IonText } from "@ionic/react";
 import Header from "../../../components/StudentHeader";
-import './Attendance.css'
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import './Attendance.css'
+import { checkmark, checkmarkDone } from "ionicons/icons";
+
+interface AttendanceModel {
+    map: any;
+    attendance_date: string;
+    student_lrn: string;
+    f_name: string;
+    l_name: string;
+}
 
 const Attendance = () => {
-    const isDesktop = useMediaQuery({ minWidth: 1050 })
+    const isDesktop = useMediaQuery({ minWidth: 1050 });
     const username = localStorage.getItem('username');
-    const [attendanceData, setAttendanceData] = useState([]);
+    const [attendanceData, setAttendanceData] = useState<AttendanceModel | null>(null);
+
+    const getFormattedDate = (dateTime: string) => {
+        if (dateTime) {
+            const options: Intl.DateTimeFormatOptions = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            };
+            const formattedDateTime = new Date(dateTime).toLocaleDateString("en-AS", options);
+            return formattedDateTime;
+        }
+        return "Invalid Date";
+    };
+
 
     useEffect(() => {
         if (username) {
             axios
-                .post('http://localhost/qr-for-student.php', { username: username })
+                .post('https://studentportal.lcsinhs.com/scripts/qr-for-student.php', { username: username })
                 .then((response) => {
-                    console.log(response);
-                    console.log(username);
-                    if (response.data && !response.data.error) {
-                        setAttendanceData(response.data);
+                    if ('error' in response.data) {
+                        console.error('Failed to fetch attendance data:', response.data.error);
                     } else {
-                        console.error('Failed to fetch attendance data');
+                        const attendance: AttendanceModel = response.data;
+                        setAttendanceData(attendance);
+                        console.log(attendance);
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
+                    console.error('Network error:', error);
                 });
         }
     }, [username]);
 
     return (
-
         <IonPage>
             <Header />
 
-            {isDesktop ? <>
+            {isDesktop ? (
                 <IonContent color={'light'} scrollX={false}>
                     <div className="spacer-h-m" />
-                    <div className="display-flex">
-                        <IonLabel className="my-att-title">My Classes </IonLabel>
+                    <div className="cal-margin">
+                        <IonLabel className="my-att-title">Attendance Log</IonLabel>
                     </div>
 
-                    <IonCard className="my-grades-card">
-                        <IonCardContent>
-                            <IonItem>
-                                <IonItem>
-                                    {attendanceData && !attendanceData.error && attendanceData.attendance_date ? (
-                                        <div>
-                                            <h2>Attendance Data</h2>
-                                            <ul>
-                                                <li>{attendanceData.attendance_date} {attendanceData.attendance_time}</li>
-                                            </ul>
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            <p>No attendance data available.</p>
-                                        </div>
-                                    )}
-                                </IonItem>
+                    {attendanceData ? (
+                        attendanceData.map((attendance: AttendanceModel, index: any) => (
+                            <IonCard className="my-att-card" key={index}>
+                                <IonCardContent>
+                                    <div className="att-item-size">
+                                        <IonItem>
+                                            <IonText>
+                                                {getFormattedDate(attendance.attendance_date)}
+                                            </IonText>
 
-                            </IonItem>
-                        </IonCardContent>
-                    </IonCard>
-                </IonContent>
-            </>
-                :
-
-                /*MOBILE VIEW*/
-                <>
-                    <IonContent color={'light'} scrollX={false}>
-                        <div className="spacer-h-s" />
-                        <div className="display-flex">
-                            <IonLabel className="m-my-att-title">My Classes </IonLabel>
+                                            <IonText slot="end" style={{ color: 'green' }}>
+                                                Logged
+                                            </IonText>
+                                        </IonItem>
+                                    </div>
+                                </IonCardContent>
+                            </IonCard>
+                        ))
+                    ) : (
+                        <div>
+                            <p>No attendance data available.</p>
                         </div>
-                    </IonContent>
-                </>
+                    )}
 
-            }
+                </IonContent>
+            ) : (
+                /* MOBILE VIEW */
+                <IonContent color={'light'} scrollX={false}>
+                    <div className="spacer-h-s" />
+                    <div className="cal-margin">
+                        <IonLabel className="m-my-att-title">Attendance Log</IonLabel>
+                    </div>
+
+                    {attendanceData ? (
+
+                        attendanceData.map((attendance: AttendanceModel, index: any) => (
+                            <IonCard className="m-my-att-card">
+                                <IonCardContent>
+                                    <div className="m-att-item-size" key={index}>
+                                        <IonItem>
+                                            <IonText className="m-att-label">{getFormattedDate(attendance.attendance_date)}</IonText>
+                                            <IonIcon slot="end" icon={checkmarkDone} color="success" />
+                                        </IonItem>
+                                    </div>
+                                </IonCardContent>
+                            </IonCard>
+                        ))
+
+
+                    ) : (
+                        <div>
+                            <p>No attendance data available.</p>
+                        </div>
+                    )}
+                </IonContent>
+            )}
         </IonPage>
     );
 };

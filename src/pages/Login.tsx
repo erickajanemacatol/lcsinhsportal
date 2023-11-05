@@ -25,16 +25,6 @@ const Login: React.FC = () => {
   const [presentingElement, setPresentingElement] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    axios.get('http://localhost/login.php')
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }, []);
-
-  useEffect(() => {
   }, []);
 
   const [loginData, setLoginData] = useState({
@@ -79,7 +69,7 @@ const Login: React.FC = () => {
       setIsLoading(true);
 
       axios
-        .post('http://localhost/login.php', JSON.stringify(loginData), {
+        .post('https://studentportal.lcsinhs.com/scripts/login.php', JSON.stringify(loginData), {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -117,14 +107,14 @@ const Login: React.FC = () => {
         })
         .catch((error) => {
           console.error('API Call Error:', error);
-          setIsLoading(false); // Hide loading indicator on error
+          setIsLoading(false);
           showToast('API Call Error. Please try again.', 'danger');
         });
     }
   };
 
   useEffect(() => {
-    axios.get('http://localhost/login.php')
+    axios.get('https://studentportal.lcsinhs.com/scripts/data_sync.php')
       .then((response) => {
         setData(response.data);
       })
@@ -134,10 +124,8 @@ const Login: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Check if the user is already logged in
     const username = localStorage.getItem('username');
     if (username) {
-      // User is already logged in, redirect them to the appropriate page
       const role = localStorage.getItem('role');
       switch (role) {
         case '0':
@@ -150,7 +138,6 @@ const Login: React.FC = () => {
           history.replace('/faculty/attendance');
           break;
         default:
-          // Handle unexpected roles
           history.replace('/default');
       }
     }
@@ -179,7 +166,7 @@ const Login: React.FC = () => {
       {isDesktop ?
         <>
           {isLoading ? (
-            <CustomLoading isOpen={isLoading} delay={10000} />
+            <CustomLoading isOpen={isLoading} delay={3000} />
           ) : (
             <IonContent scrollY={false} fullscreen={true}>
               <div className='contact'>

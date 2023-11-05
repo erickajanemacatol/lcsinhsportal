@@ -5,30 +5,34 @@ import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import './Students.css';
 
+interface StudentModel {
+    student_lrn: string;
+    f_name: string;
+    l_name: string;
+}
+
 const Students: React.FC = () => {
     const isDesktop = useMediaQuery({ minWidth: 1050 });
-    const [file, setFile] = useState<File | null>(null);
-    const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>([]);
-    const [sortCriteria, setSortCriteria] = useState("student_lrn");
-    const [students, setStudents] = useState([]);
+    const [sortCriteria, setSortCriteria] = useState<keyof StudentModel>("student_lrn");
+    const [students, setStudents] = useState<StudentModel[]>([]);
     const [presentToast, dismissToast] = useIonToast();
-    const inputKeys = ["CoR", "form_137", "good_moral", "CoEnrolment", "CoRanking"];
+    const inputKeys: string[] = ["CoR", "form_137", "good_moral", "CoEnrolment", "CoRanking"];
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearch = (e: CustomEvent) => {
         setSearchQuery(e.detail.value);
     };
 
-
     const [fileStates, setFileStates] = useState(
         students.map(() => ({
-            CoR: null,
-            form_137: null,
-            good_moral: null,
-            CoEnrolment: null,
-            CoRanking: null
+            CoR: null as File | null,
+            form_137: null as File | null,
+            good_moral: null as File | null,
+            CoEnrolment: null as File | null,
+            CoRanking: null as File | null
         }))
     );
+
 
     const showToast = (message: string, color: 'primary' | 'danger' | 'success' | 'warning') => {
         presentToast({
@@ -48,7 +52,8 @@ const Students: React.FC = () => {
             const file = event.target.files[0];
 
             if (file) {
-                updatedFileStates[studentIndex][inputKeys[inputIndex - 1]] = file;
+                const key = inputKeys[inputIndex - 1] as keyof typeof updatedFileStates[0];
+                updatedFileStates[studentIndex][key] = file;
             }
 
             setFileStates(updatedFileStates);
@@ -56,7 +61,6 @@ const Students: React.FC = () => {
     };
 
     const handleUpload = (studentIndex: number) => {
-        // Ensure that students and students[studentIndex] exist
         if (!students || students.length <= studentIndex || students[studentIndex] == null) {
             showToast('Student data not available', 'danger');
             return;
@@ -71,14 +75,14 @@ const Students: React.FC = () => {
         }
 
         const uploadPromises = inputKeys.map((key, index) => {
-            const file = files[key];
+            const file = files[key as keyof typeof files]; // Use type assertion here
             if (file) {
                 const formData = new FormData();
                 formData.append('file', file);
                 formData.append('student_lrn', studentLRN);
-                formData.append('input_index', index + 1);
+                formData.append('input_index', (index + 1).toString());
 
-                return axios.post('http://localhost/file-upload.php', formData);
+                return axios.post('https://studentportal.lcsinhs.com/scripts/file-upload.php', formData);
             }
             return null;
         });
@@ -89,6 +93,7 @@ const Students: React.FC = () => {
                     if (response && response.data) {
                         if (response.data.success) {
                             showToast('File uploaded successfully', 'success');
+                            window.location.reload();
                         } else {
                             console.error(response.data.error);
                             showToast('File upload failed', 'danger');
@@ -101,21 +106,23 @@ const Students: React.FC = () => {
             });
     };
 
-    const handleViewClick = (studentIndex: number, category: string) => {
+
+    const handleViewClick = (studentIndex: number, category: keyof StudentModel) => {
         const student = students[studentIndex];
-        const filePath = student[category]; // Use the category to determine which file to view
+        const filePath = student[category];
 
         if (!filePath) {
             showToast(`No ${category} file available.`, "warning");
             return;
         }
 
-        const viewUrl = `http://localhost/file-fetch.php?file=${filePath}&category=${category}`;
+        const viewUrl = `https://studentportal.lcsinhs.com/scripts/file-fetch.php?file=${filePath}&category=${category}`;
         window.open(viewUrl, '_blank');
     };
 
+
     useEffect(() => {
-        axios.get('http://localhost/get-students.php')
+        axios.get('https://studentportal.lcsinhs.com/scripts/get-students.php')
             .then((response) => {
                 setStudents(response.data);
 
@@ -157,7 +164,7 @@ const Students: React.FC = () => {
     }, []);
 
     const filteredAndSortedStudents = students
-        .filter((student) => {
+        .filter((student: StudentModel) => {
             // Filter students based on the search query
             return (
                 student.student_lrn.includes(searchQuery) ||
@@ -166,10 +173,8 @@ const Students: React.FC = () => {
             );
         })
         .sort((a, b) => {
-            // Sort students based on the selected criteria
             return a[sortCriteria].localeCompare(b[sortCriteria]);
         });
-
 
     return (
         <IonPage>
@@ -178,9 +183,6 @@ const Students: React.FC = () => {
                 <IonContent>
                     <div className="spacer-h-l"></div>
                     <div className="search-bar-size">
-                        <div className="search-bar-desc">
-                            <h2>List of Students</h2>
-                        </div>
                         <IonSearchbar
                             value={searchQuery}
                             onIonChange={handleSearch}
@@ -215,33 +217,34 @@ const Students: React.FC = () => {
                     <IonGrid>
                         <IonRow>
                             {students
-                                .filter((student) =>
+                                .filter((student: StudentModel) =>
                                     student.student_lrn.includes(searchQuery) ||
                                     student.f_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                     student.l_name.toLowerCase().includes(searchQuery.toLowerCase())
                                 )
-                                .map((student, index) => (
+                                .map((student: StudentModel, index) => (
                                     <IonRow key={student.student_lrn}>
                                         <IonCol className="column-lrn">{student.student_lrn}</IonCol>
                                         <IonCol className="column-name">{student.f_name} {student.l_name}</IonCol>
                                         {inputKeys.map((key, inputIndex) => (
                                             <IonCol className="column-upload" key={inputIndex}>
                                                 <div className="input-width">
-                                                    <label htmlFor={`fileInput-${index}-${inputIndex + 1}`}>Choose a file:</label>
+                                                    <label htmlFor={`fileInput-${index}-${inputIndex + 1}`}>Upload file:</label>
                                                     <input
                                                         id={`fileInput-${index}-${inputIndex + 1}`}
                                                         type="file"
                                                         onChange={(e) => handleFileChange(e, index, inputIndex + 1)}
                                                     />
-                                                    {student[key] && (
-                                                        <IonButton size="small" onClick={() => handleViewClick(index, key)}>View</IonButton>
+                                                    {student[key as keyof StudentModel] && ( // Type assertion
+                                                        <IonButton size="small" color="tertiary" onClick={() => handleViewClick(index, key as keyof StudentModel)}>View</IonButton> // Type assertion
                                                     )}
                                                 </div>
                                             </IonCol>
                                         ))}
+
                                         <IonCol className="column-upload">
-                                            <IonButton fill="clear" color="dark" className="submit-button-pref" onClick={() => handleUpload(index)}>
-                                                <u><b>Submit</b></u>
+                                            <IonButton className="submit-button-pref" onClick={() => handleUpload(index)}>
+                                                Submit
                                             </IonButton>
                                         </IonCol>
                                     </IonRow>
@@ -254,8 +257,9 @@ const Students: React.FC = () => {
                 <IonContent>
                     <div className="spacer-h-l"></div>
                     <div className="spacer-h-m"></div>
-
-                    <IonLabel>Not Available in Mobile View</IonLabel>
+                    <div className="center">
+                        <IonLabel>Not Available in Mobile View</IonLabel>
+                    </div>
                 </IonContent>
             )
             }

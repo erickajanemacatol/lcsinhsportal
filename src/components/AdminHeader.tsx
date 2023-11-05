@@ -1,11 +1,11 @@
 import {
-  IonImg, IonButton, IonLabel, IonContent, IonMenu, IonPage, IonHeader, IonIcon, IonToolbar, IonText,
+  IonImg, IonButton, IonLabel, IonHeader, IonIcon, IonToolbar, IonText,
 } from "@ionic/react";
 import './AdminHeader.css';
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useHistory } from "react-router";
-import { logOut, personCircle } from "ionicons/icons";
+import { logOut } from "ionicons/icons";
 
 const AdminHeader: React.FC = () => {
   const isDesktop = useMediaQuery({ minWidth: 1050 })
@@ -113,7 +113,7 @@ const AdminHeader: React.FC = () => {
                     <IonButton className="m-logo-btn-size" fill="clear" href="/admin/news" size="default">
                       <IonImg src="/src/imgs/logo.png"></IonImg>
                     </IonButton>
-                    <IonText className="m-title-label" color={"dark"}>LCSINHS Portal</IonText>
+                    <IonText className="m-title-label" color={"dark"}>LCSINHS Portal - Admin</IonText>
                   </div>
                   <IonButton fill="clear" color={"dark"} onClick={handleLogout}>
                     <IonIcon icon={logOut} size="large" ></IonIcon>

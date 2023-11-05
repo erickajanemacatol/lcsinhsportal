@@ -1,7 +1,6 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonContent, IonIcon, IonInput, IonLabel, IonPage, IonText, useIonToast } from "@ionic/react";
+import { IonButton, IonContent, IonInput, IonLabel, IonPage, useIonToast } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import AdminHeader from "../../components/AdminHeader";
-import { add, create, trash } from "ionicons/icons";
 import { useMediaQuery } from "react-responsive";
 import './Survey.css';
 import axios from "axios";
@@ -39,7 +38,7 @@ const Links: React.FC = () => {
         const surveyData = { surveyID, surveyLink };
 
         // Make a POST request to your PHP server to update the survey link
-        axios.post('http://localhost/survey.php', surveyData)
+        axios.post('https://studentportal.lcsinhs.com/scripts/survey.php', surveyData)
             .then((response) => {
                 // Handle the response here
                 if (response.data.success) {
@@ -99,7 +98,7 @@ const Links: React.FC = () => {
 
         const enrolData = { enrolID, enrolLink };
 
-        axios.post('http://localhost/enrolment.php', enrolData)
+        axios.post('https://studentportal.lcsinhs.com/scripts/enrolment.php', enrolData)
             .then((response) => {
                 if (response.data.success) {
                     localStorage.setItem("enrolLink", enrolLink);
@@ -118,8 +117,8 @@ const Links: React.FC = () => {
     const handleDeleteLink2 = () => {
         const confirmed = window.confirm("Are you sure you want to delete the current enrolment link?");
         if (confirmed) {
-            setEnrolLink("");
-            localStorage.removeItem("enrolLink");
+            setEnrolLink(""); // Clear the link in the component's state
+            localStorage.removeItem("enrolLink"); // Remove the link from localStorage
             setEditingE(true);
             showToast("Enrolment Link Successfully Deleted", "success");
         }
@@ -157,7 +156,11 @@ const Links: React.FC = () => {
                     <IonContent>
                         {/*SURVEY*/}
                         <div className="spacer-h-l"></div>
-                        <IonLabel className="annc-title">Survey Form Link</IonLabel>
+
+                        <div className="ttl-margin">
+                            <IonLabel className="ttl">Survey Form Link</IonLabel>
+                        </div>
+
                         <div className="spacer-h-m"></div>
                         <div className="disp-block">
                             <div className="disp-flex">
@@ -194,7 +197,10 @@ const Links: React.FC = () => {
                         <div className="spacer-h-xl"></div>
                         <div className="spacer-h-xl"></div>
 
-                        <IonLabel className="annc-title">Enrolment Form Link</IonLabel>
+                        <div className="ttl-margin">
+                            <IonLabel className="ttl">Enrolment Form Link</IonLabel>
+                        </div>
+
                         <div className="spacer-h-m"></div>
                         <div className="disp-block">
                             <div className="disp-flex">
@@ -231,22 +237,82 @@ const Links: React.FC = () => {
                 </> : <>
                     {/*MOBILE*/}
                     <IonContent>
+                        {/*SURVEY*/}
                         <div className="spacer-h-l"></div>
-                        <IonLabel className="annc-title">Survey Link</IonLabel>
-                        <div className="spacer-h-xs"></div>
 
-                        <div className="create-button">
-                            <IonInput fill="outline" placeholder="Enter link to survey here">
-
-                            </IonInput>
-                            <div className="spacer-h-xs" />
-                            <IonButton size="default" href="/admin/announcement-details">
-                                <IonIcon icon={add} />
-                                Create
-                            </IonButton>
+                        <div className="m-ttl-margin">
+                            <IonLabel className="m-ttl">Survey Form Link</IonLabel>
                         </div>
 
+                        <div className="spacer-h-m"></div>
+                        <div className="m-disp-block">
+                            <div className="m-disp-flex">
+                                <IonInput
+                                    fill="outline"
+                                    placeholder="Enter link to survey here"
+                                    value={surveyLink}
+                                    onIonChange={(e) => setSurveyLink(e.detail.value!)}
+                                ></IonInput>
+                                <div className="spacer-w-xs" />
+                                <IonButton onClick={handleAddLink}>
+                                    {editing ? "Save Link" : "Edit Link"}
+                                </IonButton>
+                            </div>
+                        </div>
 
+                        <div className="spacer-h-s" />
+                        <div className="m-disp-center-flex">
+                            {surveyLink && !editing && (
+                                <div className="m-disp-block">
+                                    <div className="spacer-w-s" />
+                                    <IonButton href={surveyLink} target="_blank">
+                                        Open Survey
+                                    </IonButton>
+                                    <IonButton color="danger" onClick={handleDeleteLink}>
+                                        Delete Link
+                                    </IonButton>
+                                </div>
+                            )}
+                        </div>
+
+                        {/*ENROLMENT*/}
+                        <div className="spacer-h-xl"></div>
+                        <div className="spacer-h-xl"></div>
+
+                        <div className="m-ttl-margin">
+                            <IonLabel className="m-ttl">Enrolment Form Link</IonLabel>
+                        </div>
+
+                        <div className="spacer-h-m"></div>
+                        <div className="m-disp-block">
+                            <div className="m-disp-flex">
+                                <IonInput
+                                    fill="outline"
+                                    placeholder="Enter link to enrolment form here"
+                                    value={enrolLink}
+                                    onIonChange={(e) => setEnrolLink(e.detail.value!)}
+                                ></IonInput>
+                                <div className="spacer-w-xs" />
+                                <IonButton onClick={handleAddLink2}>
+                                    {editingE ? "Save Link" : "Edit Link"}
+                                </IonButton>
+                            </div>
+                        </div>
+
+                        <div className="spacer-h-s" />
+                        <div className="m-disp-center-flex">
+                            {enrolLink && !editingE && (
+                                <div className="m-disp-block">
+                                    <div className="spacer-w-s" />
+                                    <IonButton href={enrolLink} target="_blank">
+                                        Open Enrolment Form
+                                    </IonButton>
+                                    <IonButton color="danger" onClick={handleDeleteLink2}>
+                                        Delete Link
+                                    </IonButton>
+                                </div>
+                            )}
+                        </div>
                     </IonContent>
                 </>
             }

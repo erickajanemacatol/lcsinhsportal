@@ -1,7 +1,7 @@
-import { IonButton, IonCard, IonCardContent, IonContent, IonIcon, IonInput, IonLabel, IonPage, useIonToast } from "@ionic/react";
+import { IonButton, IonContent, IonIcon, IonInput, IonLabel, IonPage, useIonToast } from "@ionic/react";
 import React, { useState } from "react";
 import './Announcements.css'
-import { arrowBack, checkmark, close, wineOutline } from "ionicons/icons";
+import { arrowBack, checkmark, close } from "ionicons/icons";
 import { useMediaQuery } from "react-responsive";
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
@@ -37,7 +37,7 @@ const AddAnnouncement: React.FC = () => {
         };
 
         axios
-            .post("http://localhost/annc-add.php", JSON.stringify(newAnnouncement))
+            .post("https://studentportal.lcsinhs.com/scripts/annc-add.php", JSON.stringify(newAnnouncement))
             .then((response) => {
                 if (response.data.success) {
                     showToast("Announcement Posted", "success");

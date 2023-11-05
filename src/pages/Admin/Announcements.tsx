@@ -1,9 +1,12 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonModal, IonNote, IonPage, IonText, IonTitle, IonToolbar, useIonToast } from "@ionic/react";
+import {
+    IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader,
+    IonContent, IonIcon, IonItem, IonLabel, IonPage, IonText, useIonToast
+} from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import './Announcements.css';
 import AdminHeader from "../../components/AdminHeader";
 import { add, create, trash } from "ionicons/icons";
-import axios from 'axios'; // Import axios for making HTTP requests.
+import axios from 'axios';
 import { useMediaQuery } from "react-responsive";
 import UpdateAnnouncement, { Announcement } from './Annc_Update';
 
@@ -13,7 +16,6 @@ interface UpdateAnnouncementProps {
     announcement?: Announcement | null;
     onUpdate: (updatedAnnouncement: Announcement) => void;
 }
-
 
 const Announcements: React.FC = () => {
     const isDesktop = useMediaQuery({ minWidth: 1050 });
@@ -30,10 +32,10 @@ const Announcements: React.FC = () => {
     const [updateModal, setUpdateModal] = useState(false);
     const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
 
-    const handleUpdateClick = (id) => {
+    const handleUpdateClick = (id: any) => {
         const selectedAnnouncement = announcements.find((announcement) => announcement.annc_id === id);
         console.log("Selected Announcement:", selectedAnnouncement);
-        setSelectedAnnouncement(selectedAnnouncement);
+        setSelectedAnnouncement(selectedAnnouncement ?? null);
         setUpdateModal(true);
     };
 
@@ -42,13 +44,11 @@ const Announcements: React.FC = () => {
         setSelectedAnnouncement(null);
     };
 
-
-    const handleUpdateAnnouncement = (updatedAnnouncement, id) => {
+    const handleUpdateAnnouncement = (updatedAnnouncement: any, id: any) => {
         console.log('Updated Announcement:', updatedAnnouncement);
         console.log(id)
 
-        // Assuming your server response format, you may need to adjust this based on your server's response structure.
-        axios.post('http://localhost/annc-update.php', updatedAnnouncement)
+        axios.post('https://studentportal.lcsinhs.com/scripts/annc-update.php', updatedAnnouncement)
             .then((response) => {
                 console.log('Response from server:', response);
 
@@ -90,13 +90,13 @@ const Announcements: React.FC = () => {
     };
 
 
-    const handleDeleteAnnouncement = (id) => {
+    const handleDeleteAnnouncement = (id: any) => {
         const confirmed = window.confirm('Are you sure you want to delete this announcement?');
 
         if (confirmed) {
             // Send a DELETE request to your PHP script with the announcement ID
             axios
-                .delete(`http://localhost/annc-delete.php`, {
+                .delete(`https://studentportal.lcsinhs.com/scripts/annc-delete.php`, {
                     data: { id },
                     headers: {
                         'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ const Announcements: React.FC = () => {
 
     useEffect(() => {
         axios
-            .get('http://localhost/annc-fetch.php')
+            .get('https://studentportal.lcsinhs.com/scripts/annc-fetch.php')
             .then((response) => {
                 setAnnouncements(response.data);
             })
@@ -139,12 +139,12 @@ const Announcements: React.FC = () => {
             {isDesktop ?
                 <>
                     <IonContent >
-
                         <div className="spacer-h-l"></div>
                         <div className="div-title">
                             <div className="title-pl">
                                 <IonLabel className="annc-title">Announcements</IonLabel>
                             </div>
+
                             <div className="create-button">
                                 <IonButton size="default" href="/admin/announcement-details" color={'dark'}>
                                     <IonIcon icon={add} />
@@ -165,36 +165,30 @@ const Announcements: React.FC = () => {
                                     <p>Details: {announcement.description}</p>
                                 </IonLabel>
 
-                                    <IonButtons slot="end">
-                                        <IonButton color="primary" size="default" onClick={() => handleUpdateClick(announcement.annc_id)}>
-                                            Update
-                                        </IonButton>
-                                        <IonButton color="danger" size="default" onClick={() => handleDeleteAnnouncement(announcement.annc_id)}>
-                                            Delete
-                                        </IonButton>
-                                    </IonButtons>
+                                <IonButtons slot="end">
+                                    <IonButton color="primary" size="default" onClick={() => handleUpdateClick(announcement.annc_id)}>
+                                        Update
+                                    </IonButton>
+                                    <IonButton color="danger" size="default" onClick={() => handleDeleteAnnouncement(announcement.annc_id)}>
+                                        Delete
+                                    </IonButton>
+                                </IonButtons>
                             </IonItem>
                         ))}
-
-
                     </IonContent>
                 </> : <>
 
                     {/*MOBILE*/}
                     <IonContent>
-
-                        <div className="spacer-h-l"></div>
-                        <IonLabel className="annc-title">Announcements</IonLabel>
-                        <div className="spacer-h-xs"></div>
-
-                        <div className="create-button">
-                            <IonButton size="default" href="/admin/announcement-details">
+                        <div className="spacer-h-s" />
+                        <div className="annc-add">
+                            <IonButton size="default" href="/admin/announcement-details" color={'dark'}>
                                 <IonIcon icon={add} />
                                 Create
                             </IonButton>
                         </div>
 
-                        <div className="spacer-h-m"></div>
+                        <div className="spacer-h-s"></div>
 
                         {announcements.map((announcement, index) => (
                             <IonCard key={index}>
@@ -235,7 +229,7 @@ const Announcements: React.FC = () => {
                 isOpen={updateModal}
                 onClose={closeUpdateModal}
                 announcement={selectedAnnouncement}
-                onUpdate={(updatedAnnouncement) => handleUpdateAnnouncement(updatedAnnouncement, selectedAnnouncement.annc_id)}
+                onUpdate={(updatedAnnouncement) => handleUpdateAnnouncement(updatedAnnouncement, selectedAnnouncement?.annc_id)}
             />
         </IonPage>
     );

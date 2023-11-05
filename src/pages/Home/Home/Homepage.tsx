@@ -8,6 +8,7 @@ import {
     IonIcon,
     IonImg,
     IonItem,
+    IonItemDivider,
     IonLabel,
     IonList,
     IonPage,
@@ -21,47 +22,75 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { chevronBack, chevronForward, person } from "ionicons/icons";
 
+interface AnnouncementModel {
+    dateandtime: string;
+    title: string;
+    description: string;
+}
+
+interface EventModel {
+    cal_id: string;
+    event_name: string;
+    description: string;
+    start_date: string;
+    end_date?: string | null;
+}
 
 const Homepage = () => {
-
     const isDesktop = useMediaQuery({ minWidth: 1050 })
     const [newsItems, setNewsItems] = useState<string[]>([]);
     const [announcements, setAnnouncements] = useState([]);
     const [scrollPosition, setScrollPosition] = useState(0);
     const scrollableContainerRef = useRef(null);
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<EventModel[]>([]);
+    const scrollInterval = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleScroll = () => {
         if (scrollableContainerRef.current) {
-            const container = scrollableContainerRef.current;
-            // Calculate the percentage of scroll position relative to the container width
+            const container = scrollableContainerRef.current as HTMLDivElement;
             const scrollPercentage = (container.scrollLeft / (container.scrollWidth - container.clientWidth)) * 100;
             setScrollPosition(scrollPercentage);
         }
     };
 
-    const handleNextClick = () => {
-        if (scrollableContainerRef.current) {
-            const container = scrollableContainerRef.current;
-            // Scroll to the next position (adjust the value as needed)
-            container.scrollLeft += 100;
-            handleScroll();
+    // Function to automatically scroll the container
+    const autoScroll = (container: any, scrollStep: any, maxScroll: any) => {
+        if (container.scrollLeft >= maxScroll) {
+            container.scrollLeft = 0;
+        } else {
+            container.scrollLeft += scrollStep;
         }
     };
 
-    const handlePrevClick = () => {
+    const handleAutoScroll = (isDesktop: any) => {
         if (scrollableContainerRef.current) {
-            const container = scrollableContainerRef.current;
-            // Scroll to the previous position (adjust the value as needed)
-            container.scrollLeft -= 100;
-            handleScroll();
+            const container = scrollableContainerRef.current as HTMLDivElement;
+            const maxScroll = container.scrollWidth - container.clientWidth;
+            const scrollStep = isDesktop ? 1475 : 370; // Adjust the scroll step for desktop and mobile
+
+            autoScroll(container, scrollStep, maxScroll);
         }
     };
+
+
+    useEffect(() => {
+        if (isDesktop) {
+            scrollInterval.current = setInterval(() => handleAutoScroll(true), 4000); // Adjust the interval for desktop
+        } else {
+            scrollInterval.current = setInterval(() => handleAutoScroll(false), 4000); // Adjust the interval for mobile
+        }
+    
+        return () => {
+            if (scrollInterval.current) {
+                clearInterval(scrollInterval.current);
+            }
+        };
+    }, [isDesktop]);
 
     useEffect(() => {
         // Fetch announcements from your PHP script
         axios
-            .get('http://localhost/annc-fetch.php')
+            .get('https://studentportal.lcsinhs.com/scripts/annc-fetch.php')
             .then((response) => {
                 // Update the announcements in the state
                 setAnnouncements(response.data);
@@ -76,7 +105,7 @@ const Homepage = () => {
 
     const fetchImageList = () => {
         axios
-            .get('http://localhost/news-fetch.php')
+            .get('https://studentportal.lcsinhs.com/scripts/news-fetch.php')
             .then((response) => {
                 if (response.data && response.data.success) {
                     setNewsItems(response.data.newsItems);
@@ -92,26 +121,28 @@ const Homepage = () => {
     let startX = 0;
     let currentX = 0;
 
-    function handleTouchStart(e) {
+    function handleTouchStart(e: any) {
         startX = e.touches[0].clientX;
         currentX = startX;
     }
 
-    function handleTouchMove(e) {
-        const container = document.querySelector(".scrollable-container");
-        const scrollSpeed = 2; // You can adjust the scroll speed as needed
+    function handleTouchMove(e: any) {
+        let container = document.querySelector(".scrollable-container-home");
+        const scrollSpeed = 2;
 
-        const diffX = e.touches[0].clientX - currentX;
-        currentX = e.touches[0].clientX;
+        if (container) {
+            const diffX = e.touches[0].clientX - currentX;
+            currentX = e.touches[0].clientX;
 
-        container.scrollLeft -= diffX * scrollSpeed;
-        e.preventDefault();
+            container.scrollLeft -= diffX * scrollSpeed;
+            e.preventDefault();
+        }
     }
 
     useEffect(() => {
         const fetchNewsImages = async () => {
             try {
-                const response = await axios.get('http://localhost/news-fetch.php');
+                const response = await axios.get('https://studentportal.lcsinhs.com/scripts/news-fetch.php');
                 if (response.data.success) {
                     const imageUrls = response.data.images;
                     console.log('Fetched images:', imageUrls);
@@ -127,18 +158,18 @@ const Homepage = () => {
         fetchNewsImages();
     }, []);
 
-    const getFormattedMonth = (date) => {
+    const getFormattedMonth = (date: any) => {
         const options = { month: "long", year: "numeric" };
         return date.toLocaleDateString("en-AS", options);
     };
 
-    const getFormattedDate = (date) => {
-        const options = { month: "long", day: "numeric", year: "numeric" };
+    const getFormattedDate = (date: any) => {
+        const options: Intl.DateTimeFormatOptions = { month: "long", day: "numeric", year: "numeric" };
         return new Date(date).toLocaleDateString("en-AS", options);
     };
 
     useEffect(() => {
-        axios.get("http://localhost/event-fetch.php")
+        axios.get("https://studentportal.lcsinhs.com/scripts/event-fetch.php")
             .then((response) => {
                 setEvents(response.data);
             })
@@ -147,128 +178,102 @@ const Homepage = () => {
             });
     }, []);
 
-
-
     return (
         <IonPage >
             <StudentHeader />
             {isDesktop ? <>
-                <IonContent className="home-background">
+                <IonContent color={'light'}>
+                    <div className="custom-image">
+                        <IonImg src="/src/imgs/bg.jpg" className="image-cropped" />
+                    </div>
 
-                    <div className="content">
-                        <div className='homepage-card-position'>
-                            <IonCard className="homepage-card">
-                                <div className="spacer-h-m" />
-                                <IonLabel className="p">Recent News</IonLabel>
-                                <div>
-                                    <div
-                                        className="scrollable-container"
-                                        onTouchStart={handleTouchStart}
-                                        onTouchMove={handleTouchMove}
-                                        onScroll={handleScroll} // Add an onScroll event to update the scroll position
-                                        ref={scrollableContainerRef}
-                                    >
-                                        <div className="news-items">
-                                            {newsItems && newsItems.length > 0 ? (
-                                                newsItems.map((imageUrl, index) => (
-                                                    <div className="news-card" key={index}>
-                                                        <img src={imageUrl} alt={`Image ${index}`} />
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                <div className="center">
-                                                    <IonText>No news items to display</IonText>
-                                                </div>
-                                            )}
+                    <div className="spacer-h-m" />
+                    <IonLabel className="p">Recent News</IonLabel>
+
+                    <div>
+                        <IonCard >
+                            <div
+                                className="scrollable-container-home"
+                                onTouchStart={handleTouchStart}
+                                onTouchMove={handleTouchMove}
+                                onScroll={handleScroll}
+                                ref={scrollableContainerRef}
+                            >
+                                <div className="news-items">
+                                    {newsItems && newsItems.length > 0 ? (
+                                        newsItems.map((imageUrl, index) => (
+                                            <div className="news-card" key={index}>
+                                                <img src={imageUrl} alt={`Image ${index}`} />
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div>
+                                            <div className="spacer-w-m" />
+                                            <IonText>No news to show.</IonText>
                                         </div>
-                                    </div>
-                                    <div className="center">
-                                        <IonButton
-                                            className="scroll-button prev"
-                                            onClick={handlePrevClick}
-                                            disabled={scrollPosition === 0}
-                                        >
-                                            <IonIcon slot="icon-only" icon={chevronBack} />
-                                        </IonButton>
-                                        <IonButton
-                                            className="scroll-button next"
-                                            onClick={handleNextClick}
-                                            disabled={scrollPosition === 100}
-                                        >
-                                            <IonIcon slot="icon-only" icon={chevronForward} />
-                                        </IonButton>
-                                    </div>
-                                    <div className="spacer-h-s" />
+                                    )}
                                 </div>
+                            </div>
+                            <div className="spacer-h-s" />
+                        </IonCard>
+                    </div>
 
-                            </IonCard>
-
-                            <IonCard className='homepage-card'>
-                                <div className="spacer-h-m" />
-                                <IonLabel className="p">School Announcements</IonLabel>
-                                {announcements.map((announcement, index) => (
-                                    <IonItem>
-                                        <IonCard key={index} className="anncm-card">
-                                            <IonCardHeader>
-                                                <IonText color={'dark'} className="title-format">{announcement.title}</IonText>
-                                                <div className="spacer-w-xl" />
-                                                {(announcement.dateandtime)}
-                                            </IonCardHeader>
-                                            <IonCardContent>
-                                                <IonText color={'dark'}> Description: {announcement.description}</IonText>
-                                                <br></br>
-                                                <div className="spacer-h-xxs" />
-                                                <IonText><IonIcon icon={person} /> Admin</IonText>
-                                            </IonCardContent>
-                                        </IonCard>
-                                    </IonItem>
-                                ))}
-                            </IonCard>
-
+                    <IonLabel className="p">School Announcements</IonLabel>
+                    <IonCard className='homepage-card'>
+                        <div className="cal-cont">
+                            {announcements.map((announcement: AnnouncementModel, index) => (
+                                <IonItem>
+                                    <IonCard key={index} className="anncm-card">
+                                        <IonCardHeader>
+                                            <IonText color={'dark'} className="title-format">{announcement.title}</IonText>
+                                            <div className="spacer-w-xl" />
+                                            {(announcement.dateandtime)}
+                                        </IonCardHeader>
+                                        <IonCardContent>
+                                            <IonText color={'dark'}> Description: {announcement.description}</IonText>
+                                            <br></br>
+                                            <div className="spacer-h-xxs" />
+                                            <IonText><IonIcon icon={person} /> Admin</IonText>
+                                        </IonCardContent>
+                                    </IonCard>
+                                </IonItem>
+                            ))}
                         </div>
+                    </IonCard>
 
-                        <div className='calendar-pos'>
-                            <IonCard className='calendar-card'>
 
-                                <div className="spacer-h-m" />
-                                <IonLabel className="p">School Calendar</IonLabel>
+                    <IonLabel className="p">School Calendar</IonLabel>
+                    <IonCard className='homepage-card'>
+                        <div className="cal-cont">
+                            <IonList>
+                                {events.map((event: EventModel, index) => {
+                                    const currentDate = new Date(event.start_date);
+                                    const prevEventDate = index > 0 ? new Date(events[index - 1].start_date) : null;
 
-                                <div className="cal-cont">
-                                    <IonList>
-                                        {events.map((event, index) => {
-                                            const currentDate = new Date(event.start_date);
-                                            const prevEventDate = index > 0 ? new Date(events[index - 1].start_date) : null;
+                                    return (
+                                        <div key={event.cal_id}>
+                                            {index === 0 || (prevEventDate && currentDate.getMonth() !== prevEventDate.getMonth()) ? (
+                                                <h3 className="month-year">{getFormattedMonth(currentDate)}</h3>
+                                            ) : null}
 
-                                            return (
-                                                <div key={event.cal_id}>
-                                                    {index === 0 || currentDate.getMonth() !== prevEventDate.getMonth() ? (
-                                                        <h4 className="month-year">{getFormattedMonth(currentDate)}</h4>
+                                            <IonItem>
+                                                <IonLabel>
+                                                    <h2>{event.event_name}</h2>
+                                                    <p>{event.description}</p>
+                                                    <p>Start Date: {getFormattedDate(event.start_date)}</p>
+                                                    {event.end_date ? (
+                                                        <p>End Date: {getFormattedDate(event.end_date)}</p>
                                                     ) : null}
-
-                                                    <IonCard className="events">
-                                                        <IonCardContent>
-                                                            <IonText>
-                                                                <h2>{event.event_name}</h2>
-                                                                <p>{event.description}</p>
-                                                                <p>Start Date: {getFormattedDate(event.start_date)}</p>
-                                                                {event.end_date ? (
-                                                                    <p>End Date: {getFormattedDate(event.end_date)}</p>
-                                                                ) : null}
-                                                            </IonText>
-                                                        </IonCardContent>
-                                                    </IonCard>
-                                                </div>
-                                            );
-                                        })}
-                                    </IonList>
-                                </div>
-
-
-                            </IonCard>
+                                                </IonLabel>
+                                            </IonItem>
+                                        </div>
+                                    );
+                                })}
+                            </IonList>
                         </div>
+                    </IonCard>
 
-
-                    </div><div className="footer1">
+                    <div className="footer1">
                         <IonFooter className="ion-no-border" color={"dark"}>
                             <IonToolbar>
                                 <div className='footer-toolbar'>
@@ -324,32 +329,59 @@ const Homepage = () => {
             </>
                 :
                 <>
-                    <IonContent>
+                    <IonContent color={'light'}>
                         <div className="m-content">
                             <div className='m-homepage-card-position'>
-
                                 <p className="m-p">Recent News</p>
-                                <div className="scrollable-container">
-                                    <IonCard className="news-card">
-                                        <IonImg src={'/src/imgs/logo2.png'} />
-                                    </IonCard>
-                                    <IonCard className="news-card">
-                                        <IonImg src={'/src/imgs/logo2.png'} />
-                                    </IonCard>
-                                    <IonCard className="news-card">
-                                        <IonImg src={'/src/imgs/logo2.png'} />
-                                    </IonCard>
-                                    <IonCard className="news-card">
-                                        <IonImg src={'/src/imgs/logo2.png'} />
-                                    </IonCard>
-                                </div>
 
+                                <div>
+                                    <IonCard className="m-calendar-card">
+                                        <div
+                                            className="scrollable-container-home"
+                                            onTouchStart={handleTouchStart}
+                                            onTouchMove={handleTouchMove}
+                                            onScroll={handleScroll}
+                                            ref={scrollableContainerRef}
+                                        >
+                                            <div className="news-items">
+                                                {newsItems && newsItems.length > 0 ? (
+                                                    newsItems.map((imageUrl, index) => (
+                                                        <div className="m-news-card" key={index}>
+                                                            <img src={imageUrl} alt={`Image ${index}`} />
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div>
+                                                        <div className="spacer-w-m" />
+                                                        <IonText>No news to show.</IonText>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </IonCard>
+
+                                </div>
                             </div>
 
-
                             <p className="m-p">School Announcements</p>
-                            <IonCard className="m-recent-news">
-                                <IonCardHeader>announcement</IonCardHeader>
+                            <IonCard className="m-calendar-card">
+                                {announcements.map((announcement: AnnouncementModel, index) => (
+                                    <IonItem>
+                                        <IonCard key={index} className="anncm-card">
+                                            <IonCardHeader>
+                                                <IonText color={'dark'} className="title-format">{announcement.title}</IonText>
+                                                <div className="spacer-w-xl" />
+                                                {(announcement.dateandtime)}
+                                            </IonCardHeader>
+                                            <IonCardContent>
+                                                <IonText color={'dark'}> Description: {announcement.description}</IonText>
+                                                <br></br>
+                                                <div className="spacer-h-xxs" />
+                                                <IonText><IonIcon icon={person} /> Admin</IonText>
+                                            </IonCardContent>
+                                        </IonCard>
+                                    </IonItem>
+                                ))}
                             </IonCard>
 
                         </div>
@@ -357,7 +389,31 @@ const Homepage = () => {
                             <p className="m-p">School Calendar</p>
                             <IonCard className='m-calendar-card'>
                                 <IonCardContent>
-                                    Calendar
+                                    <IonList>
+                                        {events.map((event: EventModel, index) => {
+                                            const currentDate = new Date(event.start_date);
+                                            const prevEventDate = index > 0 ? new Date(events[index - 1].start_date) : null;
+
+                                            return (
+                                                <div key={event.cal_id}>
+                                                    {index === 0 || (prevEventDate && currentDate.getMonth() !== prevEventDate.getMonth()) ? (
+                                                        <h3 className="month-year">{getFormattedMonth(currentDate)}</h3>
+                                                    ) : null}
+
+                                                    <IonItem>
+                                                        <IonLabel>
+                                                            <h2>{event.event_name}</h2>
+                                                            <p>{event.description}</p>
+                                                            <p>Start Date: {getFormattedDate(event.start_date)}</p>
+                                                            {event.end_date ? (
+                                                                <p>End Date: {getFormattedDate(event.end_date)}</p>
+                                                            ) : null}
+                                                        </IonLabel>
+                                                    </IonItem>
+                                                </div>
+                                            );
+                                        })}
+                                    </IonList>
                                 </IonCardContent>
 
 

@@ -13,7 +13,7 @@ interface IDModel {
     emergency_no: string;
 }
 
-const ID_temp = () => {
+const ID_temp_shs = () => {
     const [userData, setUserData] = useState<IDModel>();
     const location = useLocation();
     const [profilePicturePath, setProfilePicturePath] = useState("https://ionicframework.com/docs/img/demos/avatar.svg");
@@ -38,7 +38,7 @@ const ID_temp = () => {
 
                     if (response.data.profile_pic) {
                         console.log(response.data.profile_pic);
-                        const profilePicturePath = `https://studentportal.lcsinhs.com/scripts/file-fetch-profile.php?file=${response.data.profile_pic}`;
+                        const profilePicturePath = `https://studentportal.lcsinhs.com/scripts/fetch_profile_pic.php?file=${response.data.profile_pic}`;
                         setProfilePicturePath(profilePicturePath);
                     }
                 })
@@ -76,7 +76,7 @@ const ID_temp = () => {
                 <div className="cards-pref">
                     <IonCard className="card-size">
                         <div className="card-content">
-                            <IonImg src="/src/imgs/idfront_jhs.png"></IonImg>
+                            <IonImg src="/src/imgs/idfront_shs.png"></IonImg>
                             <div className="avatar-post">
                                 <IonAvatar className="avatar-size">
                                     <img alt="Student Avatar" src={profilePicturePath || "https://ionicframework.com/docs/img/demos/avatar.svg"} />
@@ -96,7 +96,7 @@ const ID_temp = () => {
                     </IonCard>
                     <IonCard className="card-size">
                         <div className="card-content">
-                            <IonImg src='/src/imgs/idback_jhs.png'></IonImg>
+                            <IonImg src='/src/imgs/idback_shs.png'></IonImg>
                         </div>
                         <div className="poc-over-image">
                             <IonText className='poc-size'>
@@ -120,4 +120,4 @@ const ID_temp = () => {
     );
 };
 
-export { ID_temp };
+export { ID_temp_shs };

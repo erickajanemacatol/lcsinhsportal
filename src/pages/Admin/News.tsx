@@ -1,10 +1,14 @@
-import { useIonToast, IonPage, IonContent, IonLabel, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon } from "@ionic/react";
-import { useEffect, useRef, useState } from "react";
+import {
+    useIonToast, IonPage, IonContent, IonLabel, IonButton,
+    IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon,
+    IonImg
+} from "@ionic/react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useMediaQuery } from "react-responsive";
+import { trash } from "ionicons/icons";
+import AdminHeader from "../../components/AdminHeader";
 import axios from "axios";
 import './News.css';
-import AdminHeader from "../../components/AdminHeader";
-import { trash } from "ionicons/icons";
 
 const News: React.FC = () => {
     const isDesktop = useMediaQuery({ minWidth: 1050 });
@@ -35,49 +39,60 @@ const News: React.FC = () => {
     const uploadFile = () => {
         if (fileInputRef.current && fileInputRef.current.files && fileInputRef.current.files.length > 0) {
             const selectedFile = fileInputRef.current.files[0];
-
             const formData = new FormData();
             formData.append("news", selectedFile);
 
             axios
-                .post("http://localhost/news-add.php", formData, {
+                .post("https://studentportal.lcsinhs.com/scripts/news-add.php", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
                 })
                 .then((response) => {
+                    console.log(response.data);
                     if (response.data && response.data.success) {
                         showToast("File uploaded successfully", "success");
                         fetchImageList();
 
-                        fileInputRef.current.value = "";
+                        if (fileInputRef.current) {
+                            fileInputRef.current.value = "";
+                        }
+
                         if (selectedFileNameRef.current) {
                             selectedFileNameRef.current.innerText = "";
                         }
                     } else {
-                        showToast(response.data.error || "File upload failed", "danger");
+                        const errorMessage = response.data.error || "File upload failed";
+                        console.error("Upload Error:", errorMessage);
+                        showToast(errorMessage, "danger");
                     }
-
-                    fileInputRef.current.value = ""; // Clear the selected file
                 })
                 .catch((error) => {
-                    console.error("Error:", error);
-                    showToast("File upload failed", "danger");
+                    if (error.response) {
+                        const errorMessage = error.response.data.error || "File upload failed";
+                        console.error("Server Error:", errorMessage);
+                        showToast(errorMessage, "danger");
+                    } else {
+                        const errorMessage = "Request to server failed. Please check your network connection.";
+                        console.error("Network Error:", errorMessage);
+                        showToast(errorMessage, "danger");
+                    }
                 });
         } else {
             showToast("No file selected", "danger");
         }
     };
 
-
-    const imageStyle = {
-        width: '100%',
-        height: '100%',
-    };
+    const imageStyle = useMemo(() => {
+        return {
+            width: "100%",
+            height: "100%",
+        };
+    }, []);
 
     const fetchImageList = () => {
         axios
-            .get('http://localhost/news-fetch.php')
+            .get('https://studentportal.lcsinhs.com/scripts/news-fetch.php')
             .then((response) => {
                 if (response.data && response.data.success) {
                     setImageUrls(response.data.images);
@@ -94,15 +109,15 @@ const News: React.FC = () => {
         fetchImageList();
     }, []);
 
-    const handleDeleteImage = (imageUrl) => {
+    const handleDeleteImage = (imageUrl: string) => {
+        console.log(imageUrl);
         const confirmed = window.confirm('Are you sure you want to delete this image?');
-    
+
         if (confirmed) {
             // Extract the relative path from the imageUrl
-            const relativePath = imageUrl.replace('http://localhost/', '');
-    
-            axios
-                .delete(`http://localhost/news-delete.php?imageId=${relativePath}`)
+            const relativePath = imageUrl.replace('https://studentportal.lcsinhs.com', '');
+
+            axios.delete(`https://studentportal.lcsinhs.com//scripts/news-delete.php?imageId=${imageUrl}`)
                 .then((response) => {
                     console.log("Response:", response.data);
                     if (response.data.success) {
@@ -117,8 +132,8 @@ const News: React.FC = () => {
                 });
         }
     };
-    
-    
+
+
     return (
         <IonPage>
             <AdminHeader />
@@ -128,16 +143,16 @@ const News: React.FC = () => {
                     <div className="div-title-n">
 
                         <div className="title-pl">
-                            <IonLabel className="annc-title">News</IonLabel>
+                            <IonLabel className="news-ttl">News Contents</IonLabel>
                         </div>
                         <div className="upload-pl">
                             <IonCard className="upload-card">
                                 <input
+                                    className="input-disp"
                                     type="file"
                                     name="news"
                                     accept=".jpeg, .jpg, .png"
                                     ref={fileInputRef}
-                                    style={{ display: 'none' }}
                                     onChange={handleFileSelect}
                                 />
                                 <div>
@@ -146,8 +161,8 @@ const News: React.FC = () => {
                                             Selected File: <span ref={selectedFileNameRef}></span>
                                         </div>
                                         <div className="select-file-but">
-                                            <IonButton onClick={openFileInput} size="small" color={'dark'}>Select File</IonButton>
-                                            <IonButton onClick={uploadFile} size="small" color={'dark'}>Upload</IonButton>
+                                            <IonButton onClick={openFileInput} fill="outline" color={'dark'}>Select File</IonButton>
+                                            <IonButton onClick={uploadFile} color={'dark'}>Upload</IonButton>
                                         </div>
                                     </IonCardContent>
                                 </div>
@@ -166,7 +181,7 @@ const News: React.FC = () => {
                                         </IonButton>
                                     </IonCardHeader>
                                     <IonCardContent>
-                                        <img src={imageUrl} alt={`Image ${index}`} style={imageStyle} />
+                                        <IonImg src={imageUrl} alt={`Image ${index}`} style={imageStyle} />
                                     </IonCardContent>
                                 </IonCard>
                             ))
@@ -174,12 +189,58 @@ const News: React.FC = () => {
                             <div></div>
                         )
                     }
-
-
-
                 </IonContent >
             ) : (
                 <IonContent>
+                    <div className="spacer-h-l"></div>
+                    <div className="div-title-n">
+
+                        <div className="title-pl">
+                        </div>
+                    </div>
+                    <div className="m-upload-pl">
+                        <IonCard className="upload-card">
+                            <input
+                                type="file"
+                                name="news"
+                                accept=".jpeg, .jpg, .png"
+                                ref={fileInputRef}
+                                className="input-disp"
+                                onChange={handleFileSelect}
+                            />
+                            <div>
+                                <IonCardContent className="upload-card-cont">
+                                    <div className="select-file-text">
+                                        Selected File: <span ref={selectedFileNameRef}></span>
+                                    </div>
+                                    <div className="select-file-but">
+                                        <IonButton onClick={openFileInput} fill="outline" color={'dark'}>Select File</IonButton>
+                                        <IonButton onClick={uploadFile} color={'dark'}>Upload</IonButton>
+                                    </div>
+                                </IonCardContent>
+                            </div>
+                        </IonCard>
+                    </div>
+
+                    {
+                        imageUrls.length > 0 ? (
+                            imageUrls.map((imageUrl, index) => (
+                                <IonCard key={index} className="card">
+                                    <IonCardHeader>
+                                        <IonCardTitle>{index + 1}</IonCardTitle>
+                                        <IonButton fill="clear" className="trash-button" onClick={() => handleDeleteImage(imageUrl)}>
+                                            <IonIcon slot="icon-only" color={'danger'} icon={trash} />
+                                        </IonButton>
+                                    </IonCardHeader>
+                                    <IonCardContent>
+                                        <IonImg src={imageUrl} alt={`Image ${index}`} style={imageStyle} />
+                                    </IonCardContent>
+                                </IonCard>
+                            ))
+                        ) : (
+                            <div></div>
+                        )
+                    }
                 </IonContent>
             )}
         </IonPage >

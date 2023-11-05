@@ -42,12 +42,13 @@ import { Links } from './pages/Admin/Survey';
 import PrivateRoute from './components/utils/PrivateRoute';
 import Error from './components/utils/Error';
 import { QRAttendance } from './pages/QR Attendance/QR';
+import { ID_temp_shs } from './pages/Home/Profile/ID_temp_shs';
 
 setupIonicReact();
 
 const App: React.FC = () => (
 
-  /*<IonApp>
+  <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
         <Router>
@@ -59,6 +60,7 @@ const App: React.FC = () => (
             <PrivateRoute exact path="/grades" component={Grades} requiredRole="0" />
             <PrivateRoute exact path="/profile" component={Profile} requiredRole="0" />
             <PrivateRoute exact path="/school_id" component={ID_temp} requiredRole="0" />
+            <PrivateRoute exact path="/school_id_shs" component={ID_temp_shs} requiredRole="0" />
 
             <PrivateRoute exact path="/faculty/attendance" component={fAttendance} requiredRole="2" />
             <PrivateRoute exact path="/faculty/grades" component={fGrades} requiredRole="2" />
@@ -70,7 +72,7 @@ const App: React.FC = () => (
             <PrivateRoute exact path="/admin/calendar" component={Calendar} requiredRole="1" />
             <PrivateRoute exact path="/admin/students" component={Students} requiredRole="1" />
             <PrivateRoute exact path="/admin/faculty" component={Faculty} requiredRole="1" />
-            <PrivateRoute exact path="/admin/survey" component={Survey} requiredRole="1" />
+            <PrivateRoute exact path="/admin/links" component={Links} requiredRole="1" />
 
             <Route exact path="/qr-attendance" component={QRAttendance}/>
             <Route exact path="/error" component={Error} />
@@ -80,8 +82,9 @@ const App: React.FC = () => (
         </Router>
       </IonRouterOutlet>
     </IonReactRouter>
-  </IonApp>*/
+  </IonApp>
 
+  /*
 <IonApp>
 <IonReactRouter>
   <IonRouterOutlet>
@@ -115,7 +118,7 @@ const App: React.FC = () => (
     </Router>
   </IonRouterOutlet>
 </IonReactRouter>
-</IonApp>
+</IonApp>*/
 );
 
 export default App;

@@ -3,6 +3,8 @@ import { IonButton, IonInput, IonModal, IonTextarea } from '@ionic/react';
 import './Announcements.css'
 
 export interface Announcement {
+  dateandtime: string;
+  annc_id: number;
   title: string;
   description: string;
   id: number;

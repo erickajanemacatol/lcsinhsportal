@@ -3,7 +3,9 @@ import {
     IonContent, IonPage,
     IonFab, IonFabButton,
     IonIcon, IonChip, IonItem,
-    IonButton} from "@ionic/react";
+    IonButton,
+    IonText
+} from "@ionic/react";
 import './Activities.css';
 import { add, addSharp, ellipse, trash } from "ionicons/icons";
 import Header from "../../../components/StudentHeader";
@@ -12,18 +14,32 @@ import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+interface ActModel {
+    activity_id: string;
+    priority: number;
+    act_desc: string;
+    due_date: string;
+    category: string;
+}
 
 const Activities = () => {
     const isDesktop = useMediaQuery({ minWidth: 1050 })
-    const history = useHistory();
-
-    const [activities, setActivities] = useState([]);
+    const [activities, setActivities] = useState<ActModel[]>([]); // Specify the type as ActModel[]
     const username = localStorage.getItem('username');
     const [selectedCategory, setSelectedCategory] = useState("All"); // Default to show all categories
 
+    function formatDate(dateString: any) {
+        const options: Intl.DateTimeFormatOptions = {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        };
+        return new Date(dateString).toLocaleDateString("en-AS", options);
+    }
 
     useEffect(() => {
-        axios.get(`http://localhost/task-fetch.php?studentLRN=${username}`)
+        axios.get(`https://studentportal.lcsinhs.com/scripts/task-fetch.php?studentLRN=${username}`)
             .then((response) => {
                 setActivities(response.data);
             })
@@ -32,7 +48,7 @@ const Activities = () => {
             });
     }, [username]);
 
-    const getPriorityColor = (priority) => {
+    const getPriorityColor = (priority: any) => {
         switch (priority) {
             case 0:
                 return 'success';
@@ -41,26 +57,26 @@ const Activities = () => {
             case 2:
                 return 'danger';
             default:
-                return 'medium'; // Default color if priority is not 0, 1, or 2
+                return 'medium';
         }
     };
 
-    const handleChipClick = (category) => {
+    const handleChipClick = (category: any) => {
         setSelectedCategory(category);
     };
 
     const filteredActivities = selectedCategory === "All"
         ? activities
-        : activities.filter((activity) => activity.category === selectedCategory);
+        : activities.filter((activity: ActModel) => activity.category === selectedCategory);
 
     // Sort the activities array by priority
     const sortedActivities = [...filteredActivities].sort((a, b) => b.priority - a.priority);
 
-    const handleDeleteActivity = (activityId) => {
+    const handleDeleteActivity = (activityId: any) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this activity?");
         if (confirmDelete) {
             // If the user confirms, send a request to delete the activity
-            axios.delete(`http://localhost/task-delete.php?activityId=${activityId}`)
+            axios.delete(`https://studentportal.lcsinhs.com/scripts/task-delete.php?activityId=${activityId}`)
                 .then((response) => {
                     if (response.data.success) {
                         // Handle success, e.g., remove the deleted activity from the state
@@ -86,7 +102,9 @@ const Activities = () => {
                     <div className="spacer-h-m" />
                     <div className="display-flex">
 
-                        <IonLabel className="my-act-title">My Activities </IonLabel>
+                        <div className="att-margin">
+                            <IonLabel className="my-att-title">To Do List</IonLabel>
+                        </div>
 
                         <div className="add-pos">
                             <IonButton
@@ -134,25 +152,28 @@ const Activities = () => {
                         </IonChip>
                     </IonItem>
 
-                    {sortedActivities.map((activity) => (
-                        <div className="avatar-center" key={activity.activity_id}>
+                    {sortedActivities.map((activity: ActModel) => (
+                        <div className="activity-card-center" key={activity.activity_id}>
                             <IonCard className="activity-card">
                                 <IonItem>
-                                    <div className="spacer-w-l" />
+                                    <div className="spacer-w-m" />
                                     <IonIcon icon={ellipse} color={getPriorityColor(activity.priority)} />
+                                    <div className="spacer-w-m" />
+
                                     <IonLabel>
                                         <b>{activity.act_desc}</b>
                                     </IonLabel>
-                                    <IonLabel>
-                                        {new Date(activity.due_date).toLocaleString('en-US', {
-                                            year: 'numeric',
-                                            month: '2-digit',
-                                            day: '2-digit',
+
+                                    <IonText>
+                                        Due: {formatDate(activity.due_date)} at{' '}
+                                        {new Date(activity.due_date).toLocaleTimeString('en-AS', {
                                             hour: '2-digit',
                                             minute: '2-digit',
                                         })}
-                                    </IonLabel>
-                                    <IonLabel>Category: {activity.category}</IonLabel>
+                                    </IonText>
+
+                                    <div className="spacer-w-xl" />
+                                    <IonText>Category: {activity.category || 'None'}</IonText>
 
                                     <IonButton fill="clear" color={'danger'} size="default"
                                         onClick={() => handleDeleteActivity(activity.activity_id)} // Attach the delete function here
@@ -181,7 +202,10 @@ const Activities = () => {
 
                         <div className="spacer-h-s" />
 
-                        <IonLabel className="m-my-act-title">My Activities </IonLabel>
+                        <div className="att-margin">
+                            <IonLabel className="m-my-act-title">To Do List</IonLabel>
+
+                        </div>
 
                         <IonItem color={"light"}>
                             <IonChip
@@ -216,11 +240,12 @@ const Activities = () => {
                             </IonChip>
                         </IonItem>
 
-                        {sortedActivities.map((activity) => (
+                        {sortedActivities.map((activity: ActModel) => (
                             <div className="avatar-center" key={activity.activity_id}>
                                 <IonCard className="m-activity-card">
                                     <IonItem>
                                         <IonIcon icon={ellipse} color={getPriorityColor(activity.priority)} />
+                                        <div className="spacer-w-s" />
                                         <IonLabel>
                                             <b>{activity.act_desc}</b>
                                         </IonLabel>
@@ -232,17 +257,22 @@ const Activities = () => {
                                         </IonButton>
                                     </IonItem>
 
-                                    <IonLabel>
-                                        {new Date(activity.due_date).toLocaleString('en-US', {
-                                            year: 'numeric',
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                        })}
-                                    </IonLabel>
-                                    <IonLabel>Category: {activity.category}</IonLabel>
-                                    
+                                    <div className="m-due">
+                                        <IonText>
+                                            Due: {formatDate(activity.due_date)} at{' '}
+                                            {new Date(activity.due_date).toLocaleTimeString('en-AS', {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })}
+                                        </IonText>
+                                        
+                                        <div className="spacer-w-s" />
+
+                                        <IonText>Category: {activity.category || 'None'}</IonText>
+                                    </div>
+
+
+
                                 </IonCard>
                             </div>
                         ))}

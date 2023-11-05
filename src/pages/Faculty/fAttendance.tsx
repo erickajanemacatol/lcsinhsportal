@@ -5,15 +5,23 @@ import FacultyHeader from "../../components/FacultyHeader";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 
+interface AttendanceModel {
+    attendance_date: string;
+    student_lrn: string;
+    f_name: string;
+    l_name: string;
+    attendance_time: string;
+}
+
 const fAttendance: React.FC = () => {
     const isDesktop = useMediaQuery({ minWidth: 992 })
     const [attendanceData, setAttendanceData] = useState([]);
     const [availableDates, setAvailableDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
 
-    function formatDate(dateString) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+    function formatDate(dateString: any) {
+        const options: Intl.DateTimeFormatOptions = { month: "long", day: "numeric", year: "numeric" };
+        return new Date(dateString).toLocaleDateString("en-AS", options);
     }
 
     useEffect(() => {
@@ -73,8 +81,8 @@ const fAttendance: React.FC = () => {
                                     </IonLabel>
                                 </IonItem>
                                 {attendanceData
-                                    .filter((entry) => entry.attendance_date === selectedDate)
-                                    .map((entry) => (
+                                    .filter((entry: AttendanceModel) => entry.attendance_date === selectedDate)
+                                    .map((entry: AttendanceModel) => (
                                         <IonItem key={entry.student_lrn} lines="none">
                                             <IonLabel slot="start" className="ion-text-wrap">
                                                 <h2 className="ion-text-start">{entry.l_name}, {entry.f_name}</h2>
@@ -122,8 +130,8 @@ const fAttendance: React.FC = () => {
                                     </IonLabel>
                                 </IonItem>
                                 {attendanceData
-                                    .filter((entry) => entry.attendance_date === selectedDate)
-                                    .map((entry) => (
+                                    .filter((entry: AttendanceModel) => entry.attendance_date === selectedDate)
+                                    .map((entry: AttendanceModel) => (
                                         <IonItem key={entry.student_lrn} lines="none">
                                             <IonLabel slot="start" className="ion-text-wrap">
                                                 <h2 className="ion-text-start">{entry.l_name}, {entry.f_name}</h2>

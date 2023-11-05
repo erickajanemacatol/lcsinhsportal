@@ -65,7 +65,7 @@ const AddActivity = () => {
         console.log(newTaskDetails);
 
         axios
-            .post('http://localhost/task-add.php', JSON.stringify(newTaskDetails))
+            .post('https://studentportal.lcsinhs.com/scripts/task-add.php', JSON.stringify(newTaskDetails))
             .then((response) => {
                 console.log('Server Response:', response);
                 if (response.data.success) {
@@ -123,7 +123,17 @@ const AddActivity = () => {
                                             color={'dark'}
                                             value={selectedDate}
                                             min={minDate}
-                                            onIonChange={(e) => setSelectedDate(e.detail.value || '')}
+                                            onIonChange={(e) => {
+                                                const value = e.detail.value;
+                                                if (typeof value === 'string') {
+                                                    setSelectedDate(value);
+                                                } else if (Array.isArray(value)) {
+                                                    setSelectedDate(value.join(', '));
+                                                } else {
+                                                    setSelectedDate('');
+                                                }
+                                            }}
+
                                         ></IonDatetime>
                                     </div>
                                     <div>
@@ -265,7 +275,16 @@ const AddActivity = () => {
                                                 color={'dark'}
                                                 value={selectedDate}
                                                 min={minDate}
-                                                onIonChange={(e) => setSelectedDate(e.detail.value || '')}
+                                                onIonChange={(e) => {
+                                                    const value = e.detail.value;
+                                                    if (typeof value === 'string') {
+                                                        setSelectedDate(value);
+                                                    } else if (Array.isArray(value)) {
+                                                        setSelectedDate(value.join(', '));
+                                                    } else {
+                                                        setSelectedDate('');
+                                                    }
+                                                }}
                                             ></IonDatetime>
                                         </div>
 
@@ -275,7 +294,7 @@ const AddActivity = () => {
                                                 <IonSelect
                                                     slot="end"
                                                     aria-label="priority"
-                                                    value={selectedPriority} // Make sure this is correctly bound
+                                                    value={selectedPriority} 
                                                     onIonChange={(e) => setSelectedPriority(e.detail.value)}
                                                 >
                                                     <IonSelectOption value="0">Low</IonSelectOption>

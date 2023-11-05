@@ -1,10 +1,19 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonContent, IonDatetime, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonText, useIonToast } from "@ionic/react";
+import { IonAccordion, IonAccordionGroup, IonButton, IonCard, IonCardContent, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { add, addCircle, create, trash } from "ionicons/icons";
+import { addCircle } from "ionicons/icons";
 import { useMediaQuery } from "react-responsive";
 import './Calendar.css';
 import AdminHeader from "../../components/AdminHeader";
 import axios from "axios";
+import { InputChangeEventDetail } from '@ionic/core';
+
+interface EventModel {
+    cal_id: string;
+    event_name: string;
+    description: string;
+    start_date: string;
+    end_date?: string | null;
+}
 
 const Calendar: React.FC = () => {
     const isDesktop = useMediaQuery({ minWidth: 1050 });
@@ -12,9 +21,9 @@ const Calendar: React.FC = () => {
     const [eventName, setEventName] = useState("");
     const [description, setDescription] = useState("");
     const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState(null);
+    const [endDate, setEndDate] = useState<string | null>(null);
     const [error, setError] = useState("");
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<EventModel[]>([]);
 
     const [presentToast, dismissToast] = useIonToast();
     const showToast = (message: string, color: string) => {
@@ -45,7 +54,7 @@ const Calendar: React.FC = () => {
         console.log(eventData);
 
         axios
-            .post("http://localhost/event-add.php", eventData)
+            .post("https://studentportal.lcsinhs.com/scripts/event-add.php", eventData)
             .then((response) => {
                 setEventName('');
                 setDescription('');
@@ -54,7 +63,7 @@ const Calendar: React.FC = () => {
                 showToast("Event added successfully.", "success");
                 console.log("Event added successfully");
 
-                axios.get("http://localhost/event-fetch.php")
+                axios.get("https://studentportal.lcsinhs.com/scripts/event-fetch.php")
                     .then((response) => {
                         setEvents(response.data);
                     })
@@ -67,12 +76,12 @@ const Calendar: React.FC = () => {
             });
     };
 
-    const handleDeleteEvent = (calId) => {
+    const handleDeleteEvent = (calId: any) => {
         const confirmed = window.confirm("Are you sure to delete event?")
 
         if (confirmed) {
             axios
-                .post("http://localhost/event-delete.php", { cal_id: calId })
+                .post("https://studentportal.lcsinhs.com/scripts/event-delete.php", { cal_id: calId })
                 .then((response) => {
                     showToast("Event deleted successfully.", "success");
                     // Fetch the updated list of events
@@ -84,19 +93,19 @@ const Calendar: React.FC = () => {
         }
     };
 
-    const getFormattedMonth = (date) => {
+    const getFormattedMonth = (date: any) => {
         const options = { month: "long", year: "numeric" };
         return date.toLocaleDateString("en-AS", options);
     };
 
-    const getFormattedDate = (date) => {
-        const options = { month: "long", day: "numeric", year: "numeric" };
+    const getFormattedDate = (date: any) => {
+        const options: Intl.DateTimeFormatOptions = { month: "long", day: "numeric", year: "numeric" };
         return new Date(date).toLocaleDateString("en-AS", options);
     };
 
     const fetchEvents = () => {
         axios
-            .get("http://localhost/event-fetch.php")
+            .get("https://studentportal.lcsinhs.com/scripts/event-fetch.php")
             .then((response) => {
                 setEvents(response.data);
             })
@@ -110,7 +119,7 @@ const Calendar: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost/event-fetch.php")
+        axios.get("https://studentportal.lcsinhs.com/scripts/event-fetch.php")
             .then((response) => {
                 setEvents(response.data);
             })
@@ -127,7 +136,9 @@ const Calendar: React.FC = () => {
                     <IonContent>
 
                         <div className="spacer-h-l"></div>
-                        <IonLabel className="annc-title">School Calendar</IonLabel>
+                        <div className="cal-margin">
+                            <IonLabel className="cal">School Calendar</IonLabel>
+                        </div>
                         <div className="spacer-h-xs"></div>
 
                         <div className="upload-cal-button">
@@ -155,10 +166,10 @@ const Calendar: React.FC = () => {
                                         value={startDate} onIonChange={(e) => setStartDate(e.detail.value!)} />
 
 
-                                    <IonLabel slot="start">End Date</IonLabel>
+                                    <IonLabel slot="start">End Date (Optional)</IonLabel>
                                     <div className="spacer-w-xs" />
                                     <IonInput type="date" className="custom-date-input"
-                                        value={endDate} onIonChange={(e) => setEndDate(e.detail.value!)} />
+                                        value={endDate} onIonChange={(e) => setEndDate(e.detail.value || null)} />
 
                                     <div className="spacer-w-xs" />
 
@@ -172,13 +183,13 @@ const Calendar: React.FC = () => {
 
                         <div className="display-cal-button">
                             <IonList>
-                                {events.map((event, index) => {
+                                {events.map((event: EventModel, index) => {
                                     const currentDate = new Date(event.start_date);
                                     const prevEventDate = index > 0 ? new Date(events[index - 1].start_date) : null;
 
                                     return (
                                         <div key={event.cal_id}>
-                                            {index === 0 || currentDate.getMonth() !== prevEventDate.getMonth() ? (
+                                            {index === 0 || (prevEventDate && currentDate.getMonth() !== prevEventDate.getMonth()) ? (
                                                 <h3 className="month-year">{getFormattedMonth(currentDate)}</h3>
                                             ) : null}
 
@@ -199,56 +210,93 @@ const Calendar: React.FC = () => {
                                     );
                                 })}
                             </IonList>
+
                         </div>
-
-
-
                     </IonContent>
 
                 </> : <>
                     {/*MOBILE*/}
                     <IonContent>
-                        <div className="spacer-h-l"></div>
-                        <IonLabel className="annc-title">Announcements</IonLabel>
                         <div className="spacer-h-xs"></div>
 
-                        <div className="create-button">
-                            <IonButton size="default" href="/admin/announcement-details">
-                                <IonIcon icon={add} />
-                                Create
-                            </IonButton>
+                        <div className="m-upload-cal-button">
+                            <IonAccordionGroup>
+                                <IonAccordion value="first">
+                                    <IonItem slot="header" color="light">
+                                        <IonLabel>Add Event</IonLabel>
+                                    </IonItem>
+                                    <div className="ion-padding" slot="content">
+                                        <IonInput fill="outline"
+                                            label="Event Name"
+                                            labelPlacement="stacked"
+                                            className="m-event-custom-input"
+                                            value={eventName}
+                                            onIonChange={(e) => setEventName(e.detail.value!)}>
+                                        </IonInput>
+
+                                        <div className="spacer-h-xs"></div>
+
+                                        <IonInput fill="outline"
+                                            label="Description (Optional)"
+                                            labelPlacement="stacked"
+                                            className="m-desc-custom-input"
+                                            value={description}
+                                            onIonChange={(e) => setDescription(e.detail.value!)}>
+                                        </IonInput>
+
+
+                                        <h6>Start Date</h6>
+                                        <IonInput type="date" className="m-custom-date-input" fill="outline"
+                                            value={startDate} onIonChange={(e) => setStartDate(e.detail.value!)} />
+
+                                        <h6>End Date (Optional)</h6>
+                                        <IonInput type="date" className="m-custom-date-input" fill="outline"
+                                            value={endDate} onIonChange={(e) => setEndDate(e.detail.value!)} />
+
+
+                                        {/*Submit Button*/}
+                                        <div className="m-add-button-pl">
+                                            <IonButton color={'dark'} type="submit" onClick={handleFormSubmit}>
+                                                Add
+                                            </IonButton>
+                                        </div>
+                                    </div>
+                                </IonAccordion>
+                            </IonAccordionGroup>
                         </div>
 
-                        <div className="spacer-h-m"></div>
 
+                        <IonCard className="event-card">
+                            <div className="display-cal-button">
+                                <IonList>
+                                    {events.map((event: EventModel, index) => {
+                                        const currentDate = new Date(event.start_date);
+                                        const prevEventDate = index > 0 ? new Date(events[index - 1].start_date) : null;
 
-                        <IonCard >
-                            <IonCardHeader className="header-disp">
-                                <div className="header-disp">
-                                    <div className="title-poss">
-                                        <IonText className="title-format"></IonText>
-                                        <div className="spacer-w-xl" />
-                                        {/*(announcement.dateandtime)*/}
-                                    </div>
-                                    <div className="m-button-pos">
-                                        <IonButtons>
-                                            <IonButton color="primary">
-                                                <IonIcon icon={create} />
-                                            </IonButton>
-                                            <IonButton color="danger" >
-                                                <IonIcon icon={trash} />
-                                            </IonButton>
-                                        </IonButtons>
-                                    </div>
+                                        return (
+                                            <div key={event.cal_id}>
+                                                {index === 0 || (prevEventDate && currentDate.getMonth() !== prevEventDate.getMonth()) ? (
+                                                    <h3 className="month-year">{getFormattedMonth(currentDate)}</h3>
+                                                ) : null}
 
-                                </div>
-
-                            </IonCardHeader>
-
-                            <IonCardContent>
-                                <IonText color={'dark'}>Description: </IonText>
-                            </IonCardContent>
-
+                                                <IonItem>
+                                                    <IonLabel>
+                                                        <h2>{event.event_name}</h2>
+                                                        <p>{event.description}</p>
+                                                        <p>Start Date: {getFormattedDate(event.start_date)}</p>
+                                                        {event.end_date ? (
+                                                            <p>End Date: {getFormattedDate(event.end_date)}</p>
+                                                        ) : null}
+                                                    </IonLabel>
+                                                    <IonButton fill="clear" color="danger" onClick={() => handleDeleteEvent(event.cal_id)}>
+                                                        Delete
+                                                    </IonButton>
+                                                </IonItem>
+                                            </div>
+                                        );
+                                    })}
+                                </IonList>
+                            </div>
                         </IonCard>
                     </IonContent>
                 </>
