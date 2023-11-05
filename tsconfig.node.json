@@ -3,9 +3,9 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "target": "ESNext", // Specify your target version here
-    "jsx": "react-jsx", // If you are using React
-    "lib": ["ESNext", "DOM"], // Include the necessary libraries
+    "target": "ESNext", 
+    "jsx": "react-jsx", 
+    "lib": ["ESNext", "DOM"], 
     "allowSyntheticDefaultImports": true
   },
   "include": ["vite.config.ts"]
