@@ -10,6 +10,11 @@
 
 }
 
+.font-subj {
+    font-size: 10pt;
+    font-family: 'Lato';
+}
+
 .logout {
     display: flex;
     justify-content: end;
