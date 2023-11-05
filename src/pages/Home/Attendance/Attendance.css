@@ -6,6 +6,23 @@
     color: black;
 }
 
+.my-att-card {
+    box-shadow: inset;
+    height: auto;
+    border-radius: 20px;
+}
+
+.att-label {
+    font-family: "Lato";
+}
+
+.cal-margin {
+    margin-left: 20px;
+}
+
+.att-item-size {
+    width: 100%;
+}
 
 /*MOBILE*/
 .m-my-att-title {
@@ -13,4 +30,18 @@
     font-weight: bolder;
     font-size: 17pt;
     color: black;
+}
+
+.m-my-att-card {
+    box-shadow: inset;
+    border-radius: 15px;
+}
+
+.m-att-item-size {
+    display: block;
+    width: 100%;
+}
+
+.m-att-label {
+    font-size: small;
 }

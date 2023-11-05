@@ -17,3 +17,21 @@
 .search-desc-size {
     font-size: small;
 }
+
+.faculty-add {
+    display: flex;
+    justify-content: end;
+    margin-right: 10px;
+}
+
+.faculty-modal {
+    margin: 30px;
+}
+
+.faculty-modal-des {
+    border-radius: 10px;
+}
+
+.faculty-card-des {
+    margin-left: 10px;
+}

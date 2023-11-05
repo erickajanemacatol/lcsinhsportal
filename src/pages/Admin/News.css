@@ -2,8 +2,8 @@
     border: 1px solid #ccc;
     margin: 10px;
     display: inline-block;
-    height: 250px; /* Set the desired fixed height for the IonCard */
-    width: 200px; /* Set the desired width for the IonCard */
+    height: 200px; /* Set the desired fixed height for the IonCard */
+    width: 160px; /* Set the desired width for the IonCard */
     position: relative; /* Set position to relative for positioning the trash button */
 }
 
@@ -23,7 +23,6 @@ img {
     top: 10px; /* Adjust the top position as needed */
     right: 10px; /* Adjust the right position as needed */
 }
-
 
 
 .div-title-n {
@@ -62,4 +61,22 @@ img {
     display: flex;
     justify-content: end;
     width: 50%;
+}
+
+.input-disp {
+    display: none;
+}
+
+.news-ttl {
+    font-family: poppins;
+    width: 50%;
+    font-weight: bolder;
+    font-size: 18pt;
+    color: black;
+}
+
+.m-upload-pl {
+    display: block;
+    align-items: center;
+    justify-content: end;
 }

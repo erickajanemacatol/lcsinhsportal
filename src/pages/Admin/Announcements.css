@@ -14,7 +14,9 @@
 .title-pl {
     display: flex;
     width: 100%;
+    margin-left: 20px;
 }
+
 
 .create-button {
     width: auto;
@@ -78,4 +80,16 @@
 
 .mobile-display {
     display: block;
+}
+
+.m-upload-annc-button {
+    display: block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.annc-add {
+    display: flex;
+    justify-content: end;
+    margin-right: 10px;
 }

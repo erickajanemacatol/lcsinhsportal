@@ -30,7 +30,7 @@ ion-button {
     align-items: center;
     justify-content: end;
 
-    ion-buttons {
+    :is(ion-buttons) {
         --background-hover: var(--background);
     }
 }

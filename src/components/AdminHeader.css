@@ -35,6 +35,7 @@ ion-menu::part(backdrop) {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
+    height: 45px;
 }
 
 /* Hide the scrollbar for Webkit-based browsers */
@@ -46,4 +47,36 @@ ion-menu::part(backdrop) {
 /* Hide scrollbar track for Webkit-based browsers */
 .scrollable-container::-webkit-scrollbar-track {
     display: none;
+}
+
+.m-title-and-logo {
+    display: flex;
+    align-items: center;
+    width: 90%;
+}
+
+.m-logo-btn-size {
+    width: 60px;
+    height: 60px;
+}
+
+.m-title-label {
+    font-family: 'poppins';
+    font-weight: 600;
+    font-size: 14pt;
+    margin: none;
+}
+
+.m-tabs-display {
+    display: flex;
+    align-items: center;
+}
+
+.m-tab-btn {
+    width: 200px;
+    font-size: 10pt;
+}
+
+.m-profile-btn-size {
+    --height: 20px;
 }

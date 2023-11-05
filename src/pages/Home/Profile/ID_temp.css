@@ -25,7 +25,6 @@
     top: 34%;
     left: 29%;
     transform: translate(-50%, -50%);
-    /* Center the text within the container */
 }
 
 .avatar-size {
@@ -35,29 +34,26 @@
 
 .name-over-image {
     position: absolute;
-    top: 72%;
-    /* Adjust this value to vertically center the text */
+    top: 72.5%;
     left: 50%;
-    /* Adjust this value to horizontally center the text */
     transform: translate(-50%, -50%);
-    /* Center the text within the container */
-    font-size: 16px;
+    font-size: 10px;
     color: white;
 }
 
 .name-size {
-    font-size: 8.5pt;
+    font-size: 8pt;
     font-weight: bolder;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
 }
 
 .lrn-over-image {
     position: absolute;
     bottom: 13.5%;
-    /* Adjust this value to vertically center the text */
     left: 58%;
-    /* Adjust this value to horizontally center the text */
     transform: translate(-50%, -50%);
-    /* Center the text within the container */
     font-size: 16px;
     color: white;
 }
@@ -71,11 +67,8 @@
 .poc-over-image {
     position: absolute;
     top: 32%;
-    /* Adjust this value to vertically center the text */
     left: 30%;
-    /* Adjust this value to horizontally center the text */
     transform: translate(-50%, -50%);
-    /* Center the text within the container */
     font-size: 16px;
     color: black;
 }

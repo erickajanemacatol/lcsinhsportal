@@ -1,20 +1,31 @@
 .display-flex {
     display: flex;
+    width: 100%;
     align-items: center;
 }
 
 .add-pos {
     display: flex;
     justify-content: end;
-    width: 50%;
+    width: 87%;
     margin-right: 2%;
+}
+
+.att-margin {
+    margin-left: 20px;
+}
+
+.activity-card-center {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 .add-btn-properties {
     font-weight: lighter;
 }
 
-.header-properties{
+.header-properties {
     border-radius: 10px;
     border-color: rgb(198, 198, 198);
     border-style: solid;
@@ -25,10 +36,12 @@
 }
 
 .activity-card {
-    border-radius: 10px;
-    box-shadow:#6815ec;
-    width: 95%;
     height: auto;
+    border-radius: 10px;
+    border-color: rgb(198, 198, 198);
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: none;
 }
 
 .my-act-title {
@@ -39,29 +52,10 @@
     color: black;
 }
 
-ion-radio {
-    --border-radius: 4px;
-    --inner-border-radius: 4px;
-  
-    --color: #ddd;
-    --color-checked: #000201;
-  }
-  
-  ion-radio.ios::part(container) {
-    width: 20px;
-    height: 20px;
-  
-    border: 2px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .radio-checked.ios::part(container) {
-    border-color: #6815ec;
-  }
 
-  /*MOBILE*/
+/*MOBILE*/
 
-  
+
 .m-add-pos {
     display: flex;
     justify-content: end;
@@ -73,7 +67,7 @@ ion-radio {
     font-weight: lighter;
 }
 
-.m-header-properties{
+.m-header-properties {
     border-radius: 10px;
     border-color: rgb(198, 198, 198);
     border-style: solid;
@@ -101,3 +95,8 @@ ion-radio {
     color: black;
 }
 
+.m-due {
+    display: block;
+    margin-top: 5px;
+    margin-left: 15px;
+}

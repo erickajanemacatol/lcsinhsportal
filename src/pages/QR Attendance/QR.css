@@ -21,6 +21,11 @@
     align-items: center;
 }
 .video {
-    width: 50%;
-    height: 50%;
+    width: 30%;
+    height: 30%;
+}
+
+.student-info {
+    display: flex;
+    justify-content: center;
 }

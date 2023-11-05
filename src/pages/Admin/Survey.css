@@ -15,3 +15,46 @@
     justify-content: center;
     width: 100%;;
 }
+
+.ttl-margin {
+    margin-left: 20px;
+}
+
+.ttl {
+    font-family: poppins;
+    width: 50%;
+    font-weight: bolder;
+    font-size: 18pt;
+    color: black;
+}
+
+/*MOBILE*/
+
+.m-disp-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.m-disp-flex {
+    display: flex;
+}
+
+.m-disp-center-flex {
+    display: flex;
+    justify-content: center;
+    width: 100%;;
+}
+
+.m-ttl-margin {
+    margin-left: 20px;
+}
+
+.m-ttl {
+    font-family: poppins;
+    width: 50%;
+    font-weight: bolder;
+    font-size: 14pt;
+    color: black;
+}

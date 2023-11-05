@@ -41,3 +41,51 @@
     font-size: 18pt;
 }
   
+
+.m-upload-cal-button {
+    display: block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.m-custom-date-input {
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    border-color: antiquewhite;
+    border-width: 1px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.m-event-custom-input {
+    padding: 12px;
+    margin-right: 10px;
+}
+
+.m-desc-custom-input {
+    padding: 12px;
+    margin-right: 10px;
+}
+
+.m-month-year {
+    font-family: poppins;
+    font-size: 18pt;
+}
+  
+.m-add-button-pl {
+    display: flex;
+    justify-content: end;
+}
+
+.cal-margin {
+    margin-left: 20px;
+}
+
+.cal {
+    font-family: poppins;
+    width: 50%;
+    font-weight: bolder;
+    font-size: 18pt;
+    color: black;
+}

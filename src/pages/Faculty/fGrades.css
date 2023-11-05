@@ -1,6 +1,4 @@
 .mainContent {
-
-
     background-color: #ffffff;
     width: 100%;
     border-top-left-radius: 30px;
@@ -19,22 +17,6 @@
     padding-bottom: 0.5rem;
     min-height: 5rem;
 
-}
-
-ion-label {
-
-    padding-left: 1.2rem;
-
-    h2 {
-
-        font-weight: 600;
-        letter-spacing: -0.02rem;
-    }
-
-    p {
-
-        letter-spacing: -0.03rem;
-    }
 }
 
 .employeeImg {
