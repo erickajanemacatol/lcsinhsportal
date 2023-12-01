@@ -15,6 +15,12 @@ ion-button {
     width: 700px;
 }
 
+.f-title-and-logo {
+    display: flex;
+    align-items: center;
+    width: 1000px;
+}
+
 .logo-btn-size {
     width: 90px;
 }
@@ -22,7 +28,20 @@ ion-button {
 .title-label {
     font-family: 'poppins';
     font-weight: 600;
-    font-size: 14pt;
+    font-size: 15pt;
+}
+
+.f-title-label {
+    font-family: 'lato';
+    font-size: 13pt;
+}
+
+.f-title-label-props {
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    box-shadow: none;
+    height: 30px;
 }
 
 .tabs-display {

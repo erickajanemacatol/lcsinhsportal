@@ -46,7 +46,7 @@ const AddActivity = () => {
     };
 
     const handleAddTask = () => {
-        if (!newTask) {
+        if (!newTask && !selectedDate) {
             showToast('Please fill in the fields and select date.', 'danger');
             return;
         }
@@ -156,6 +156,7 @@ const AddActivity = () => {
                                                 <IonSelect
                                                     slot="end"
                                                     aria-label="priority"
+                                                    interface="popover"
                                                     value={selectedPriority} // Make sure this is correctly bound
                                                     onIonChange={(e) => setSelectedPriority(e.detail.value)}
                                                 >
@@ -224,7 +225,8 @@ const AddActivity = () => {
                                             <IonButton
                                                 className="submit-button"
                                                 size="default"
-                                                onClick={handleAddTask}>
+                                                onClick={handleAddTask}
+                                                disabled={!selectedDate}>
                                                 <IonIcon icon={add} />
                                                 <IonText>Submit</IonText>
                                             </IonButton>
@@ -294,7 +296,7 @@ const AddActivity = () => {
                                                 <IonSelect
                                                     slot="end"
                                                     aria-label="priority"
-                                                    value={selectedPriority} 
+                                                    value={selectedPriority}
                                                     onIonChange={(e) => setSelectedPriority(e.detail.value)}
                                                 >
                                                     <IonSelectOption value="0">Low</IonSelectOption>

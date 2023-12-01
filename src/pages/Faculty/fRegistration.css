@@ -1,0 +1,17 @@
+.reg-grids-props {
+    font-size: 12pt;
+}
+
+.reg-col {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sel-class-search {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 5px;
+    align-items: center;
+}
+

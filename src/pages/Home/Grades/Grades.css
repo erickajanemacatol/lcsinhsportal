@@ -11,11 +11,8 @@
 }
 
 .grid-border {
-    text-align: center;
     color: rgb(0, 0, 0);
-    align-items: center;
-    justify-items: center;
-    
+    font-size: 12pt;
 }
 
 .col-border-header {
@@ -65,22 +62,20 @@
     margin-right: 5px;
 }
 
-.grid-border {
-    text-align: center;
+.m-grid-border {
     color: rgb(0, 0, 0);
-    align-items: center;
-    justify-items: center;
     font-size: 10pt;
 }
 
-.col-border-header {
+.m-col-border-header {
     border-width: 1px;
     border-style: solid;
+    font-size: 10pt;
     border-color: rgb(184, 184, 184);
     background-color:beige;
 }
 
-.col-border {
+.m-col-border {
     border-width: 1px;
     border-style: solid;
     border-color: rgb(184, 184, 184);

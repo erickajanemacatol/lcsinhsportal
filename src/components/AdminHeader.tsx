@@ -25,6 +25,8 @@ const AdminHeader: React.FC = () => {
       setActivePage('students');
     } else if (currentPath === '/admin/faculty') {
       setActivePage('faculty');
+    } else if (currentPath === '/admin/classes') {
+      setActivePage('classes');
     } else if (currentPath === '/admin/links') {
       setActivePage('links');
     } else {
@@ -46,56 +48,62 @@ const AdminHeader: React.FC = () => {
     <div>
       {isDesktop ?
         <>
-          <IonHeader>
-            <IonToolbar>
+          <IonHeader className="ion-no-border" >
+            <IonToolbar color="dark">
               <div className="header-display">
                 <div className="title-and-logo">
                   <IonButton className="logo-btn-size" fill="clear" href="/admin/news">
-                    <IonImg src="/src/imgs/logo.png"></IonImg>
+                    <IonImg src="/src/imgs/logo3.png"></IonImg>
                   </IonButton>
-                  <IonLabel className="title-label" color={"dark"}>Lipa City Science Integrated National High School Portal</IonLabel>
+                  <IonLabel className="title-label" color={"light"}>LCSINHS Portal - Administrator</IonLabel>
                 </div>
                 <div className="tabs-display">
-                  <IonButton fill="clear" className="tab-button"
-                    color={"dark"}
+                  <IonButton fill="clear"
+                    color={"light"}
                     size="default"
                     style={getButtonStyle('news')}
                     href="/admin/news">News
                   </IonButton>
-                  <IonButton fill="clear" className="tab-button"
-                    color={"dark"}
+                  <IonButton fill="clear"
+                    color={"light"}
                     size="default"
                     style={getButtonStyle('anncm')}
                     href="/admin/announcements">Announcements
                   </IonButton>
-                  <IonButton fill="clear" className="tab-button"
-                    color={"dark"}
+                  <IonButton fill="clear"
+                    color={"light"}
                     size="default"
                     style={getButtonStyle('cal')}
                     href="/admin/calendar">Calendar
                   </IonButton>
-                  <IonButton fill="clear" className="tab-button"
-                    color={"dark"}
+                  <IonButton fill="clear"
+                    color={"light"}
                     size="default"
                     style={getButtonStyle('students')}
                     href="/admin/students">Students
                   </IonButton>
-                  <IonButton fill="clear" className="tab-button"
-                    color={"dark"}
+                  <IonButton fill="clear"
+                    color={"light"}
                     size="default"
                     style={getButtonStyle('faculty')}
                     href="/admin/faculty">Faculty
                   </IonButton>
-                  <IonButton fill="clear" className="tab-button"
-                    color={"dark"}
+                  <IonButton fill="clear"
+                    color={"light"}
+                    size="default"
+                    style={getButtonStyle('classes')}
+                    href="/admin/classes">Classes
+                  </IonButton>
+                  <IonButton fill="clear"
+                    color={"light"}
                     size="default"
                     style={getButtonStyle('links')}
                     href="/admin/links">Links
                   </IonButton>
                 </div>
                 <div className="profile-btn-pos">
-                  <IonButton fill="clear" color={"dark"} size="large" onClick={handleLogout}>
-                    <IonIcon icon={logOut} size="large" ></IonIcon>
+                  <IonButton fill="clear" color={"light"} onClick={handleLogout}>
+                    <IonIcon icon={logOut} slot="icon-only"></IonIcon>
                   </IonButton>
                 </div>
               </div>
@@ -120,45 +128,51 @@ const AdminHeader: React.FC = () => {
                   </IonButton>
                 </div>
 
-           
-                  <div className="scrollable-container">
-                    <IonButton fill="clear" className="m-tab-button"
-                      color={"dark"}
-                      size="default"
-                      style={getButtonStyle('news')}
-                      href="/admin/news">News
-                    </IonButton>
-                    <IonButton fill="clear" className="m-tab-button"
-                      color={"dark"}
-                      size="default"
-                      style={getButtonStyle('anncm')}
-                      href="/admin/announcements">Announcements
-                    </IonButton>
-                    <IonButton fill="clear" className="m-tab-button"
-                      color={"dark"}
-                      size="default"
-                      style={getButtonStyle('cal')}
-                      href="/admin/calendar">Calendar
-                    </IonButton>
-                    <IonButton fill="clear" className="m-tab-button"
-                      color={"dark"}
-                      size="default"
-                      style={getButtonStyle('students')}
-                      href="/admin/students">Students
-                    </IonButton>
-                    <IonButton fill="clear" className="m-tab-button"
-                      color={"dark"}
-                      size="default"
-                      style={getButtonStyle('faculty')}
-                      href="/admin/faculty">Faculty
-                    </IonButton>
-                    <IonButton fill="clear" className="m-tab-button"
-                      color={"dark"}
-                      size="default"
-                      style={getButtonStyle('links')}
-                      href="/admin/links">Links
-                    </IonButton>
-                  </div>
+
+                <div className="scrollable-container">
+                  <IonButton fill="clear" className="m-tab-button"
+                    color={"dark"}
+                    size="default"
+                    style={getButtonStyle('news')}
+                    href="/admin/news">News
+                  </IonButton>
+                  <IonButton fill="clear" className="m-tab-button"
+                    color={"dark"}
+                    size="default"
+                    style={getButtonStyle('anncm')}
+                    href="/admin/announcements">Announcements
+                  </IonButton>
+                  <IonButton fill="clear" className="m-tab-button"
+                    color={"dark"}
+                    size="default"
+                    style={getButtonStyle('cal')}
+                    href="/admin/calendar">Calendar
+                  </IonButton>
+                  <IonButton fill="clear" className="m-tab-button"
+                    color={"dark"}
+                    size="default"
+                    style={getButtonStyle('students')}
+                    href="/admin/students">Students
+                  </IonButton>
+                  <IonButton fill="clear" className="m-tab-button"
+                    color={"dark"}
+                    size="default"
+                    style={getButtonStyle('faculty')}
+                    href="/admin/faculty">Faculty
+                  </IonButton>
+                  <IonButton fill="clear" className="m-tab-button"
+                    color={"dark"}
+                    size="default"
+                    style={getButtonStyle('classes')}
+                    href="/admin/classes">Classes
+                  </IonButton>
+                  <IonButton fill="clear" className="m-tab-button"
+                    color={"dark"}
+                    size="default"
+                    style={getButtonStyle('links')}
+                    href="/admin/links">Links
+                  </IonButton>
+                </div>
 
 
               </div>

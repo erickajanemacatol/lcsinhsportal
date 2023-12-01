@@ -1,22 +1,7 @@
-.custom-menu {
-    width: 250px;
-    /* Adjust the width as needed */
-}
-
-.tab-button {
-    width: 150px;
-    height: 50px;
-    font-size: medium;
-}
-
 .m-tabs {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-ion-menu::part(backdrop) {
-    background-color: rgba(55, 65, 75, 0.5);
 }
 
 .a-logo-btn-size {

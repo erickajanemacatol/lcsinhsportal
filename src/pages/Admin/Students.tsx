@@ -1,9 +1,10 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonText, useIonToast } from "@ionic/react";
+import { IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonText, useIonToast } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import AdminHeader from "../../components/AdminHeader";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import './Students.css';
+import { cloudUpload, eye, trash } from "ionicons/icons";
 
 interface StudentModel {
     student_lrn: string;
@@ -18,6 +19,8 @@ const Students: React.FC = () => {
     const [presentToast, dismissToast] = useIonToast();
     const inputKeys: string[] = ["CoR", "form_137", "good_moral", "CoEnrolment", "CoRanking"];
     const [searchQuery, setSearchQuery] = useState('');
+    const [fileStatesMap, setFileStatesMap] = useState<Record<string, Record<string, File | null>>>({});
+    const [fileNamesMap, setFileNamesMap] = useState<Record<string, Record<string, string>>>({});
 
     const handleSearch = (e: CustomEvent) => {
         setSearchQuery(e.detail.value);
@@ -33,7 +36,6 @@ const Students: React.FC = () => {
         }))
     );
 
-
     const showToast = (message: string, color: 'primary' | 'danger' | 'success' | 'warning') => {
         presentToast({
             message: message,
@@ -42,40 +44,51 @@ const Students: React.FC = () => {
         });
     };
 
-    const handleFileChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        studentIndex: number,
-        inputIndex: number
-    ) => {
-        if (event.target.files) {
-            const updatedFileStates = [...fileStates];
-            const file = event.target.files[0];
-
-            if (file) {
-                const key = inputKeys[inputIndex - 1] as keyof typeof updatedFileStates[0];
-                updatedFileStates[studentIndex][key] = file;
-            }
-
-            setFileStates(updatedFileStates);
+    const openHiddenFileInput = (studentLRN: string, inputIndex: number) => {
+        const hiddenInput = document.getElementById(`hiddenFileInput-${studentLRN}-${inputIndex}`);
+        if (hiddenInput) {
+            hiddenInput.click();
         }
     };
 
-    const handleUpload = (studentIndex: number) => {
-        if (!students || students.length <= studentIndex || students[studentIndex] == null) {
-            showToast('Student data not available', 'danger');
-            return;
+    const handleFileChange = (
+        event: React.ChangeEvent<HTMLInputElement>,
+        studentLRN: string,
+        inputIndex: number
+    ) => {
+        if (event.target.files) {
+            const updatedFileStates = { ...fileStatesMap };
+            const file = event.target.files[0];
+
+            if (file) {
+                const key = inputKeys[inputIndex - 1];
+                if (!updatedFileStates[studentLRN]) {
+                    updatedFileStates[studentLRN] = {};
+                }
+                updatedFileStates[studentLRN][key] = file;
+
+                const updatedFileNamesMap = { ...fileNamesMap };
+                if (!updatedFileNamesMap[studentLRN]) {
+                    updatedFileNamesMap[studentLRN] = {};
+                }
+                updatedFileNamesMap[studentLRN][key] = file.name; // Store the file name
+
+                setFileStatesMap(updatedFileStates);
+                setFileNamesMap(updatedFileNamesMap); // Update the file names map
+            }
         }
+    };
 
-        const studentLRN = students[studentIndex].student_lrn;
-        const files = fileStates[studentIndex];
+    const handleUpload = (studentLRN: string) => {
+        const files = fileStatesMap[studentLRN];
 
-        if (Object.values(files).every((file) => file === null)) {
+        if (!files || Object.values(files).every((file) => file === null)) {
             showToast('Please select at least one file', 'danger');
             return;
         }
 
         const uploadPromises = inputKeys.map((key, index) => {
-            const file = files[key as keyof typeof files]; // Use type assertion here
+            const file = files[key];
             if (file) {
                 const formData = new FormData();
                 formData.append('file', file);
@@ -96,7 +109,7 @@ const Students: React.FC = () => {
                             window.location.reload();
                         } else {
                             console.error(response.data.error);
-                            showToast('File upload failed', 'danger');
+                            showToast('File exceeds maximum size (2MB).', 'danger');
                         }
                     }
                 }
@@ -107,8 +120,13 @@ const Students: React.FC = () => {
     };
 
 
-    const handleViewClick = (studentIndex: number, category: keyof StudentModel) => {
-        const student = students[studentIndex];
+    const handleViewClick = (studentLRN: string, category: keyof StudentModel) => {
+        const student = students.find((s) => s.student_lrn === studentLRN);
+        if (!student) {
+            showToast(`Student not found.`, "warning");
+            return;
+        }
+
         const filePath = student[category];
 
         if (!filePath) {
@@ -163,60 +181,65 @@ const Students: React.FC = () => {
             });
     }, []);
 
-    const filteredAndSortedStudents = students
-        .filter((student: StudentModel) => {
-            // Filter students based on the search query
-            return (
-                student.student_lrn.includes(searchQuery) ||
-                student.f_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                student.l_name.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-        })
-        .sort((a, b) => {
-            return a[sortCriteria].localeCompare(b[sortCriteria]);
-        });
-
     return (
         <IonPage>
             <AdminHeader />
             {isDesktop ? (
-                <IonContent>
-                    <div className="spacer-h-l"></div>
-                    <div className="search-bar-size">
-                        <IonSearchbar
-                            value={searchQuery}
-                            onIonChange={handleSearch}
-                            placeholder="Search"
-                            debounce={300}
-                        />
+                <IonContent color={'light'}>
+                    <div className="spacer-h-s"></div>
+
+                    <div className="ttl-col">
+                        <div className="att-margin">
+                            <IonLabel className="grades-text">
+                                Students List
+                            </IonLabel>
+                        </div>
                         <div className="search-bar-desc">
-                            <IonText color={'medium'}>
-                                Input detail of student using either LRN, First Name or Last Name and hit enter.
-                            </IonText>
+                            <IonSearchbar className="search-bar-size" color={'light'}
+                                value={searchQuery}
+                                onIonChange={handleSearch}
+                                placeholder="Search LRN, First Name or Last Name"
+                                debounce={300}
+                            />
                         </div>
                     </div>
 
-                    <div className="spacer-h-l"></div>
-                    <IonItem>
-                        <IonLabel>LRN</IonLabel>
-                        <IonLabel>Student</IonLabel>
-                        <div className="spacer-w-l" />
-                        <IonLabel>CoR</IonLabel>
-                        <IonLabel></IonLabel>
-                        <IonLabel>Form 137</IonLabel>
-                        <IonLabel></IonLabel>
-                        <IonLabel>Good Moral</IonLabel>
-                        <IonLabel></IonLabel>
-                        <IonLabel>Enrolment</IonLabel>
-                        <IonLabel></IonLabel>
-                        <IonLabel>Ranking</IonLabel>
-                        <IonLabel></IonLabel>
-                        <IonLabel></IonLabel>
-                    </IonItem>
+                    <div className="max-size">
+                        Upload Files (Max Size: 2MB)
+                    </div>
+                    <IonCard color={'light'}>
+                        <IonGrid class="grid-props">
+                            <IonRow>
+                                <IonCol size='0.3' class="cell-class">
+                                </IonCol>
+                                <IonCol size='1.4' class="cell-class">
+                                    LRN
+                                </IonCol>
+                                <IonCol size='1.5' class="cell-class">
+                                    Student Name
+                                </IonCol>
+                                <IonCol size='1.5' class="cell-class">
+                                    Certificate of Registration
+                                </IonCol>
+                                <IonCol size='1.5' class="cell-class">
+                                    Form 137
+                                </IonCol>
+                                <IonCol size='1.5' class="cell-class">
+                                    Good Moral
+                                </IonCol>
+                                <IonCol size='1.5' class="cell-class">
+                                    Certificate of Enrollment
+                                </IonCol>
+                                <IonCol size='1.5' class="cell-class">
+                                    Certificate of Ranking
+                                </IonCol>
+                                <IonCol class="cell-class">
+                                    Action
+                                </IonCol>
+                            </IonRow>
 
-                    <IonGrid>
-                        <IonRow>
                             {students
+                                .sort((a, b) => a.l_name.localeCompare(b.l_name) || a.f_name.localeCompare(b.f_name))
                                 .filter((student: StudentModel) =>
                                     student.student_lrn.includes(searchQuery) ||
                                     student.f_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -224,33 +247,56 @@ const Students: React.FC = () => {
                                 )
                                 .map((student: StudentModel, index) => (
                                     <IonRow key={student.student_lrn}>
-                                        <IonCol className="column-lrn">{student.student_lrn}</IonCol>
-                                        <IonCol className="column-name">{student.f_name} {student.l_name}</IonCol>
+                                        <IonCol size="0.3" className="cell-class">
+                                            {index + 1}
+                                        </IonCol>
+                                        <IonCol size='1.4' className="cell-class">{student.student_lrn}</IonCol>
+                                        <IonCol size='1.5' className="cell-class">{student.l_name}, {student.f_name}</IonCol>
                                         {inputKeys.map((key, inputIndex) => (
-                                            <IonCol className="column-upload" key={inputIndex}>
+                                            <IonCol size='1.5' key={inputIndex} className="cell-class">
                                                 <div className="input-width">
-                                                    <label htmlFor={`fileInput-${index}-${inputIndex + 1}`}>Upload file:</label>
                                                     <input
-                                                        id={`fileInput-${index}-${inputIndex + 1}`}
                                                         type="file"
-                                                        onChange={(e) => handleFileChange(e, index, inputIndex + 1)}
+                                                        id={`hiddenFileInput-${student.student_lrn}-${inputIndex + 1}`}
+                                                        style={{ display: 'none' }}
+                                                        onChange={(e) => handleFileChange(e, student.student_lrn, inputIndex + 1)}
                                                     />
-                                                    {student[key as keyof StudentModel] && ( // Type assertion
-                                                        <IonButton size="small" color="tertiary" onClick={() => handleViewClick(index, key as keyof StudentModel)}>View</IonButton> // Type assertion
+
+                                                    <IonButton
+                                                        size="small" fill="outline" color="dark"
+                                                        onClick={() => openHiddenFileInput(student.student_lrn, inputIndex + 1)}
+                                                    >
+                                                        Select
+                                                    </IonButton>
+
+                                                    {student[key as keyof StudentModel] && (
+                                                        <IonButton size="small" color="tertiary"
+                                                            onClick={() => handleViewClick(student.student_lrn, key as keyof StudentModel)}>
+                                                            <IonIcon icon={eye} /> <div className="spacer-w-xs" /> View
+                                                        </IonButton>
+                                                    )}
+
+                                                    {/* Display the selected file name */}
+                                                    {fileNamesMap[student.student_lrn] && fileNamesMap[student.student_lrn][key] && (
+                                                        <div>{fileNamesMap[student.student_lrn][key]}</div>
                                                     )}
                                                 </div>
                                             </IonCol>
                                         ))}
 
-                                        <IonCol className="column-upload">
-                                            <IonButton className="submit-button-pref" onClick={() => handleUpload(index)}>
+                                        <IonCol className="cell-class">
+                                            <IonButton className="submit-button-pref"
+                                                size="small"
+                                                onClick={() => handleUpload(student.student_lrn)}>
+                                                <IonIcon icon={cloudUpload} />
+                                                <div className="spacer-w-s" />
                                                 Submit
                                             </IonButton>
                                         </IonCol>
                                     </IonRow>
                                 ))}
-                        </IonRow>
-                    </IonGrid>
+                        </IonGrid>
+                    </IonCard>
 
                 </IonContent>
             ) : (

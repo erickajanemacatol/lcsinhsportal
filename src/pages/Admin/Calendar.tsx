@@ -1,6 +1,6 @@
-import { IonAccordion, IonAccordionGroup, IonButton, IonCard, IonCardContent, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from "@ionic/react";
+import { IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonText, useIonToast } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import { addCircle } from "ionicons/icons";
+import { addCircle, addOutline, trash } from "ionicons/icons";
 import { useMediaQuery } from "react-responsive";
 import './Calendar.css';
 import AdminHeader from "../../components/AdminHeader";
@@ -133,13 +133,11 @@ const Calendar: React.FC = () => {
             <AdminHeader />
             {isDesktop ?
                 <>
-                    <IonContent>
-
-                        <div className="spacer-h-l"></div>
+                    <IonContent color={'light'}>
+                        <div className="spacer-h-s"></div>
                         <div className="cal-margin">
                             <IonLabel className="cal">School Calendar</IonLabel>
                         </div>
-                        <div className="spacer-h-xs"></div>
 
                         <div className="upload-cal-button">
                             <IonCard className="event-card">
@@ -160,15 +158,12 @@ const Calendar: React.FC = () => {
                                         onIonChange={(e) => setDescription(e.detail.value!)}>
                                     </IonInput>
 
-                                    <IonLabel slot="start">Start Date</IonLabel>
                                     <div className="spacer-w-xs" />
-                                    <IonInput type="date" className="custom-date-input"
+                                    <IonInput type="date" className="custom-date-input" fill="outline" label="Start Date*" required color={'dark'}
                                         value={startDate} onIonChange={(e) => setStartDate(e.detail.value!)} />
 
-
-                                    <IonLabel slot="start">End Date (Optional)</IonLabel>
                                     <div className="spacer-w-xs" />
-                                    <IonInput type="date" className="custom-date-input"
+                                    <IonInput type="date" className="custom-date-input" fill="outline" label="End Date" color={'dark'}
                                         value={endDate} onIonChange={(e) => setEndDate(e.detail.value || null)} />
 
                                     <div className="spacer-w-xs" />
@@ -182,13 +177,13 @@ const Calendar: React.FC = () => {
                         </div>
 
                         <div className="display-cal-button">
-                            <IonList>
+                            <IonCard className="cal-list">
                                 {events.map((event: EventModel, index) => {
                                     const currentDate = new Date(event.start_date);
                                     const prevEventDate = index > 0 ? new Date(events[index - 1].start_date) : null;
 
                                     return (
-                                        <div key={event.cal_id}>
+                                        <div key={event.cal_id} className="list-mrg">
                                             {index === 0 || (prevEventDate && currentDate.getMonth() !== prevEventDate.getMonth()) ? (
                                                 <h3 className="month-year">{getFormattedMonth(currentDate)}</h3>
                                             ) : null}
@@ -202,14 +197,16 @@ const Calendar: React.FC = () => {
                                                         <p>End Date: {getFormattedDate(event.end_date)}</p>
                                                     ) : null}
                                                 </IonLabel>
-                                                <IonButton fill="clear" color="danger" onClick={() => handleDeleteEvent(event.cal_id)}>
-                                                    Delete
-                                                </IonButton>
+                                                <IonButtons>
+                                                    <IonButton color="danger" onClick={() => handleDeleteEvent(event.cal_id)}>
+                                                        <IonIcon slot="icon-only" icon={trash} />
+                                                    </IonButton>
+                                                </IonButtons>
                                             </IonItem>
                                         </div>
                                     );
                                 })}
-                            </IonList>
+                            </IonCard>
 
                         </div>
                     </IonContent>
@@ -235,7 +232,6 @@ const Calendar: React.FC = () => {
                                         </IonInput>
 
                                         <div className="spacer-h-xs"></div>
-
                                         <IonInput fill="outline"
                                             label="Description (Optional)"
                                             labelPlacement="stacked"
@@ -244,19 +240,19 @@ const Calendar: React.FC = () => {
                                             onIonChange={(e) => setDescription(e.detail.value!)}>
                                         </IonInput>
 
-
-                                        <h6>Start Date</h6>
-                                        <IonInput type="date" className="m-custom-date-input" fill="outline"
+                                        <div className="spacer-h-xs"></div>
+                                        <IonInput type="date" className="m-custom-date-input" fill="outline" required label="Start Date " labelPlacement="stacked"
                                             value={startDate} onIonChange={(e) => setStartDate(e.detail.value!)} />
 
-                                        <h6>End Date (Optional)</h6>
-                                        <IonInput type="date" className="m-custom-date-input" fill="outline"
+                                        <div className="spacer-h-xs"></div>
+                                        <IonInput type="date" className="m-custom-date-input" fill="outline" label="End Date (Optional) " labelPlacement="stacked"
                                             value={endDate} onIonChange={(e) => setEndDate(e.detail.value!)} />
 
 
                                         {/*Submit Button*/}
                                         <div className="m-add-button-pl">
                                             <IonButton color={'dark'} type="submit" onClick={handleFormSubmit}>
+                                                <IonIcon icon={addOutline} slot="start" />
                                                 Add
                                             </IonButton>
                                         </div>
@@ -264,7 +260,6 @@ const Calendar: React.FC = () => {
                                 </IonAccordion>
                             </IonAccordionGroup>
                         </div>
-
 
                         <IonCard className="event-card">
                             <div className="display-cal-button">

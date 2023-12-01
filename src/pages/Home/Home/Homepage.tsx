@@ -145,7 +145,6 @@ const Homepage = () => {
                 const response = await axios.get('https://studentportal.lcsinhs.com/scripts/news-fetch.php');
                 if (response.data.success) {
                     const imageUrls = response.data.images;
-                    console.log('Fetched images:', imageUrls);
                     setNewsItems(imageUrls);
                 } else {
                     console.error('Failed to fetch images:', response.data.error);

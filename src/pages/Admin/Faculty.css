@@ -35,3 +35,7 @@
 .faculty-card-des {
     margin-left: 10px;
 }
+
+.m-modal-props {
+    --border-radius: 18px;
+}

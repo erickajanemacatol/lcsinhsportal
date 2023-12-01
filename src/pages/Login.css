@@ -1,4 +1,18 @@
 /*DESKTOP*/
+
+.background-login1 {
+    height: 105%;
+    width: 110%;
+    background-image: url("/src/imgs/bg3.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(3px);
+    position: absolute;
+    z-index: 0;
+    overflow: hidden;
+    left: -15px;
+}
+
 ion-button {
     text-transform: none;
 }
@@ -9,11 +23,11 @@ ion-button {
 }
 
 .logo-size {
-    margin-top: 50px;
+    margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
-    height: 130px;
-    width: 130px;
+    height: 400px;
+    width: 400px;
 }
 
 .lcsinhs-title {
@@ -30,20 +44,26 @@ ion-button {
 .login-card {
     display: flex;
     justify-content: center;
-    width: 500px;
-    height: 310px;
-    border-radius: 5px;
+    width: 450px;
     box-shadow: none;
-    border-color: gainsboro;
-    border-style: solid;
-    border-width: 1px;
 }
 
 .login-card-position {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1.2fr 1px 1.1fr;
+    border-radius: 30px;
+    margin-top: 70px;
+    height: 500px;
+    width: 950px;
     align-items: center;
-    justify-content: center;
+    justify-items: center;
+}
 
+.login-card-position::before {
+    content: '';
+    border-left: 2px solid #ccc;
+    height: 90%;
+    position: absolute;
 }
 
 .login-text {
@@ -58,10 +78,30 @@ ion-button {
     align-items: center;
 }
 
-.forgot {
+.password-input {
+    position: relative;
+}
+
+.password-input ion-icon {
+    position: absolute;
+    right: 10px;
+    /* Adjust the position as needed */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.show-check {
     display: flex;
-    align-items: end;
-    justify-content: start;
+    align-items: center;
+}
+
+.show-password {
+    display: flex;
+    align-items: center;
+}
+
+.forgot {
+    align-items: center;
 }
 
 .forgot-text-size {

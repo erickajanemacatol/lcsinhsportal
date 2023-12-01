@@ -38,11 +38,14 @@ import { Calendar } from './pages/Admin/Calendar';
 import { Students } from './pages/Admin/Students';
 import { Faculty } from './pages/Admin/Faculty';
 import { ID_temp } from './pages/Home/Profile/ID_temp';
-import { Links } from './pages/Admin/Survey';
+import { Links } from './pages/Admin/Links';
 import PrivateRoute from './components/utils/PrivateRoute';
 import Error from './components/utils/Error';
-import { QRAttendance } from './pages/QR Attendance/QR';
+import { QRAttendance_Timein } from './pages/QR Attendance/QR_timein';
 import { ID_temp_shs } from './pages/Home/Profile/ID_temp_shs';
+import SurveyComponent from './pages/Admin/SurveyPage';
+import { QRAttendance_Timeout } from './pages/QR Attendance/QR_timeout';
+import { Classes } from './pages/Admin/Classes';
 
 setupIonicReact();
 
@@ -72,9 +75,12 @@ const App: React.FC = () => (
             <PrivateRoute exact path="/admin/calendar" component={Calendar} requiredRole="1" />
             <PrivateRoute exact path="/admin/students" component={Students} requiredRole="1" />
             <PrivateRoute exact path="/admin/faculty" component={Faculty} requiredRole="1" />
+            <PrivateRoute exact path="/admin/classes" component={Classes} requiredRole="1" />
             <PrivateRoute exact path="/admin/links" component={Links} requiredRole="1" />
 
-            <Route exact path="/qr-attendance" component={QRAttendance}/>
+            <PrivateRoute exact path="/survey" component={SurveyComponent} requiredRole="0" />
+            <PrivateRoute exact path="/qr-attendance-timein" component={QRAttendance_Timein} requiredRole="3" />
+            <PrivateRoute exact path="/qr-attendance-timeout" component={QRAttendance_Timeout} requiredRole="3" />
             <Route exact path="/error" component={Error} />
             <Route path="/login" component={Login} />
             <Redirect to="/login" />
@@ -85,40 +91,43 @@ const App: React.FC = () => (
   </IonApp>
 
   /*
-<IonApp>
-<IonReactRouter>
-  <IonRouterOutlet>
-    <Router>
-      <Switch>
-        <Route path="/home" component={Homepage}  />
-        <Route exact path="/activities" component={Activities} />
-        <Route exact path="/activities/add-activity" component={AddActivity}/>
-        <Route exact path="/attendance" component={Attendance} />
-        <Route exact path="/grades" component={Grades}/>
-        <Route exact path="/profile" component={Profile} />
-        <Route exact path="/school_id" component={ID_temp} />
-
-        <Route exact path="/faculty/attendance" component={fAttendance}  />
-        <Route exact path="/faculty/grades" component={fGrades}  />
-        <Route exact path="/faculty/registrationlist" component={fRegistration}/>
-
-        <Route exact path="/admin/news" component={News}/>
-        <Route exact path="/admin/announcements" component={Announcements} />
-        <Route exact path="/admin/announcement-details" component={AddAnnouncement}  />
-        <Route exact path="/admin/calendar" component={Calendar}/>
-        <Route exact path="/admin/students" component={Students}  />
-        <Route exact path="/admin/faculty" component={Faculty}/>
-        <Route exact path="/admin/links" component={Links} />
-
-        <Route exact path="/qr-attendance" component={QRAttendance}/>
-        <Route exact path="/error" component={Error} />
-        <Route path="/login" component={Login} />
-        <Redirect to="/login" />
-      </Switch>
-    </Router>
-  </IonRouterOutlet>
-</IonReactRouter>
-</IonApp>*/
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Router>
+            <Switch>
+              <Route path="/home" component={Homepage} />
+              <Route exact path="/activities" component={Activities} />
+              <Route exact path="/activities/add-activity" component={AddActivity} />
+              <Route exact path="/attendance" component={Attendance} />
+              <Route exact path="/grades" component={Grades} />
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/school_id" component={ID_temp} />
+              <Route exact path="/school_id_shs" component={ID_temp_shs} />
+  
+              <Route exact path="/faculty/attendance" component={fAttendance} />
+              <Route exact path="/faculty/grades" component={fGrades} />
+              <Route exact path="/faculty/registrationlist" component={fRegistration} />
+  
+              <Route exact path="/admin/news" component={News} />
+              <Route exact path="/admin/announcements" component={Announcements} />
+              <Route exact path="/admin/announcement-details" component={AddAnnouncement} />
+              <Route exact path="/admin/calendar" component={Calendar} />
+              <Route exact path="/admin/students" component={Students} />
+              <Route exact path="/admin/faculty" component={Faculty} />
+              <Route exact path="/admin/classes" component={Classes} />
+              <Route exact path="/admin/survey-result" component={Links} />
+  
+              <Route exact path="/survey" component={SurveyComponent} />
+              <Route exact path="/qr-attendance" component={QRAttendance} />
+              <Route exact path="/error" component={Error} />
+              <Route path="/login" component={Login} />
+              <Redirect to="/login" />
+            </Switch>
+          </Router>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>*/
 );
 
 export default App;

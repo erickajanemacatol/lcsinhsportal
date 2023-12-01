@@ -50,7 +50,7 @@ const ID_temp_shs = () => {
 
     useEffect(() => {
         const unlisten = history.listen((newLocation) => {
-            if (newLocation.pathname === '/school_id') {
+            if (newLocation.pathname === '/school_id_shs') {
                 if (username) {
                     axios
                         .post('https://studentportal.lcsinhs.com/scripts/profile.php', { username: username })

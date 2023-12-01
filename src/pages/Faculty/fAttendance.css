@@ -26,3 +26,34 @@
     grid-column: 3;
     text-align: right;
 }
+
+.title-grade-date {
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    margin-right: 20px;
+    align-items: center;
+}
+
+.grade-date {
+    display: flex;
+    margin-right: 5px;
+    align-items: center;
+}
+
+.sel-props {
+    width: 400px;
+}
+
+.sel-date-props {
+    width: 300px;
+}
+
+.m-select-marg {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.card-no-border {
+    box-shadow: none;
+}

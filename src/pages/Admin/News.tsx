@@ -115,7 +115,7 @@ const News: React.FC = () => {
 
         if (confirmed) {
             // Extract the relative path from the imageUrl
-            const relativePath = imageUrl.replace('https://studentportal.lcsinhs.com', '');
+            const relativePath = imageUrl.replace('https://studentportal.lcsinhs.com/news_uploaded', '');
 
             axios.delete(`https://studentportal.lcsinhs.com//scripts/news-delete.php?imageId=${imageUrl}`)
                 .then((response) => {
@@ -133,13 +133,12 @@ const News: React.FC = () => {
         }
     };
 
-
     return (
         <IonPage>
             <AdminHeader />
             {isDesktop ? (
-                <IonContent>
-                    <div className="spacer-h-l"></div>
+                <IonContent color={'light'}>
+                    <div className="spacer-h-s"></div>
                     <div className="div-title-n">
 
                         <div className="title-pl">
@@ -158,7 +157,7 @@ const News: React.FC = () => {
                                 <div>
                                     <IonCardContent className="upload-card-cont">
                                         <div className="select-file-text">
-                                            Selected File: <span ref={selectedFileNameRef}></span>
+                                            File (Max Size: 2MB): <span ref={selectedFileNameRef}></span>
                                         </div>
                                         <div className="select-file-but">
                                             <IonButton onClick={openFileInput} fill="outline" color={'dark'}>Select File</IonButton>
@@ -225,7 +224,7 @@ const News: React.FC = () => {
                     {
                         imageUrls.length > 0 ? (
                             imageUrls.map((imageUrl, index) => (
-                                <IonCard key={index} className="card">
+                                <IonCard key={index} className="m-card">
                                     <IonCardHeader>
                                         <IonCardTitle>{index + 1}</IonCardTitle>
                                         <IonButton fill="clear" className="trash-button" onClick={() => handleDeleteImage(imageUrl)}>

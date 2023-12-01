@@ -59,7 +59,7 @@ const Announcements: React.FC = () => {
                     const updatedAnnouncements = announcements.map((ann) => {
                         if (ann.annc_id === id) {
                             // Update the id in the updatedAnnouncement object
-                            updatedAnnouncement.id = id; // Use the correct property name
+                            updatedAnnouncement.id = id;
                             return updatedAnnouncement;
                         }
                         return ann;
@@ -120,7 +120,6 @@ const Announcements: React.FC = () => {
         }
     };
 
-
     useEffect(() => {
         axios
             .get('https://studentportal.lcsinhs.com/scripts/annc-fetch.php')
@@ -138,8 +137,8 @@ const Announcements: React.FC = () => {
 
             {isDesktop ?
                 <>
-                    <IonContent >
-                        <div className="spacer-h-l"></div>
+                    <IonContent color={'light'}>
+                        <div className="spacer-h-s"></div>
                         <div className="div-title">
                             <div className="title-pl">
                                 <IonLabel className="annc-title">Announcements</IonLabel>
@@ -154,27 +153,30 @@ const Announcements: React.FC = () => {
                         </div>
 
                         <div className="spacer-h-m"></div>
+                        <IonCard className="annc-card">
 
-                        {announcements.map((announcement, index) => (
-                            <IonItem key={index}>
-                                <IonLabel>
-                                    <h2><b>{announcement.title}</b></h2>
-                                    <div className="spacer-w-xl" />
-                                    <p color="medium">{announcement.dateandtime}</p> {/* Set the color to "medium" */}
-                                    <div className="spacer-w-xl" />
-                                    <p>Details: {announcement.description}</p>
-                                </IonLabel>
+                            {announcements.map((announcement, index) => (
+                                <IonItem key={index}>
+                                    <IonLabel>
+                                        <h2><b>{announcement.title}</b></h2>
+                                        <div className="spacer-w-xl" />
+                                        <p color="medium">{announcement.dateandtime}</p> {/* Set the color to "medium" */}
+                                        <div className="spacer-w-xl" />
+                                        <p>Details: {announcement.description}</p>
+                                    </IonLabel>
 
-                                <IonButtons slot="end">
-                                    <IonButton color="primary" size="default" onClick={() => handleUpdateClick(announcement.annc_id)}>
-                                        Update
-                                    </IonButton>
-                                    <IonButton color="danger" size="default" onClick={() => handleDeleteAnnouncement(announcement.annc_id)}>
-                                        Delete
-                                    </IonButton>
-                                </IonButtons>
-                            </IonItem>
-                        ))}
+                                    <IonButtons slot="end">
+                                        <IonButton color="primary" size="default" onClick={() => handleUpdateClick(announcement.annc_id)}>
+                                            <IonIcon slot="icon-only" icon={create} />
+                                        </IonButton>
+                                        <IonButton color="danger" size="default" onClick={() => handleDeleteAnnouncement(announcement.annc_id)}>
+                                            <IonIcon slot="icon-only" icon={trash} />
+                                        </IonButton>
+                                    </IonButtons>
+                                </IonItem>
+                            ))}
+                        </IonCard>
+
                     </IonContent>
                 </> : <>
 

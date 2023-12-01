@@ -10,6 +10,9 @@
 }
 
 .event-card {
+    border-color: rgb(218, 218, 218);
+    border-style: solid;
+    border-width: 1px;
     box-shadow: none !important;
 }
 
@@ -21,8 +24,12 @@
     border-width: 1px;
     padding: 8px;
     font-size: 16px;
-    width: 150px;
+    width: 300px;
 }
+
+.custom-date-input input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Invert the color to make it visible on white background */
+  }
 
 .event-custom-input {
     width: 350px;
@@ -31,7 +38,7 @@
 }
 
 .desc-custom-input {
-    width: 550px;
+    width: 400px;
     padding: 12px;
     margin-right: 10px;
 }
@@ -40,7 +47,6 @@
     font-family: poppins;
     font-size: 18pt;
 }
-  
 
 .m-upload-cal-button {
     display: block;
@@ -89,3 +95,12 @@
     font-size: 18pt;
     color: black;
 }
+
+.cal-list {
+    border-radius: 10px;
+}
+
+.list-mrg {
+    margin: 10px;
+}
+

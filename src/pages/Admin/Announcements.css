@@ -25,6 +25,11 @@
     margin-right: 30px;
 }
 
+.annc-card {
+    border-radius: 10px;
+    display: block;
+}
+
 .ann-deets-size {
     width: 90%;
     border-radius: 20px;

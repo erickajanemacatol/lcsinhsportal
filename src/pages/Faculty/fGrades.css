@@ -5,8 +5,14 @@
     border-top-right-radius: 30px;
 }
 
-.employeeItem {
+.grades-text {
+    font-weight: bold;
+    font-size: 18pt;
+    font-family: poppins;
+    color: black;
+}
 
+.employeeItem {
     --border-radius: 10px;
     --padding-start: 1rem;
     --padding-end: 1rem;
@@ -20,8 +26,52 @@
 }
 
 .employeeImg {
-
     width: 3rem;
     border-radius: 10px;
 
+}
+
+.att-margin {
+    margin-left: 20px;
+}
+
+.options-col {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.grades-options-col {
+    display: grid;
+    grid-template-columns: 50 0 50;
+    grid-template-rows: max-content;
+    align-items: center;
+}
+
+.opt-place {
+    margin-left: 10px;
+}
+
+.edit-view-but {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 5px;
+    align-items: center;
+}
+
+.cell-class {
+    align-items: center;
+    border-color: rgb(200, 200, 200);
+    border-width: .01em;
+    border-style: solid;
+    margin-bottom: -1px;
+}
+
+.grid-props {
+    font-size: 11pt;
+}
+
+.sel-class-props {
+    width: 600px;
 }

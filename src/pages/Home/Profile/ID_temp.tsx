@@ -38,7 +38,7 @@ const ID_temp = () => {
 
                     if (response.data.profile_pic) {
                         console.log(response.data.profile_pic);
-                        const profilePicturePath = `https://studentportal.lcsinhs.com/scripts/file-fetch-profile.php?file=${response.data.profile_pic}`;
+                        const profilePicturePath = `https://studentportal.lcsinhs.com/scripts/fetch_profile_pic.php?file=${response.data.profile_pic}`;
                         setProfilePicturePath(profilePicturePath);
                     }
                 })

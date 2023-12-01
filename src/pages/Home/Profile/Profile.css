@@ -48,6 +48,13 @@
     align-content: center;
 }
 
+.center-creds {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
 .avatar {
     height: 150px;
     width: 150px;
@@ -154,6 +161,19 @@
     color: black;
 }
 
+.m-profile {
+    font-weight: bold;
+    font-size: 14pt;
+    font-family: lato;
+    color: black;
+}
+
+.m-profile-txt {
+    font-size: 10pt;
+    font-family: lato;
+    color: black;
+}
+
 .my-profile-card {
     display: block;
     height: 95%;
@@ -168,8 +188,8 @@
 }
 
 .m-avatar {
-    height: 100px;
-    width: 100px;
+    height: 120px;
+    width: 120px;
     --border-radius: 5px;
 }
 

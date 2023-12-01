@@ -16,11 +16,20 @@ interface UserData {
     student_lrn: string;
     f_name: string;
     l_name: string;
+    class_code: string;
     CoR: string;
     form_137: string;
     good_moral: string;
     CoEnrolment: string;
     CoRanking: string;
+    grade_level: number | null;
+    class_schedule: string;
+
+    section_name: string;
+    class_adviser: string;
+    title: string;
+    fname: string;
+    lname: string;
 }
 
 interface SubjectModel {
@@ -40,6 +49,7 @@ const Profile = () => {
     const [emergencyContact, setEmergencyContact] = useState("");
     const [emergencyNumber, setEmergencyNumber] = useState("");
     const [emergencyAddress, setEmergencyAddress] = useState("");
+    const [emailParent, setEmailParent] = useState("");
     const [presentToast, dismissToast] = useIonToast();
     const initialProfilePicturePath = localStorage.getItem('profilePicturePath');
     const [hasUploadedPicture, setHasUploadedPicture] = useState(false);
@@ -49,12 +59,12 @@ const Profile = () => {
     );
     const [surveyLink, setSurveyLink] = useState("");
     const [enrolLink, setEnrolLink] = useState("");
-    const [enrollmentLink, setEnrollmentLink] = useState("");
     const [showSubjectsModal, setShowSubjectsModal] = useState(false);
     const [showSubjectsJHSModal, setShowSubjectsJHSModal] = useState(false);
     const [gradeLevel, setGradeLevel] = useState<number | null>(null);
     const [subjects, setSubjects] = useState<SubjectModel[]>([]);
     const [subjectsJHS, setSubjectsJHS] = useState<[]>([]);
+    const username = localStorage.getItem('username') || '';
 
     const showToast = (message: string, color: string) => {
         presentToast({
@@ -65,13 +75,10 @@ const Profile = () => {
     };
 
     const [userData, setUserData] = useState<UserData>({
-        student_lrn: '', f_name: '', l_name: '', CoR: '',
-        form_137: '',
-        good_moral: '',
-        CoEnrolment: '',
-        CoRanking: '',
+        student_lrn: '', f_name: '', l_name: '', class_code: '', CoR: '',
+        form_137: '', good_moral: '', CoEnrolment: '', CoRanking: '', grade_level: 0,
+        section_name: '', class_adviser: '', title: '', fname: '', lname: '', class_schedule: '',
     });
-    const username = localStorage.getItem('username') || ''; // Use an empty string as the fallback if null
 
     const uploadAvatar = () => {
         if (avatarFile) {
@@ -82,7 +89,6 @@ const Profile = () => {
             axios
                 .post("https://studentportal.lcsinhs.com/scripts/upload-avatar.php", formData)
                 .then((response) => {
-                    console.log(response.data);
                     showToast("Avatar uploaded successfully", "success");
                     setProfilePicturePath(response.data);
                     setHasUploadedPicture(true);
@@ -106,6 +112,7 @@ const Profile = () => {
             emergencyContact,
             emergencyNumber,
             emergencyAddress,
+            emailParent,
             username,
         };
 
@@ -127,6 +134,8 @@ const Profile = () => {
             });
     };
 
+    //FOR DOCS
+
     const handleViewClick = (documentPath: string) => {
         if (!documentPath) {
             showToast("No document available.", "warning");
@@ -134,16 +143,7 @@ const Profile = () => {
         }
 
         const viewUrl = `https://studentportal.lcsinhs.com/scripts/file-fetch-profile.php?file=${documentPath}`;
-
-        // Open the document URL in a new tab
-        const printWindow = window.open(viewUrl, '_blank');
-
-        if (printWindow) {
-            // Listen for the tab to be loaded
-            printWindow.onload = () => {
-                printWindow.print(); // Trigger the print dialog
-            };
-        }
+        window.open(viewUrl, '_blank');
     };
 
     const handlePrintClick = (documentPath: string) => {
@@ -161,6 +161,19 @@ const Profile = () => {
         }
     };
 
+    //FOR SCHEDULE
+
+    const openScheduleWindow = () => {
+        const schedule_link = userData.class_schedule;
+        
+        // Open a new window to display the image
+        const viewUrl = `https://studentportal.lcsinhs.com/schedule_imgs/${schedule_link}`;
+        window.open(viewUrl, '_blank');
+    };
+    
+
+    //FOR SURVEY
+
     const handleAnswerSurvey = () => {
         if (surveyLink) {
             window.open(surveyLink, '_blank'); // Open the survey link in a new tab
@@ -169,20 +182,22 @@ const Profile = () => {
         }
     };
 
+    //FOR ENROLMENT
+
     const handleEnrolForm = () => {
         if (enrolLink) {
             window.open(enrolLink, '_blank'); // Open the survey link in a new tab
         } else {
-            window.alert("Enrollment is closed.");
+            window.alert("Request Form link not available.");
         }
     };
 
+    //FETCH SURVEY LINK
     useEffect(() => {
         if (username) {
             axios
                 .get('https://studentportal.lcsinhs.com/scripts/survey-fetch.php') // Replace with the actual endpoint to fetch the survey link
                 .then((response) => {
-                    // Assuming your API response contains a property named 'surveyLink'
                     const fetchedSurveyLink = response.data.surveyLink;
                     if (fetchedSurveyLink) {
                         setSurveyLink(fetchedSurveyLink);
@@ -194,6 +209,7 @@ const Profile = () => {
         }
     }, [username]);
 
+    //FETCH REQUEST FORM LINK
     useEffect(() => {
         if (username) {
             axios
@@ -201,7 +217,7 @@ const Profile = () => {
                 .then((response) => {
                     const fetchedEnrolForm = response.data.enrolLink;
                     if (fetchedEnrolForm) {
-                        setEnrollmentLink(fetchedEnrolForm);
+                        setEnrolLink(fetchedEnrolForm);
                     }
                 })
                 .catch((error) => {
@@ -210,12 +226,12 @@ const Profile = () => {
         }
     }, [username]);
 
+    // FETCH PROFILE PIC AND OTHER DETAILS
     useEffect(() => {
         if (username) {
             axios
                 .post('https://studentportal.lcsinhs.com/scripts/profile.php', { username: username })
                 .then((response) => {
-                    console.log(response.data)
                     if (response.data.profile_pic) {
                         const profilePicturePath = `https://studentportal.lcsinhs.com/scripts/fetch_profile_pic.php?file=${response.data.profile_pic}`;
                         setProfilePicturePath(profilePicturePath);
@@ -227,17 +243,17 @@ const Profile = () => {
                     setEmergencyContact(response.data.emergency_co || '');
                     setEmergencyNumber(response.data.emergency_no || '');
                     setEmergencyAddress(response.data.emergency_add || '');
+                    setEmailParent(response.data.parent_email || '');
 
                     // Check if the response contains the student's grade level
                     if (response.data.grade_level) {
                         setGradeLevel(response.data.grade_level);
-                        console.log("Grade Level: " + response.data.grade_level);
 
                         // Determine the appropriate API endpoint based on the grade level
                         let apiEndpoint;
                         if (response.data.grade_level >= 7 && response.data.grade_level <= 10) {
                             // Grade 7-10 API endpoint
-                            apiEndpoint = 'https://studentportal.lcsinhs.com/scripts/subjects-fetch.php';
+                            apiEndpoint = 'https://studentportal.lcsinhs.com/scripts/subjects-jhs-fetch.php';
                         } else if (response.data.grade_level >= 11 && response.data.grade_level <= 12) {
                             // Grade 11-12 API endpoint (for subjects_shs table)
                             apiEndpoint = 'https://studentportal.lcsinhs.com/scripts/subjects-shs-fetch.php';
@@ -251,7 +267,6 @@ const Profile = () => {
                             .then((subjectsResponse) => {
                                 setSubjects(subjectsResponse.data);
                                 setSubjectsJHS(subjectsResponse.data);
-                                console.log("Subjects: " + subjectsResponse.data);
                             })
                             .catch((error) => {
                                 console.error(error);
@@ -261,22 +276,12 @@ const Profile = () => {
                     }
 
                     // Check if the response contains a survey link and set it in the state
-                    const savedSurveyLink = localStorage.getItem("surveyLink");
+                    const savedSurveyLink = localStorage.getItem('surveyLink');
                     if (savedSurveyLink) {
                         setSurveyLink(savedSurveyLink);
                     }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    }, [username])
 
-    useEffect(() => {
-        if (username) {
-            axios
-                .post('https://studentportal.lcsinhs.com/scripts/profile.php', { username: username })
-                .then((response) => {
+                    // Set user data
                     setUserData(response.data);
                 })
                 .catch((error) => {
@@ -284,9 +289,6 @@ const Profile = () => {
                 });
         }
     }, [username]);
-
-    console.log('Grade Level:', gradeLevel);
-    console.log('Subjects:', subjects);
 
     const openQRCodeModal = () => {
         setShowQRCodeModal(true);
@@ -331,7 +333,6 @@ const Profile = () => {
     };
 
     const handleLogout = () => {
-        // Clear the user's identifier from localStorage
         localStorage.removeItem('username');
         history.push('/login');
         console.log('Logged out');
@@ -384,14 +385,23 @@ const Profile = () => {
                             )}
                         </div>
 
-                        <div className="avatar-center">
+                        <div className="center-creds">
                             <IonLabel className="my-profile-text">{userData.f_name} {userData.l_name}</IonLabel>
                         </div>
-                        <div className="avatar-center">
-                            <IonLabel className="my-profile-text">LRN: {userData.student_lrn}</IonLabel>
+                        <div className="center-creds">
+                            <IonChip className="m-profile">LRN: {userData.student_lrn}</IonChip>
+                            <IonChip className="m-profile">
+                                Grade {userData.grade_level ? userData.grade_level : 'N/A'} - {userData.section_name ? userData.section_name : 'N/A'}
+                            </IonChip>
                         </div>
-
-                        <div className="spacer-h-l" />
+                        <div className="center-creds">
+                            <IonChip className="m-profile">
+                                Class Adviser: {userData.title && userData.fname && userData.lname ?
+                                    `${userData.title} ${userData.fname} ${userData.lname}` : 'N/A'}
+                            </IonChip>
+                            <IonChip className="m-profile"> S. Y. {new Date().getFullYear()}</IonChip>
+                        </div>
+                        <div className="spacer-h-xxs" />
                     </div>
 
                     <div className="avatar-center">
@@ -420,7 +430,8 @@ const Profile = () => {
                             </div>
 
                             <div>
-                                <IonButton className="buttons-appearance">
+                                <IonButton className="buttons-appearance"
+                                    onClick={openScheduleWindow}>
                                     <div className="but-col">
                                         <IonIcon className="icon-size" icon={time}></IonIcon>
                                         <div className="spacer-w-xs" />
@@ -463,7 +474,7 @@ const Profile = () => {
                                     <div className="but-col">
                                         <IonIcon className="icon-size" icon={documentText}></IonIcon>
                                         <div className="spacer-w-xs" />
-                                        <IonLabel>Enrollment Form</IonLabel>
+                                        <IonLabel>Request Form</IonLabel>
                                     </div>
                                 </IonButton>
                             </div>
@@ -509,12 +520,12 @@ const Profile = () => {
                         <div className="spacer-h-m"></div>
                         <div className="avatar-center">
                             {hasUploadedPicture ? (
-                                <IonAvatar className="avatar">
+                                <IonAvatar className="m-avatar">
                                     <IonImg alt="Student Avatar" src={profilePicturePath} />
                                 </IonAvatar>
 
                             ) : (
-                                <IonAvatar className="avatar">
+                                <IonAvatar className="m-avatar">
                                     <IonImg alt="Student Avatar" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
                                 </IonAvatar>
                             )}
@@ -523,11 +534,21 @@ const Profile = () => {
                         <div className="avatar-center">
                             <IonLabel className="m-profile-text">{userData.f_name} {userData.l_name}</IonLabel>
                         </div>
-                        <div className="avatar-center">
-                            <IonLabel className="m-profile-text">LRN: {userData.student_lrn}</IonLabel>
+                        <div className="center-creds">
+                            <IonChip className="m-profile-txt">LRN: {userData.student_lrn}</IonChip>
+                            <IonChip className="m-profile-txt">
+                                Grade {userData.grade_level ? userData.grade_level : 'N/A'} - {userData.section_name ? userData.section_name : 'N/A'}
+                            </IonChip>
+                        </div>
+                        <div className="center-creds">
+                            <IonChip className="m-profile-txt">
+                                Class Adviser: {userData.title && userData.fname && userData.lname ?
+                                    `${userData.title} ${userData.fname} ${userData.lname}` : 'N/A'}
+                            </IonChip>
+                            <IonChip className="m-profile-txt"> S. Y. {new Date().getFullYear()}</IonChip>
                         </div>
 
-                        <div className="spacer-h-m"></div>
+                        <div className="spacer-h-"></div>
                         <div className="avatar-center">
                             <div className="m-cards-column">
 
@@ -541,7 +562,6 @@ const Profile = () => {
                                     </IonButton>
                                 </div>
 
-
                                 <div>
                                     <IonButton className="m-buttons-appearance"
                                         href={gradeLevel && (gradeLevel >= 7 && gradeLevel <= 10) ? '/school_id?print=true' : '/school_id_shs?print=true'}
@@ -553,8 +573,10 @@ const Profile = () => {
                                         </div>
                                     </IonButton>
                                 </div>
+
                                 <div>
-                                    <IonButton className="m-buttons-appearance">
+                                    <IonButton className="m-buttons-appearance"
+                                        onClick={openScheduleWindow}>
                                         <div className="m-button-content">
                                             <IonIcon className="m-icon-size" icon={time}></IonIcon>
                                             <div className="spacer-h-xs" />
@@ -595,7 +617,7 @@ const Profile = () => {
                                         <div className="m-button-content">
                                             <IonIcon className="m-icon-size" icon={documentText}></IonIcon>
                                             <div className="spacer-h-xs" />
-                                            <IonText>Enrollment Form</IonText>
+                                            <IonText>Request Form</IonText>
                                         </div>
                                     </IonButton>
                                 </div>
@@ -631,53 +653,56 @@ const Profile = () => {
             <IonModal isOpen={showInfo} onDidDismiss={closeInfoModal} className='modal-des'>
                 {isDesktop ? <>
                     <div className="modal-css">
-                        <div className="close-but">
-                            <IonButton fill="clear" onClick={closeInfoModal} color={"dark"}>
-                                <IonIcon icon={close} slot="icon-only" />
-                            </IonButton>
-                        </div>
+                        <IonHeader className="ion-no-border">
+                            <IonToolbar>
+                                <h4>Please fill in the Student ID details.</h4>
+                                <IonButton fill="clear" onClick={closeInfoModal} color={"dark"} slot="end">
+                                    <IonIcon icon={close} slot="icon-only" />
+                                </IonButton>
+                            </IonToolbar>
+                        </IonHeader>
 
-                        <div className="avatar-center">
-                            <h2>Please fill in the Student ID details.</h2>
-                        </div>
                         <div className="display-block">
-                            <div>
-                                <p>Upload 1x1 Picture:</p>
-                            </div>
-                            <div>
-                                <IonItem>
-                                    <label htmlFor="avatar"></label>
-                                    <input
-                                        type="file"
-                                        id="avatarInput"
-                                        onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
-                                    />
-                                    <IonButton onClick={uploadAvatar} slot="end" color={'dark'}>
-                                        {hasUploadedPicture ? 'Reupload' : 'Upload'}
-                                    </IonButton>
-                                </IonItem>
-                            </div>
+                            <IonItem>
+                                <IonText slot="start">Upload 1x1 Picture:</IonText>
+                                <div className='spacer-w-xs' />
+                                <label htmlFor="avatar"></label>
+                                <input
+                                    type="file"
+                                    id="avatarInput"
+                                    onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
+                                />
+                                <IonButton onClick={uploadAvatar} slot="end" color={'dark'}>
+                                    {hasUploadedPicture ? 'Reupload' : 'Upload'}
+                                </IonButton>
+                            </IonItem>
                         </div>
 
-                        <div className='spacer-h-s' />
-                        Person to Contact in Case of Emergency:
-                        <div className='spacer-h-xs' />
+                        <div className='spacer-h-m' />
                         <IonInput fill="outline" value={emergencyContact}
+                            label="Person to Contact in Case of Emergency:"
+                            labelPlacement="stacked"
                             onIonChange={(e) => setEmergencyContact(e.detail.value!)}
                             placeholder="First Name, Last Name"></IonInput>
 
-                        <div className='spacer-h-xs' />
-                        Contact No.:
-                        <div className='spacer-h-xs' />
+                        <div className='spacer-h-s' />
                         <IonInput fill="outline" value={emergencyNumber}
+                            label="Contact No.:"
+                            labelPlacement="stacked"
                             onIonChange={(e) => setEmergencyNumber(e.detail.value!)}
                             type="tel" placeholder="Tel./Mobile Number"></IonInput>
 
+                        <div className='spacer-h-s' />
+                        <IonInput fill="outline" value={emailParent}
+                            label="Parent / Guardian's Email Address:"
+                            labelPlacement="stacked"
+                            onIonChange={(e) => setEmailParent(e.detail.value!)}
+                            type="email" placeholder="Email Address"></IonInput>
 
-                        <div className='spacer-h-xs' />
-                        <IonText>Address: (e. g. Batangas City, Batangas)</IonText>
-                        <div className='spacer-h-xs' />
+                        <div className='spacer-h-s' />
                         <IonInput fill="outline" value={emergencyAddress}
+                            label="Address: (e. g. Batangas City, Batangas)"
+                            labelPlacement="stacked"
                             onIonChange={(e) => setEmergencyAddress(e.detail.value!)}
                             placeholder="City, Province"></IonInput>
 
@@ -707,7 +732,7 @@ const Profile = () => {
                         </div>
                         <div className="display-block">
                             <div>
-                                <p>Upload Avatar:</p>
+                                <p>Upload 1x1 Picture:</p>
                             </div>
                             <div>
                                 <IonItem>
@@ -724,26 +749,31 @@ const Profile = () => {
                             </div>
                         </div>
 
-                        <div className='spacer-h-l' />
-                        Person to Contact in Case of Emergency:
-                        <div className='spacer-h-xs' />
-                        <IonInput fill="outline" value={emergencyContact}
-                            onIonChange={(e) => setEmergencyContact(e.detail.value!)}
-                            placeholder="First Name, Last Name">
-                        </IonInput>
-
                         <div className='spacer-h-m' />
-                        Contact No.:
-                        <div className='spacer-h-xs' />
+                        <IonInput fill="outline" value={emergencyContact}
+                            label="Person to Contact in Case of Emergency:"
+                            labelPlacement="stacked"
+                            onIonChange={(e) => setEmergencyContact(e.detail.value!)}
+                            placeholder="First Name, Last Name"></IonInput>
+
+                        <div className='spacer-h-s' />
                         <IonInput fill="outline" value={emergencyNumber}
+                            label="Contact No.:"
+                            labelPlacement="stacked"
                             onIonChange={(e) => setEmergencyNumber(e.detail.value!)}
                             type="tel" placeholder="Tel./Mobile Number"></IonInput>
 
+                        <div className='spacer-h-s' />
+                        <IonInput fill="outline" value={emailParent}
+                            label="Parent / Guardian's Email Address:"
+                            labelPlacement="stacked"
+                            onIonChange={(e) => setEmailParent(e.detail.value!)}
+                            type="email" placeholder="Email Address"></IonInput>
 
                         <div className='spacer-h-s' />
-                        <IonText>Address: (e. g. Batangas City, Batangas)</IonText>
-                        <div className='spacer-h-xs' />
                         <IonInput fill="outline" value={emergencyAddress}
+                            label="Address: (e. g. Batangas City, Batangas)"
+                            labelPlacement="stacked"
                             onIonChange={(e) => setEmergencyAddress(e.detail.value!)}
                             placeholder="City, Province"></IonInput>
 
@@ -796,7 +826,7 @@ const Profile = () => {
                         >Print</IonButton>
                     </IonItem>
                     <IonItem>
-                        <IonLabel>Certificate of Enrolment</IonLabel>
+                        <IonLabel>Certificate of Enrollment</IonLabel>
                         <IonButton fill="outline" onClick={() => handleViewClick(userData.CoEnrolment)}
                         >View</IonButton>
                         <IonButton onClick={() => handlePrintClick(userData.CoEnrolment)}
@@ -845,7 +875,6 @@ const Profile = () => {
                 </IonContent>
             </IonModal>
 
-
             {/*MODAL FOR G7-G10)*/}
             <IonModal isOpen={showSubjectsJHSModal} onDidDismiss={closeSubjectsJHSModal}>
                 <IonToolbar>
@@ -857,10 +886,10 @@ const Profile = () => {
 
                 <IonContent>
                     {subjectsJHS.length > 0 ? (
-                        subjectsJHS.map((subjects) => (
-                            <IonCard >
+                        subjectsJHS.map((subject: SubjectModel, index) => (
+                            <IonCard key={index}>
                                 <IonItem className="font-subj">
-                                    <IonLabel>{subjects}</IonLabel>
+                                    <IonLabel>{subject.subject_name}</IonLabel>
                                 </IonItem>
                             </IonCard>
                         ))
