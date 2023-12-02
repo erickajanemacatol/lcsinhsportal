@@ -52,7 +52,6 @@ const AddActivity = () => {
         }
 
         const date = new Date();
-        const dueDateISO = date.toISOString();
 
         const newTaskDetails = {
             act_desc: newTask,
@@ -226,7 +225,7 @@ const AddActivity = () => {
                                                 className="submit-button"
                                                 size="default"
                                                 onClick={handleAddTask}
-                                                disabled={!selectedDate}>
+                                                disabled={!selectedDate || !newTask}>
                                                 <IonIcon icon={add} />
                                                 <IonText>Submit</IonText>
                                             </IonButton>
@@ -236,8 +235,6 @@ const AddActivity = () => {
                                 </div>
                             </IonCard>
                         </div>
-
-
 
                     </IonContent>
                 </>
@@ -363,6 +360,7 @@ const AddActivity = () => {
                                         size="default"
                                         onClick={handleAddTask}
                                         expand="block"
+                                        disabled={!selectedDate || !newTask}
                                         color={'dark'}>
                                         Submit
                                     </IonButton>

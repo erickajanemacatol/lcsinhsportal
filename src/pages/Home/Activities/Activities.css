@@ -11,6 +11,18 @@
     margin-right: 2%;
 }
 
+.check-hover ion-button:hover .bi-checkbox {
+    display: none;
+}
+
+.check-hover ion-button:hover .bi-check-square {
+    display: inline-block;
+}
+
+.col-align {
+    align-items: center;
+}
+
 .att-margin {
     margin-left: 20px;
 }
