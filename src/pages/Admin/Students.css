@@ -3,7 +3,8 @@
 }
 
 .max-size {
-    margin-left: 10px;;
+    margin-left: 10px;
+    ;
 }
 
 .div-card {
@@ -27,7 +28,7 @@
 }
 
 .search-bar-size {
-    width: 70%;
+    width: 50vh;
     align-items: center;
     justify-content: end;
     border-radius: 10px;

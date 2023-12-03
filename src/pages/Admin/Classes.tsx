@@ -4,11 +4,12 @@ import {
     IonItem,
     IonLabel, IonList, IonModal, IonPage, IonRow, IonSelect, IonSelectOption, IonText, IonTitle, IonToolbar, useIonToast
 } from "@ionic/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminHeader from "../../components/AdminHeader";
-import { add, addOutline, closeSharp, cloudUpload, create, eye, personAdd, trash } from "ionicons/icons";
+import { add, addOutline, closeSharp, create, eye, personAdd, trash } from "ionicons/icons";
 import { useMediaQuery } from "react-responsive";
 import './Classes.css'
+import { BiUpload } from "react-icons/bi";
 import axios from "axios";
 
 interface Faculty {
@@ -765,14 +766,14 @@ const Classes: React.FC = () => {
                                                     <IonButton
                                                         color="dark" size="small"
                                                         onClick={() => handleSchedUpload(classItem.class_code)}
-                                                    >
-                                                        Upload
+                                                        title="Upload"
+                                                    >Upload
                                                     </IonButton>
                                                     {/* View button for uploaded file */}
                                                     {uploadedFiles[classItem.class_code] && (
                                                         <IonButton size="small" color="tertiary"
                                                             onClick={() => handleViewUploadedFile(classItem.class_code)}>
-                                                            <IonIcon icon={eye} /> <div className="spacer-w-xs" /> View
+                                                            <IonIcon icon={eye} />
                                                         </IonButton>
                                                     )}
                                                 </IonRow>
@@ -784,7 +785,7 @@ const Classes: React.FC = () => {
                                     <IonRow>
                                         <IonButton className="buttons-font-size"
                                             onClick={() => openAddTeachModal(classItem.class_code, classItem.grade_level, classItem.section_name)}>
-                                            Assign Teachers to Subject
+                                            Assign Teachers
                                             <IonIcon slot="start" icon={add} />
                                         </IonButton>
                                         <IonButton color={'success'} className="buttons-font-size"
@@ -832,14 +833,11 @@ const Classes: React.FC = () => {
                 </IonContent>
             </> : <>
                 <IonContent>
-
-                    <div>
-                        <div className="spacer-h-s" />
-                        <div >
-                            <p>Not yet available in mobile view.</p>
-                        </div>
+                    <div className="spacer-h-l"></div>
+                    <div className="spacer-h-m"></div>
+                    <div className="center">
+                        <IonLabel>Classes not available in mobile view.</IonLabel>
                     </div>
-
                 </IonContent>
             </>}
 
@@ -1052,7 +1050,7 @@ const Classes: React.FC = () => {
                                     {subject.semester === 1
                                         ? <IonChip color={'success'}>1st Sem</IonChip>
                                         : subject.semester === 2
-                                            ? <IonChip color={'success'}>2nd Sem</IonChip>
+                                            ? <IonChip color={'primary'}>2nd Sem</IonChip>
                                             : null
                                     }
                                 </IonText>
@@ -1087,7 +1085,7 @@ const Classes: React.FC = () => {
                                     {subject.semester === 1
                                         ? <IonChip color={'success'}>1st Sem</IonChip>
                                         : subject.semester === 2
-                                            ? <IonChip color={'success'}>2nd Sem</IonChip>
+                                            ? <IonChip color={'primary'}>2nd Sem</IonChip>
                                             : null
                                     }
                                 </IonText>

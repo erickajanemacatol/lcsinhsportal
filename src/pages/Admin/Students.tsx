@@ -304,7 +304,7 @@ const Students: React.FC = () => {
                     <div className="spacer-h-l"></div>
                     <div className="spacer-h-m"></div>
                     <div className="center">
-                        <IonLabel>Not Available in Mobile View</IonLabel>
+                        <IonLabel>Students not available in mobile view.</IonLabel>
                     </div>
                 </IonContent>
             )

@@ -28,6 +28,10 @@
 .annc-card {
     border-radius: 10px;
     display: block;
+    border-color: rgb(218, 218, 218);
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: none !important;
 }
 
 .ann-deets-size {
@@ -63,7 +67,7 @@
 }
 
 .title-poss {
-    width: 50%;
+    width: 60%;
 
 }
 

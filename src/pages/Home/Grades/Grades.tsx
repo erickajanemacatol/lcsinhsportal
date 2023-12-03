@@ -153,7 +153,7 @@ const Grades = () => {
                     .then((gradesResponse) => {
                         console.log('Grades Response Data:', gradesResponse.data);
                         return gradesResponse.data;
-                    })                    .catch((error) => {
+                    }).catch((error) => {
                         console.error(`Error fetching ${scriptUrl}:`, error);
                         setError(error);
                         return null;
@@ -193,17 +193,37 @@ const Grades = () => {
                             <IonCardContent>
                                 <div>
                                     <IonGrid className="grid-border">
-                                        <IonRow>
-                                            <IonCol class="col-border-header" size="5">
-                                                Subject Name
-                                            </IonCol>
-                                            <IonCol class="col-border-header" size="3">
-                                                Subject Teacher
-                                            </IonCol>
-                                            <IonCol class="col-border-header">
-                                                Grade
-                                            </IonCol>
-                                        </IonRow>
+
+
+                                        {gradeLevel && gradeLevel >= 7 && gradeLevel <= 10 ? (
+                                            <IonRow>
+                                                <IonCol class="col-border-header" size="5">
+                                                    <b>Subject Name</b>
+                                                </IonCol>
+                                                <IonCol class="col-border-header" size="3">
+                                                    <b>Subject Teacher</b>
+                                                </IonCol>
+                                                <IonCol class="col-border-header">
+                                                    <b>Grade</b>
+                                                </IonCol>
+                                            </IonRow>
+
+                                        ) :
+                                            <IonRow>
+                                                <IonCol class="col-border-header" size="1.5">
+                                                    <b>Semester</b>
+                                                </IonCol>
+                                                <IonCol class="col-border-header" size="5">
+                                                    <b>Subject Name</b>
+                                                </IonCol>
+                                                <IonCol class="col-border-header" size="4">
+                                                    <b>Subject Teacher</b>
+                                                </IonCol>
+                                                <IonCol class="col-border-header">
+                                                    <b>Grade</b>
+                                                </IonCol>
+                                            </IonRow>
+                                        }
 
                                         {gradeLevel && gradeLevel >= 7 && gradeLevel <= 10 ? (
                                             <IonRow>
@@ -218,19 +238,21 @@ const Grades = () => {
 
                                         {subjects.map((subject: GradeData, subjectIndex) => (
                                             <IonRow key={subjectIndex}>
-                                                <IonCol class="col-border" size="5">
-                                                    {subject.subject_name}
-                                                </IonCol>
 
-                                                <IonCol class="col-border" size="3">
-                                                    {(teachers[subject.subject_code] ?? []).map((teacher, teacherIndex) => (
-                                                        <div key={teacherIndex}>{teacher.teacher_name || "-"}</div>
-                                                    ))}
-                                                </IonCol>
 
 
                                                 {gradeLevel && gradeLevel >= 7 && gradeLevel <= 10 ? (
                                                     <>
+                                                        <IonCol class="col-border" size="5">
+                                                            {subject.subject_name}
+                                                        </IonCol>
+
+                                                        <IonCol class="col-border" size="3">
+                                                            {(teachers[subject.subject_code] ?? []).map((teacher, teacherIndex) => (
+                                                                <div key={teacherIndex}>{teacher.teacher_name || "-"}</div>
+                                                            ))}
+                                                        </IonCol>
+
                                                         {['q1', 'q2', 'q3', 'q4'].map((quarter, quarterIndex) => (
                                                             <IonCol className="col-border" key={quarterIndex}>
                                                                 {grades
@@ -246,6 +268,25 @@ const Grades = () => {
                                                 ) :
                                                     (
                                                         <>
+                                                          <IonCol className="cell-class" size="1.5">
+                                                                <IonText>
+                                                                    {subject.semester === 1
+                                                                        ? <IonText color={'success'}>1st </IonText>
+                                                                        : subject.semester === 2
+                                                                            ? <IonText color={'primary'}>2nd </IonText>
+                                                                            : null
+                                                                    }
+                                                                </IonText>
+                                                            </IonCol>
+                                                            <IonCol class="col-border" size="5">
+                                                                {subject.subject_name}
+                                                            </IonCol>
+
+                                                            <IonCol class="col-border" size="4">
+                                                                {(teachers[subject.subject_code] ?? []).map((teacher, teacherIndex) => (
+                                                                    <div key={teacherIndex}>{teacher.teacher_name || "-"}</div>
+                                                                ))}
+                                                            </IonCol>
                                                             <IonCol className="col-border">
                                                                 {grades
                                                                     .filter((g) => g.subject_code === subject.subject_code)
@@ -281,17 +322,36 @@ const Grades = () => {
                             <IonCardContent>
                                 <div>
                                     <IonGrid className="m-grid-border">
-                                        <IonRow>
-                                            <IonCol class="m-col-border-header" size="4">
-                                                Subject Name
-                                            </IonCol>
-                                            <IonCol class="m-col-border-header" size="3">
-                                                Subject Teacher
-                                            </IonCol>
-                                            <IonCol class="m-col-border-header">
-                                                Grade
-                                            </IonCol>
-                                        </IonRow>
+
+                                        {gradeLevel && gradeLevel >= 7 && gradeLevel <= 10 ? (
+                                            <IonRow>
+                                                <IonCol class="m-col-border-header" size="4">
+                                                    <b>Subject Name</b>
+                                                </IonCol>
+                                                <IonCol class="m-col-border-header" size="3">
+                                                    <b>Subject Teacher</b>
+                                                </IonCol>
+                                                <IonCol class="m-col-border-header">
+                                                    <b>Grade</b>
+                                                </IonCol>
+                                            </IonRow>
+
+                                        ) :
+                                            <IonRow>
+                                                <IonCol class="m-col-border-header" size="1.5">
+                                                    <b>Sem</b>
+                                                </IonCol>
+                                                <IonCol class="m-col-border-header" size="4.3">
+                                                    <b>Subject Name</b>
+                                                </IonCol>
+                                                <IonCol class="m-col-border-header" size="4">
+                                                    <b>Subject Teacher</b>
+                                                </IonCol>
+                                                <IonCol class="m-col-border-header">
+                                                    <b>Grade</b>
+                                                </IonCol>
+                                            </IonRow>
+                                        }
 
                                         {gradeLevel && gradeLevel >= 7 && gradeLevel <= 10 ? (
                                             <IonRow>
@@ -306,28 +366,19 @@ const Grades = () => {
 
                                         {subjects.map((subject: GradeData, subjectIndex) => (
                                             <IonRow key={subjectIndex}>
-                                                <IonCol className="cell-class" size="4">
-                                                    {subject.subject_name}
-
-                                                    <IonText slot="end">
-                                                        {subject.semester === 1
-                                                            ? <IonChip color={'success'}>1st Sem</IonChip>
-                                                            : subject.semester === 2
-                                                                ? <IonChip color={'success'}>2nd Sem</IonChip>
-                                                                : null
-                                                        }
-                                                    </IonText>
-                                                </IonCol>
-
-                                                <IonCol className="cell-class" size="3">
-                                                    {(teachers[subject.subject_code] ?? []).map((teacher, teacherIndex) => (
-                                                        <div key={teacherIndex}>{teacher.teacher_name || "-"}</div>
-                                                    ))}
-                                                </IonCol>
-
 
                                                 {gradeLevel && gradeLevel >= 7 && gradeLevel <= 10 ? (
                                                     <>
+                                                        <IonCol className="cell-class" size="4">
+                                                            {subject.subject_name}
+                                                        </IonCol>
+
+                                                        <IonCol className="cell-class" size="3">
+                                                            {(teachers[subject.subject_code] ?? []).map((teacher, teacherIndex) => (
+                                                                <div key={teacherIndex}>{teacher.teacher_name || "-"}</div>
+                                                            ))}
+                                                        </IonCol>
+
                                                         {['q1', 'q2', 'q3', 'q4'].map((quarter, quarterIndex) => (
                                                             <IonCol className="cell-class" key={quarterIndex}>
                                                                 {grades
@@ -343,12 +394,31 @@ const Grades = () => {
                                                 ) :
                                                     (
                                                         <>
+                                                            <IonCol className="cell-class" size="1.5">
+                                                                <IonText>
+                                                                    {subject.semester === 1
+                                                                        ? <IonText color={'success'}>1st </IonText>
+                                                                        : subject.semester === 2
+                                                                            ? <IonText color={'primary'}>2nd </IonText>
+                                                                            : null
+                                                                    }
+                                                                </IonText>
+                                                            </IonCol>
+
+                                                            <IonCol className="cell-class" size="4.3">
+                                                                {subject.subject_name}
+                                                            </IonCol>
+
+                                                            <IonCol className="cell-class" size="4">
+                                                                {(teachers[subject.subject_code] ?? []).map((teacher, teacherIndex) => (
+                                                                    <div key={teacherIndex}>{teacher.teacher_name || "-"}</div>
+                                                                ))}
+                                                            </IonCol>
                                                             <IonCol className="cell-class">
                                                                 {grades
                                                                     .filter((g) => g.subject_code === subject.subject_code)
                                                                     .map((grade, gradeIndex) => (
                                                                         <div key={gradeIndex}>
-                                                                            {/* Replace with the appropriate property for SHS grading */}
                                                                             {grade.grades.grade !== null ? grade.grades.grade : "-"}
                                                                         </div>
                                                                     ))}

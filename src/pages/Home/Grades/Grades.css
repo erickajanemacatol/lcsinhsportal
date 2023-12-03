@@ -36,6 +36,11 @@
 .my-grades-card {
     height: auto;
     border-radius: 10px;
+    margin: 20px;
+    box-shadow: none;
+    border-color: rgb(198, 198, 198);
+    border-style: solid;
+    border-width: 1px;
 }
 
 .my-grades-text {
@@ -84,6 +89,10 @@
 .m-grades-card {
     height: auto;
     border-radius: 10px;
+    box-shadow: none;
+    border-color: rgb(198, 198, 198);
+    border-style: solid;
+    border-width: 1px;
 }
 
 .m-grades-text {

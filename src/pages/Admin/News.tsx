@@ -190,8 +190,7 @@ const News: React.FC = () => {
                     }
                 </IonContent >
             ) : (
-                <IonContent>
-                    <div className="spacer-h-l"></div>
+                <IonContent  color={'light'}>
                     <div className="div-title-n">
 
                         <div className="title-pl">
@@ -226,9 +225,9 @@ const News: React.FC = () => {
                             imageUrls.map((imageUrl, index) => (
                                 <IonCard key={index} className="m-card">
                                     <IonCardHeader>
-                                        <IonCardTitle>{index + 1}</IonCardTitle>
-                                        <IonButton fill="clear" className="trash-button" onClick={() => handleDeleteImage(imageUrl)}>
-                                            <IonIcon slot="icon-only" color={'danger'} icon={trash} />
+                                        <IonLabel>{index + 1}</IonLabel>
+                                        <IonButton fill="clear" size="small" className="trash-button" onClick={() => handleDeleteImage(imageUrl)}>
+                                            <IonIcon color={'danger'} icon={trash} />
                                         </IonButton>
                                     </IonCardHeader>
                                     <IonCardContent>

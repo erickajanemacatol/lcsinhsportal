@@ -1,20 +1,3 @@
-.my-att-title {
-    font-family: poppins;
-    width: 50%;
-    font-weight: bolder;
-    font-size: 22pt;
-    color: black;
-}
-
-
-/*MOBILE*/
-.m-my-att-title {
-    font-family: poppins;
-    font-weight: bolder;
-    font-size: 17pt;
-    color: black;
-}
-
 .video-position {
     display: flex;
     justify-content: center;

@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { IonButton, IonInput, IonModal, IonTextarea } from '@ionic/react';
+import { IonButton, IonInput, IonItemDivider, IonModal, IonTextarea } from '@ionic/react';
 import './Announcements.css'
-
-export interface Announcement {
-  dateandtime: string;
-  annc_id: number;
-  title: string;
-  description: string;
-  id: number;
-}
+import { useMediaQuery } from 'react-responsive';
+import { Announcement } from './Announcements';
 
 interface UpdateAnnouncementProps {
   isOpen: boolean;
@@ -26,6 +20,7 @@ const UpdateAnnouncement: React.FC<UpdateAnnouncementProps> = ({
   // State to keep track of the updated title and description
   const [updatedTitle, setUpdatedTitle] = useState('');
   const [updatedDescription, setUpdatedDescription] = useState('');
+  const isDesktop = useMediaQuery({ minWidth: 1050 });
 
   // Set initial values when the announcement changes
   useEffect(() => {
@@ -58,29 +53,103 @@ const UpdateAnnouncement: React.FC<UpdateAnnouncementProps> = ({
   };
 
   return (
-    <IonModal className='modal-des' isOpen={isOpen} onDidDismiss={onClose}>
-      <div className='modal-view'>
-        <h3><b>Update Announcement</b></h3>
-        <div className='spacer-h-l' />
-        Title
-        <div className='spacer-h-xs' />
-        <IonInput fill={'outline'}
-          value={updatedTitle}
-          onIonChange={(e) => setUpdatedTitle(e.detail.value!)}
-        ></IonInput>
-        <div className='spacer-h-m' />
-        Description
-        <div className='spacer-h-xs' />
-        <IonTextarea fill='outline'
-          value={updatedDescription}
-          onIonChange={(e) => setUpdatedDescription(e.detail.value!)}
-        ></IonTextarea>
-      </div>
-      <div className='buttons-pos'>
-        <IonButton expand="block" onClick={handleUpdate}>Update</IonButton>
-        <IonButton  expand="block" onClick={onClose} color={'danger'}>Close</IonButton> {/* Close button */}
-      </div>
-    </IonModal>
+    <>
+      {isDesktop ?
+        <>
+          <IonModal className='modal-des' isOpen={isOpen} onDidDismiss={onClose}>
+            <div className='modal-view'>
+              <center><h3><b>Update Announcement</b></h3></center>
+              <div className='spacer-h-l' />
+              Title
+              <div className='spacer-h-xs' />
+              <IonInput fill={'outline'}
+                value={updatedTitle}
+                onIonChange={(e) => setUpdatedTitle(e.detail.value!)}
+                counter={true}
+                maxlength={50}
+                counterFormatter={(inputLength, maxLength) =>
+                  `${maxLength - inputLength} characters remaining`
+                }
+              ></IonInput>
+              <div className='spacer-h-m' />
+              Description
+              <div className='spacer-h-xs' />
+              <IonTextarea
+                fill='outline'
+                rows={5}
+                value={updatedDescription}
+                onIonChange={(e) => setUpdatedDescription(e.detail.value!)}
+                counter={true}
+                maxlength={300}
+                counterFormatter={(inputLength, maxLength) =>
+                  `${maxLength - inputLength} characters remaining`
+                }
+              ></IonTextarea>
+              <div className="spacer-h-l"></div>
+              <div className="submit-button-pos">
+                <IonButton
+                  className="submit-button"
+                  size="default"
+                  color={'primary'}
+                  onClick={handleUpdate}>
+                  Update
+                </IonButton>
+              </div>
+            </div>
+
+          </IonModal>
+        </> : <>
+          {/*MOBILE*/}
+          <IonModal className='modal-des'
+            isOpen={isOpen}
+            onDidDismiss={onClose}
+            initialBreakpoint={0.70}
+            breakpoints={[0, 0.70]}
+            backdropDismiss={true}
+            backdropBreakpoint={0}>
+            <div className='modal-view'>
+              <center><h4><b>Update Announcement</b></h4></center>
+              <IonItemDivider />
+              <div className='spacer-h-l' />
+              Title
+              <div className='spacer-h-xs' />
+              <IonInput
+                fill={'outline'}
+                value={updatedTitle}
+                onIonChange={(e) => setUpdatedTitle(e.detail.value!)}
+                counter={true}
+                maxlength={50}
+                counterFormatter={(inputLength, maxLength) =>
+                  `${maxLength - inputLength} characters remaining`
+                }
+              ></IonInput>
+              Description
+              <div className='spacer-h-xs' />
+              <IonTextarea fill='outline'
+                rows={7}
+                value={updatedDescription}
+                onIonChange={(e) => setUpdatedDescription(e.detail.value!)}
+                counter={true}
+                maxlength={300}
+                counterFormatter={(inputLength, maxLength) =>
+                  `${maxLength - inputLength} characters remaining`
+                }
+              ></IonTextarea>
+              <div className="spacer-h-m"></div>
+              <IonButton
+                expand="block"
+                size="default"
+                color={'primary'}
+                onClick={handleUpdate}>
+                Update
+              </IonButton>
+            </div>
+
+          </IonModal>
+        </>
+      }
+    </>
+
   );
 };
 

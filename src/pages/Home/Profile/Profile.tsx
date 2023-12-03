@@ -1,6 +1,6 @@
 import {
     IonAvatar, IonButton, IonCard, IonCardContent, IonChip, IonContent, IonHeader, IonIcon, IonImg,
-    IonInput, IonItem, IonLabel, IonModal, IonPage, IonText, IonTitle, IonToolbar,
+    IonInput, IonItem, IonItemDivider, IonLabel, IonModal, IonPage, IonText, IonTitle, IonToolbar,
     useIonToast
 } from "@ionic/react";
 import { arrowBack, close, closeOutline, documentText, folderOpen, idCard, list, logOut, person, qrCode, school, time } from "ionicons/icons";
@@ -165,12 +165,12 @@ const Profile = () => {
 
     const openScheduleWindow = () => {
         const schedule_link = userData.class_schedule;
-        
+
         // Open a new window to display the image
         const viewUrl = `https://studentportal.lcsinhs.com/schedule_imgs/${schedule_link}`;
         window.open(viewUrl, '_blank');
     };
-    
+
 
     //FOR SURVEY
 
@@ -649,9 +649,8 @@ const Profile = () => {
                 </div>
             </IonModal>
 
-
-            <IonModal isOpen={showInfo} onDidDismiss={closeInfoModal} className='modal-des'>
-                {isDesktop ? <>
+            {isDesktop ? <>
+                <IonModal isOpen={showInfo} onDidDismiss={closeInfoModal} className='modal-des'>
                     <div className="modal-css">
                         <IonHeader className="ion-no-border">
                             <IonToolbar>
@@ -715,25 +714,37 @@ const Profile = () => {
                         </div>
 
                     </div>
+                </IonModal>
 
-
-                </> : <>
+            </> : <>
+                <IonModal isOpen={showInfo}
+                    onDidDismiss={closeInfoModal}
+                    className='modal-des'
+                    initialBreakpoint={0.80}
+                    breakpoints={[0, 0.5, 0.75, 1]}
+                    backdropDismiss={true}
+                    backdropBreakpoint={0}>
 
                     <div className="modal-css">
-                        <div className="close-but">
-                            <IonButton fill="clear" onClick={closeInfoModal} color={"dark"}>
-                                <IonIcon icon={close} slot="icon-only" />
-                            </IonButton>
-                        </div>
-                        <div className="spacer-h-xl" />
+                        <IonHeader className="ion-no-border">
+                            <IonToolbar>
+                                <div className="spacer-h-m" />
+                                <center>
+                                    <h3><b>Student Information</b></h3>
+                                </center>
+                                <IonItemDivider />
+                            </IonToolbar>
+                        </IonHeader>
 
                         <div className="avatar-center">
-                            <h2>Please fill in the Student ID details.</h2>
+
                         </div>
                         <div className="display-block">
                             <div>
-                                <p>Upload 1x1 Picture:</p>
+                                <div className="spacer-h-m" />
+                                <IonLabel>Upload 1x1 Picture:</IonLabel>
                             </div>
+                            
                             <div>
                                 <IonItem>
                                     <label htmlFor="avatar"></label>
@@ -785,8 +796,9 @@ const Profile = () => {
                         <div className='spacer-h-xxs' />
 
                     </div>
-                </>}
-            </IonModal>
+                </IonModal>
+            </>
+            }
 
             <IonModal
                 isOpen={showDocs}
@@ -861,8 +873,8 @@ const Profile = () => {
                                         {subject.semester === 1
                                             ? <IonChip color={'success'}>1st Sem</IonChip>
                                             : subject.semester === 2
-                                                ? <IonChip color={'success'}>2nd Sem</IonChip>
-                                                : <IonChip color={'danger'}>Unknown Semester</IonChip>
+                                                ? <IonChip color={'primary'}>2nd Sem</IonChip>
+                                                : null
                                         }
                                     </IonText>
 

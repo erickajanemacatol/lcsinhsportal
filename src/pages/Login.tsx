@@ -86,22 +86,17 @@ const Login: React.FC = () => {
 
         .then(async (response) => {
           setIsLoading(true);
-          console.log('Complete Server Response:', response); // Log the complete response
           const data = response.data;
-          console.log('Data:', data);
 
           // Check if data.success is true
           if (data && data.success) {
             // Log the entire data object
-            console.log('Complete Data:', data);
 
             // Check if data.role_id is defined
             if (data.role_id !== undefined) {
-              console.log('Role ID in Response:', data.role_id);
 
               localStorage.setItem('username', loginData.username);
               localStorage.setItem('role', data.role_id);
-              console.log('Role ID in Local Storage:', localStorage.getItem('role'));
 
               setIsLoggedIn(true);
 
@@ -196,11 +191,9 @@ const Login: React.FC = () => {
   const onChange = (value: string | null) => {
     setIsCaptchaVerified(!!value);
     setRecaptchaToken(value);
-    console.log(value)
   };
 
   useEffect(() => {
-    console.log('Captcha verified:', isCaptchaVerified);
   }, [isCaptchaVerified]);
 
   return (
