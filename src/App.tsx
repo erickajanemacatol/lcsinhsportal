@@ -33,7 +33,6 @@ import { fGrades } from './pages/Faculty/fGrades';
 import { fRegistration } from './pages/Faculty/fRegistration';
 import { News } from './pages/Admin/News';
 import { Announcements } from './pages/Admin/Announcements';
-import { AddAnnouncement } from './pages/Admin/AddAnnouncement';
 import { Calendar } from './pages/Admin/Calendar';
 import { Students } from './pages/Admin/Students';
 import { Faculty } from './pages/Admin/Faculty';
@@ -43,7 +42,6 @@ import PrivateRoute from './components/utils/PrivateRoute';
 import Error from './components/utils/Error';
 import { QRAttendance_Timein } from './pages/QR Attendance/QR_timein';
 import { ID_temp_shs } from './pages/Home/Profile/ID_temp_shs';
-import SurveyComponent from './pages/Admin/SurveyPage';
 import { QRAttendance_Timeout } from './pages/QR Attendance/QR_timeout';
 import { Classes } from './pages/Admin/Classes';
 
@@ -71,14 +69,12 @@ const App: React.FC = () => (
 
             <PrivateRoute exact path="/admin/news" component={News} requiredRole="1" />
             <PrivateRoute exact path="/admin/announcements" component={Announcements} requiredRole="1" />
-            <PrivateRoute exact path="/admin/announcement-details" component={AddAnnouncement} requiredRole="1" />
             <PrivateRoute exact path="/admin/calendar" component={Calendar} requiredRole="1" />
             <PrivateRoute exact path="/admin/students" component={Students} requiredRole="1" />
             <PrivateRoute exact path="/admin/faculty" component={Faculty} requiredRole="1" />
             <PrivateRoute exact path="/admin/classes" component={Classes} requiredRole="1" />
             <PrivateRoute exact path="/admin/links" component={Links} requiredRole="1" />
 
-            <PrivateRoute exact path="/survey" component={SurveyComponent} requiredRole="0" />
             <PrivateRoute exact path="/qr-attendance-timein" component={QRAttendance_Timein} requiredRole="3" />
             <PrivateRoute exact path="/qr-attendance-timeout" component={QRAttendance_Timeout} requiredRole="3" />
             <Route exact path="/error" component={Error} />
