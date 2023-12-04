@@ -92,7 +92,6 @@ const Links: React.FC = () => {
                 localStorage.removeItem("surveyLink"); // Remove the invalid URL
             }
         }
-        console.log('current survey: ', enrolLink)
 
     }, []);
 
@@ -161,7 +160,6 @@ const Links: React.FC = () => {
                 localStorage.removeItem("enrolLink");
             }
         }
-        console.log('current enrolLink: ', enrolLink)
     }, []);
 
     // Function to validate a URL
@@ -213,7 +211,7 @@ const Links: React.FC = () => {
                                         Open Survey
                                     </IonButton>
                                     <IonButton color="danger" onClick={handleDeleteLink}>
-                                        Delete Link
+                                        Delete
                                     </IonButton>
                                 </div>
                             )}
@@ -253,7 +251,7 @@ const Links: React.FC = () => {
                                         Open Request Form
                                     </IonButton>
                                     <IonButton color="danger" onClick={handleDeleteLink2}>
-                                        Delete Link
+                                        Delete
                                     </IonButton>
                                 </div>
                             )}
@@ -262,7 +260,7 @@ const Links: React.FC = () => {
                     </IonContent>
                 </> : <>
                     {/*MOBILE*/}
-                    <IonContent>
+                    <IonContent color={'light'}>
                         {/*SURVEY*/}
                         <div className="spacer-h-l"></div>
 
@@ -295,7 +293,7 @@ const Links: React.FC = () => {
                                         Open Survey
                                     </IonButton>
                                     <IonButton color="danger" onClick={handleDeleteLink}>
-                                        Delete Link
+                                        Delete
                                     </IonButton>
                                 </div>
                             )}
@@ -306,7 +304,7 @@ const Links: React.FC = () => {
                         <div className="spacer-h-xl"></div>
 
                         <div className="m-ttl-margin">
-                            <IonLabel className="m-ttl">Enrolment Form Link</IonLabel>
+                            <IonLabel className="m-ttl">Request Form Link</IonLabel>
                         </div>
 
                         <div className="spacer-h-m"></div>
@@ -314,7 +312,7 @@ const Links: React.FC = () => {
                             <div className="m-disp-flex">
                                 <IonInput
                                     fill="outline"
-                                    placeholder="Enter link to enrolment form here"
+                                    placeholder="Enter link to request form here"
                                     value={enrolLink}
                                     onIonChange={(e) => setEnrolLink(e.detail.value!)}
                                 ></IonInput>
@@ -331,10 +329,10 @@ const Links: React.FC = () => {
                                 <div className="m-disp-block">
                                     <div className="spacer-w-s" />
                                     <IonButton href={enrolLink} target="_blank">
-                                        Open Enrolment Form
+                                        Open Request Form
                                     </IonButton>
                                     <IonButton color="danger" onClick={handleDeleteLink2}>
-                                        Delete Link
+                                        Delete
                                     </IonButton>
                                 </div>
                             )}

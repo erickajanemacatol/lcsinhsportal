@@ -1,10 +1,11 @@
-import { IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonRow, IonSearchbar, IonSelect, IonSelectOption, IonText, useIonToast } from "@ionic/react";
+import { IonButton, IonCard, IonCol, IonContent, IonGrid, IonIcon, IonLabel, IonPage, IonRow, IonSearchbar, useIonToast } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import AdminHeader from "../../components/AdminHeader";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import './Students.css';
-import { cloudUpload, eye, trash } from "ionicons/icons";
+import { cloudUpload, eye } from "ionicons/icons";
+import { BiUpload } from "react-icons/bi";
 
 interface StudentModel {
     student_lrn: string;
@@ -207,8 +208,18 @@ const Students: React.FC = () => {
                     <div className="max-size">
                         Upload Files (Max Size: 2MB)
                     </div>
-                    <IonCard color={'light'}>
-                        <IonGrid class="grid-props">
+
+                    <div>
+                        <IonCard className="tip-prop" color={'light'}>
+                            <IonLabel>
+                                <p>Tip: Submit any file from CoR, Form 137, Good Moral, CoE, CoRk one or all at a time per student.</p>
+                            </IonLabel>
+                        </IonCard>
+                    </div>
+
+
+                    <IonCard className="table-prop">
+                        <IonGrid className="grid-prop">
                             <IonRow>
                                 <IonCol size='0.3' class="cell-class">
                                 </IonCol>
@@ -263,16 +274,15 @@ const Students: React.FC = () => {
                                                     />
 
                                                     <IonButton
-                                                        size="small" fill="outline" color="dark"
+                                                        size="small" fill="outline" color="dark" className="student-button-prop"
                                                         onClick={() => openHiddenFileInput(student.student_lrn, inputIndex + 1)}
                                                     >
                                                         Select
                                                     </IonButton>
-
                                                     {student[key as keyof StudentModel] && (
-                                                        <IonButton size="small" color="tertiary"
+                                                        <IonButton size="small" color="tertiary" className="student-button-prop"
                                                             onClick={() => handleViewClick(student.student_lrn, key as keyof StudentModel)}>
-                                                            <IonIcon icon={eye} /> <div className="spacer-w-xs" /> View
+                                                            <IonIcon icon={eye} slot="start" /> View
                                                         </IonButton>
                                                     )}
 
@@ -288,8 +298,8 @@ const Students: React.FC = () => {
                                             <IonButton className="submit-button-pref"
                                                 size="small"
                                                 onClick={() => handleUpload(student.student_lrn)}>
-                                                <IonIcon icon={cloudUpload} />
-                                                <div className="spacer-w-s" />
+                                                <BiUpload size={18} />
+                                                <div className="spacer-w-xxs" />
                                                 Submit
                                             </IonButton>
                                         </IonCol>
@@ -297,7 +307,6 @@ const Students: React.FC = () => {
                                 ))}
                         </IonGrid>
                     </IonCard>
-
                 </IonContent>
             ) : (
                 <IonContent>

@@ -28,9 +28,8 @@
 }
 
 .search-bar-size {
-    width: 50vh;
+    width: 55vh;
     align-items: center;
-    justify-content: end;
     border-radius: 10px;
     border-color: gray;
     border-style: solid;
@@ -38,9 +37,22 @@
     --box-shadow: none;
 }
 
-.search-bar-desc {
-    display: flex;
-    justify-content: end;
+.grid-prop {
+    font-size: 10pt;
+}
+
+.student-button-prop {
+    font-size: 9pt;
+}
+
+.tip-prop {
+    box-shadow: none !important;
+}
+
+.table-prop {
+   color: black;
+   box-shadow: none !important;
+
 }
 
 .ttl-col {

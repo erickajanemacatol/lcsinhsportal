@@ -59,6 +59,7 @@ const UpdateAnnouncement: React.FC<UpdateAnnouncementProps> = ({
           <IonModal className='modal-des' isOpen={isOpen} onDidDismiss={onClose}>
             <div className='modal-view'>
               <center><h3><b>Update Announcement</b></h3></center>
+              <IonItemDivider />
               <div className='spacer-h-l' />
               Title
               <div className='spacer-h-xs' />

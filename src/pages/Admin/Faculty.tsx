@@ -1,21 +1,23 @@
 import {
     IonAccordion,
     IonAccordionGroup,
-    IonButton, IonButtons, IonCard, IonCardHeader, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput,
-    IonItem, IonLabel, IonList, IonModal, IonPage, IonRow, IonSelect, IonSelectOption, IonText, IonTitle, IonToolbar, useIonToast
+    IonButton, IonCard, IonCardHeader, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput,
+    IonItem, IonItemDivider, IonLabel, IonModal, IonPage, IonPopover, IonRow, IonSelect, IonSelectOption, IonText, IonTitle, IonToolbar, useIonToast
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import AdminHeader from "../../components/AdminHeader";
-import { addOutline, close, create, createOutline, trash } from "ionicons/icons";
+import { addOutline, archive, close, create, ellipsisHorizontal, refreshCircle, trash } from "ionicons/icons";
 import { useMediaQuery } from "react-responsive";
 import './Faculty.css'
 import axios from "axios";
+import { BiArchive, BiSolidArchive, BiSolidArchiveOut } from "react-icons/bi";
 
 interface FacultyModel {
     title: string,
     fname: string,
     lname: string,
     employee_no: number | null,
+    isArchived: number;
 }
 
 const Faculty: React.FC = () => {
@@ -23,14 +25,34 @@ const Faculty: React.FC = () => {
     const [presentToast, dismissToast] = useIonToast();
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [facultyList, setFacultyList] = useState<FacultyModel[]>([]); // Specify the type as an array of FacultyModel
-    const [showAddModal, setShowAddModal] = useState(false);
     const [currentEmployeeNo, setCurrentEmployeeNo] = useState<number | null>(null);
+    const [archivedFacultyModal, setArchivedfacultyModal] = useState(false);
+    const [archivedFacultyList, setArchivedFacultyList] = useState<FacultyModel[]>([]);
+    const [showPopover, setShowPopover] = useState<{ isOpen: boolean, event?: Event | undefined }>({ isOpen: false, event: undefined });
+    const [showPopoverArchived, setShowPopoverArchived] = useState<{ isOpen: boolean, event?: Event | undefined }>({ isOpen: false, event: undefined });
+
+    const openArchiveModal = () => {
+        setArchivedfacultyModal(true);
+
+        axios.get('https://studentportal.lcsinhs.com/scripts/faculty-archived-fetch.php')
+            .then((response) => {
+                setArchivedFacultyList(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    const closeArchiveModal = () => {
+        setArchivedfacultyModal(false);
+    };
 
     const [facultyInfo, setFacultyInfo] = useState<FacultyModel>({
         title: "",
         fname: "",
         lname: "",
         employee_no: null, // Initialize as 0 or the appropriate default value
+        isArchived: 0, // Initialize as 0 or the appropriate default value
     });
 
     const [updatedFacultyInfo, setUpdatedFacultyInfo] = useState<FacultyModel>({
@@ -38,6 +60,7 @@ const Faculty: React.FC = () => {
         fname: "",
         lname: "",
         employee_no: null, // Initialize as 0 or the appropriate default value
+        isArchived: 0, // Initialize as 0 or the appropriate default value
     });
 
 
@@ -58,8 +81,6 @@ const Faculty: React.FC = () => {
     };
 
     const openUpdateModal = (faculty: FacultyModel) => {
-        console.log("Opening update modal for faculty:", faculty);
-
         // Set the currentEmployeeNo state
         setCurrentEmployeeNo(faculty.employee_no);
 
@@ -69,12 +90,17 @@ const Faculty: React.FC = () => {
             fname: faculty.fname,
             lname: faculty.lname,
             employee_no: faculty.employee_no,
+            isArchived: 0,
         });
         setShowUpdateModal(true);
     };
 
+    const closeUpmodal = () => {
+        setShowUpdateModal(false);
+    }
+
     const handleSubmit = () => {
-        if (facultyInfo.title || !facultyInfo.fname || !facultyInfo.lname || !facultyInfo.employee_no) {
+        if (!facultyInfo.fname || !facultyInfo.lname || !facultyInfo.employee_no) {
             showToast('All fields are required.', 'danger');
             return;
         }
@@ -91,12 +117,9 @@ const Faculty: React.FC = () => {
             return;
         }
 
-        console.log(facultyInfo);
-
         // Make an HTTP POST request to your PHP script to insert faculty information.
         axios.post("https://studentportal.lcsinhs.com/scripts/faculty-add.php", facultyInfo)
             .then((response) => {
-                console.log("Faculty added successfully:", response.data);
                 showToast('Faculty Added', 'success');
 
                 // Fetch the updated list of faculty members
@@ -113,9 +136,8 @@ const Faculty: React.FC = () => {
                     fname: "",
                     lname: "",
                     employee_no: null,
+                    isArchived: 0,
                 });
-
-                setShowAddModal(false);
             })
             .catch((error) => {
                 console.error("Error adding faculty:", error);
@@ -132,8 +154,7 @@ const Faculty: React.FC = () => {
     };
 
     const handleUpdateFaculty = () => {
-        console.log('Updated Faculty Info:', updatedFacultyInfo);
-        if (!updatedFacultyInfo.title || !updatedFacultyInfo.fname || !updatedFacultyInfo.lname || currentEmployeeNo === null) {
+        if (!updatedFacultyInfo.fname || !updatedFacultyInfo.lname || currentEmployeeNo === null) {
             showToast('All fields are required.', 'danger');
             return;
         }
@@ -164,6 +185,83 @@ const Faculty: React.FC = () => {
         setShowUpdateModal(false);
     };
 
+    const archiveFaculty = (employee_no: any) => {
+        const confirmed = window.confirm('Are you sure you want to archive this faculty?');
+
+        if (confirmed) {
+            axios
+                .delete(`https://studentportal.lcsinhs.com/scripts/faculty-archive.php`, {
+                    data: { employee_no },
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then((response) => {
+                    if (response.data && response.data.success) {
+                        showToast(response.data.message || 'Faculty Archived', 'success');
+
+                        // Update both facultyList and archivedFacultyList to reflect the change
+                        const updatedFacultyList = facultyList.map((faculty) => {
+                            if (faculty.employee_no === employee_no) {
+                                return { ...faculty, isArchived: 1 };
+                            }
+                            return faculty;
+                        });
+
+                        const updatedArchivedFacultyList = archivedFacultyList.concat(
+                            facultyList.filter((faculty) => faculty.employee_no === employee_no)
+                        );
+
+                        setFacultyList(updatedFacultyList);
+                        setArchivedFacultyList(updatedArchivedFacultyList);
+                    } else {
+                        console.error('Archiving failed:', response.data);
+                        showToast(response.data.error || 'Faculty Archiving Failed', 'danger');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Axios Error:', error);
+                    showToast('Faculty Archiving Failed', 'danger');
+                });
+        }
+    };
+
+    const restoreFaculty = (employee_no: any) => {
+        const confirmed = window.confirm('Are you sure you want to restore this faculty?');
+
+        if (confirmed) {
+            axios
+                .delete(`https://studentportal.lcsinhs.com/scripts/faculty-restore.php`, {
+                    data: { employee_no },
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then((response) => {
+                    if (response.data && response.data.success) {
+                        showToast(response.data.message || 'Faculty Restored', 'success');
+
+                        // Update the facultyList to reflect the change
+                        const restoredFaculty = archivedFacultyList.find((faculty) => faculty.employee_no === employee_no);
+                        if (restoredFaculty) {
+                            setFacultyList((prevList) => [...prevList, restoredFaculty]);
+                        }
+
+                        // Remove the restored faculty from the archived list
+                        setArchivedFacultyList((prevList) => prevList.filter((faculty) => faculty.employee_no !== employee_no));
+                    } else {
+                        console.error('Restoring failed:', response.data);
+                        showToast(response.data.error || 'Faculty Restoring Failed', 'danger');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Axios Error:', error);
+                    showToast('Faculty Restoring Failed', 'danger');
+                });
+        }
+    };
+
+
     const deleteFaculty = (employee_no: any) => {
         const confirmed = window.confirm('Are you sure you want to delete this faculty?');
 
@@ -177,13 +275,13 @@ const Faculty: React.FC = () => {
                 })
                 .then((response) => {
                     if (response.data && response.data.success) {
-                        showToast('Faculty Deleted', 'success');
+                        showToast(response.data.message || 'Faculty Deleted', 'success');
                         // Filter out the deleted faculty from the facultyList
                         const updatedFacultyList = facultyList.filter((faculty) => faculty.employee_no !== employee_no);
                         setFacultyList(updatedFacultyList);
                     } else {
                         console.error('Deletion failed:', response.data);
-                        showToast('Faculty Deletion Failed', 'danger');
+                        showToast(response.data.error || 'Faculty Deletion Failed', 'danger');
                     }
                 })
                 .catch((error) => {
@@ -192,10 +290,6 @@ const Faculty: React.FC = () => {
                 });
         }
     };
-
-    const closeUpmodal = () => {
-        setShowUpdateModal(false);
-    }
 
     useEffect(() => {
         axios
@@ -222,6 +316,9 @@ const Faculty: React.FC = () => {
                                     Faculty List
                                 </IonLabel>
                             </div>
+                            <IonButton color={'medium'} shape="round" onClick={openArchiveModal}>
+                                Archived Faculty
+                            </IonButton>
                         </div>
 
                         <IonCard className="classes-card">
@@ -238,7 +335,7 @@ const Faculty: React.FC = () => {
                                             onIonChange={handleInputChange}
                                             interface="popover"
                                             justify="space-between"
-                                            label="Select Title"
+                                            label="Title (Optional):"
                                         >
                                             <IonSelectOption value=""></IonSelectOption>
                                             <IonSelectOption value="Ms.">Ms.</IonSelectOption>
@@ -284,76 +381,95 @@ const Faculty: React.FC = () => {
                             </IonGrid>
                         </IonCard>
 
-                        <IonGrid>
-                            <IonRow>
-                                <IonCol className="cell-class">
-                                    <IonText color={'dark'}>
-                                        <b>Faculty Name</b>
-                                    </IonText>
-                                </IonCol>
-                                <IonCol className="cell-class">
-                                    <IonText>
-                                        <b>Employee Number</b>
-                                    </IonText>
-                                </IonCol>
-                                <IonCol className="cell-class" size="2">
-                                    <IonText>
-                                        <b>Actions</b>
-                                    </IonText>
-                                </IonCol>
-                            </IonRow>
-
-                            {facultyList.map((faculty: FacultyModel) => (
-
-                                <IonRow key={faculty.employee_no} >
+                        <IonCard className="table-prop">
+                            <IonGrid>
+                                <IonRow>
                                     <IonCol className="cell-class">
                                         <IonText color={'dark'}>
-                                            {faculty.title} {faculty.fname} {faculty.lname}
+                                            <b>Faculty Name</b>
                                         </IonText>
                                     </IonCol>
                                     <IonCol className="cell-class">
-                                        <IonText>{faculty.employee_no}</IonText>
+                                        <IonText>
+                                            <b>Employee Number</b>
+                                        </IonText>
                                     </IonCol>
-                                    <IonCol size="2" className="cell-class">
-                                        <IonButton color={'primary'}
-                                            className="buttons-font-size"
-                                            onClick={() => {
-                                                const currentEmployeeNo = faculty.employee_no;
-                                                console.log('Employee Number:', currentEmployeeNo);
-                                                openUpdateModal(faculty);
-                                            }}> Update
-                                            <IonIcon slot="start" icon={create} />
-                                        </IonButton>
-                                        <IonButton
-                                            className="buttons-font-size"
-                                            color={'danger'}
-                                            onClick={() => {
-                                                console.log('Employee Number:', faculty.employee_no);
-                                                deleteFaculty(faculty.employee_no);
-                                            }}
-                                        > Delete
-                                            <div className="spacer-h-s" />
-                                            <IonIcon slot="start" icon={trash} />
-                                        </IonButton>
+                                    <IonCol className="cell-class" size="3">
+                                        <IonText>
+                                            <b>Actions</b>
+                                        </IonText>
                                     </IonCol>
-                                    <input type="hidden" value={faculty.employee_no !== null ? faculty.employee_no.toString() : ''} />
                                 </IonRow>
-                            ))}
-                        </IonGrid>
-                    </div>
 
+                                {facultyList.map((faculty: FacultyModel) => (
+                                    !faculty.isArchived && (
+                                        <IonRow key={faculty.employee_no} >
+                                            <IonCol className="cell-class">
+                                                <IonText color={'dark'}>
+                                                    {faculty.title} {faculty.fname} {faculty.lname}
+                                                </IonText>
+                                            </IonCol>
+                                            <IonCol className="cell-class">
+                                                <IonText>{faculty.employee_no}</IonText>
+                                            </IonCol>
+                                            <IonCol size="3" className="cell-class">
+                                                <IonButton color={'primary'}
+                                                    className="buttons-font-size"
+                                                    onClick={() => {
+                                                        openUpdateModal(faculty);
+                                                    }}> Update
+                                                    <IonIcon slot="start" icon={create} />
+                                                </IonButton>
+                                                <IonButton
+                                                    className="buttons-font-size"
+                                                    color={'tertiary'}
+                                                    onClick={() => {
+                                                        archiveFaculty(faculty.employee_no);
+                                                    }}
+                                                > Archive
+                                                    <IonIcon slot="start" icon={archive} />
+                                                </IonButton>
+                                                <IonButton
+                                                    className="buttons-font-size"
+                                                    color={'danger'}
+                                                    onClick={() => {
+                                                        deleteFaculty(faculty.employee_no);
+                                                    }}
+                                                > Delete
+                                                    <div className="spacer-h-s" />
+                                                    <IonIcon slot="start" icon={trash} />
+                                                </IonButton>
+                                            </IonCol>
+                                            <input type="hidden" value={faculty.employee_no !== null ? faculty.employee_no.toString() : ''} />
+                                        </IonRow>
+                                    )
+                                ))}
+                            </IonGrid>
+                        </IonCard>
+                    </div>
 
                 </IonContent>
             </> : <>
-                <IonContent>
 
+                {/*MOBILE*/}
+                <IonContent color={'light'}>
                     <div>
                         <div className="spacer-h-s" />
+                        <div className="options-col">
+                            <div className="att-margin">
+                            </div>
+                            <IonFab vertical="bottom" horizontal="end" slot="fixed">
+                                <IonFabButton color={'tertiary'} onClick={openArchiveModal}
+                                >
+                                    <BiSolidArchive size={20} />
+                                </IonFabButton>
+                            </IonFab>
+                        </div>
 
                         <div className="m-upload-cal-button">
                             <IonAccordionGroup>
                                 <IonAccordion value="first">
-                                    <IonItem slot="header" color="light">
+                                    <IonItem slot="header">
                                         <IonLabel>Add a Faculty</IonLabel>
                                     </IonItem>
                                     <div className="ion-padding" slot="content">
@@ -402,10 +518,10 @@ const Faculty: React.FC = () => {
                                         ></IonInput>
 
                                         {/*Submit Button*/}
+                                        <div className="spacer-h-xs" />
                                         <div className="m-add-button-pl">
                                             <IonButton color={'dark'} type="submit" onClick={handleSubmit}>
-                                                <IonIcon icon={addOutline} slot="start" />
-                                                Add
+                                                Submit
                                             </IonButton>
                                         </div>
                                     </div>
@@ -415,52 +531,61 @@ const Faculty: React.FC = () => {
 
                         <div className="spacer-h-s" />
 
-                        <IonGrid>
+                        <IonGrid className="grid-propsss">
                             <IonRow>
-                                <IonCol className="cell-class" size="1"></IonCol>
-                                <IonCol className="cell-class" size="4.5">Faculty Name</IonCol>
-                                <IonCol className="cell-class" size="4.5">Employee No.</IonCol>
-                                <IonCol className="cell-class">Actions</IonCol>
+                                <IonCol className="cell-class" size="5"><b>Faculty Name</b></IonCol>
+                                <IonCol className="cell-class" size="5"><b>Employee No.</b></IonCol>
+                                <IonCol className="cell-class"><b>Actions</b></IonCol>
                             </IonRow>
 
-                            {facultyList.map((faculty: FacultyModel, index) => (
-                                <IonRow key={faculty.employee_no}>
-                                    <IonCol className="cell-class"size="1">{index + 1}</IonCol>
-                                    <IonCol className="cell-class"size="4.5">
-                                        <IonText color={'dark'}>
-                                            {faculty.title} {faculty.fname} {faculty.lname}
-                                        </IonText>
-                                    </IonCol>
-                                    <IonCol className="cell-class"size="4.5">
-                                        <IonText>{faculty.employee_no}</IonText>
-                                    </IonCol>
-                                    <IonCol className="cell-class">
-                                        <IonRow>
-                                            <IonButton color={'primary'}
-                                                size="small"
-                                                onClick={() => {
-                                                    const currentEmployeeNo = faculty.employee_no;
-                                                    console.log('Employee Number:', currentEmployeeNo);
-                                                    openUpdateModal(faculty);
-                                                }}>
-                                                <IonIcon icon={create} />
-                                            </IonButton>
-                                            <IonButton
-                                                size="small"
-                                                color={'danger'}
-                                                onClick={() => {
-                                                    console.log('Employee Number:', faculty.employee_no);
-                                                    deleteFaculty(faculty.employee_no);
-                                                }}
-                                            >
-                                                <IonIcon icon={trash} />
-                                            </IonButton>
-                                        </IonRow>
+                            {facultyList.map((faculty: FacultyModel) => (
+                                !faculty.isArchived && (
+                                    <IonRow key={faculty.employee_no}>
+                                        <IonCol className="cell-class" size="5">
+                                            <IonText color={'dark'}>
+                                                {faculty.title} {faculty.fname} {faculty.lname}
+                                            </IonText>
+                                        </IonCol>
+                                        <IonCol className="cell-class" size="5">
+                                            <IonText>{faculty.employee_no}</IonText>
+                                        </IonCol>
+                                        <IonCol className="cell-class">
+                                            <IonRow>
+                                                <IonButton id="action-buttons" fill="clear"
+                                                    onClick={(e) => setShowPopover({ isOpen: true, event: e.nativeEvent })}
+                                                    color={'dark'} size="small"
+                                                >
+                                                    <IonIcon icon={ellipsisHorizontal} />
+                                                </IonButton>
 
-                                    </IonCol>
-                                    {/* Hidden input field to store the employee number */}
-                                    <input type="hidden" value={faculty.employee_no !== null ? faculty.employee_no.toString() : ''} />
-                                </IonRow>
+                                                <IonPopover
+                                                    side="bottom"
+                                                    isOpen={showPopover.isOpen}
+                                                    event={showPopover.event}
+                                                    onDidDismiss={() => setShowPopover({ isOpen: false, event: undefined })}
+                                                >
+                                                    <IonContent class="ion-padding">
+                                                        <IonButton color={'primary'} onClick={() => { openUpdateModal(faculty); }}>
+                                                            <IonIcon icon={create} slot="start" />
+                                                            Update
+                                                        </IonButton>
+                                                        <IonButton color={'tertiary'} onClick={() => { archiveFaculty(faculty.employee_no); }}>
+                                                            <IonIcon icon={archive} slot="start" />
+                                                            Archive
+                                                        </IonButton>
+                                                        <IonButton color={'danger'} onClick={() => { deleteFaculty(faculty.employee_no); }}>
+                                                            <IonIcon icon={trash} slot="start" />
+                                                            Delete
+                                                        </IonButton>
+                                                    </IonContent>
+                                                </IonPopover>
+
+                                            </IonRow>
+                                        </IonCol>
+                                        {/* Hidden input field to store the employee number */}
+                                        <input type="hidden" value={faculty.employee_no !== null ? faculty.employee_no.toString() : ''} />
+                                    </IonRow>
+                                )
                             ))}
                         </IonGrid>
                     </div>
@@ -469,73 +594,160 @@ const Faculty: React.FC = () => {
 
             {isDesktop ?
                 <>
-                    <IonModal isOpen={showUpdateModal} onDidDismiss={closeUpmodal}
+                    {/*UPDATE MODAL*/}
+                    <IonModal isOpen={showUpdateModal}
+                        onDidDismiss={closeUpmodal}
+                        className="modal-des"
                     >
-                        <IonContent>
-                            <IonHeader className="ion-no-border">
-                                <IonToolbar>
-                                    <IonTitle>Update Faculty Details</IonTitle>
-                                    <IonButton fill="clear" color={'dark'} onClick={closeUpmodal} slot="end">
-                                        <IonIcon slot="icon-only" icon={close} />
-                                    </IonButton>
-                                </IonToolbar>
-                            </IonHeader>
+                        <div className="modal-view">
+                            <center>
+                                <h3><b>Update Faculty Details</b></h3>
+                            </center>
+                            <IonItemDivider />
+                            <div className="spacer-h-m"></div>
+                            <div className="spacer-h-m"></div>
+
+                            <IonSelect
+                                fill="outline"
+                                name="title"
+                                value={updatedFacultyInfo.title}
+                                onIonChange={handleUpdateInputChange}
+                                interface="popover"
+                                justify="space-between"
+                                label="Title:"
+                                selectedText={updatedFacultyInfo.title}
+                            >
+                                <IonSelectOption value=""></IonSelectOption>
+                                <IonSelectOption value="Ms.">Ms.</IonSelectOption>
+                                <IonSelectOption value="Mrs.">Mrs.</IonSelectOption>
+                                <IonSelectOption value="Mr.">Mr.</IonSelectOption>
+                            </IonSelect>
+                            <div className="spacer-h-m"></div>
+
+                            <IonInput
+                                label="First Name:"
+                                fill="outline"
+                                name="fname"
+                                value={updatedFacultyInfo.fname}
+                                placeholder="First Name"
+                                onIonChange={handleUpdateInputChange}
+                            ></IonInput>
+                            <div className="spacer-h-m"></div>
+
+                            <IonInput
+                                label="Last Name:"
+                                fill="outline"
+                                name="lname"
+                                value={updatedFacultyInfo.lname}
+                                placeholder="Last Name"
+                                onIonChange={handleUpdateInputChange}
+                            ></IonInput>
+                            <div className="spacer-h-m"></div>
+
+                            <IonInput
+                                fill="outline"
+                                name="employee_no"
+                                type="number"
+                                label="Employee No.:"
+                                value={updatedFacultyInfo.employee_no}
+                                placeholder="Employee Number"
+                                onIonChange={handleUpdateInputChange}
+                            ></IonInput>
+                            <div className="spacer-h-m"></div>
+
+                            <div className="buttons-pref">
+                                <IonButton onClick={handleUpdateFaculty}>Update</IonButton>
+                                <div className="spacer-w-xxs" />
+                            </div>
+                        </div>
+                    </IonModal>
+
+                    {/*ARCHIVE MODAL*/}
+                    <IonModal className='modal-des'
+                        isOpen={archivedFacultyModal}
+                        onDidDismiss={closeArchiveModal}>
+                        <div className='modal-view'>
+                            <center>
+                                <h3><b>Archived Faculty</b></h3>
+                            </center>
+                            <IonItemDivider />
+
+                            <div className="spacer-h-m"></div>
 
                             <IonGrid>
-                                <IonCol>
-                                    <IonSelect
-                                        fill="outline"
-                                        name="title"
-                                        value={updatedFacultyInfo.title}
-                                        onIonChange={handleUpdateInputChange}
-                                        interface="popover"
-                                        justify="space-between"
-                                        label="Select Title"
-                                        selectedText={updatedFacultyInfo.title}
-                                    >
-                                        <IonSelectOption value=""></IonSelectOption>
-                                        <IonSelectOption value="Ms.">Ms.</IonSelectOption>
-                                        <IonSelectOption value="Mrs.">Mrs.</IonSelectOption>
-                                        <IonSelectOption value="Mr.">Mr.</IonSelectOption>
-                                    </IonSelect>
-                                </IonCol>
-                                <IonCol>
-                                    <IonInput
-                                        label="First Name:"
-                                        fill="outline"
-                                        name="fname"
-                                        value={updatedFacultyInfo.fname}
-                                        placeholder="First Name"
-                                        onIonChange={handleUpdateInputChange}
-                                    ></IonInput>
-                                </IonCol>
-                                <IonCol>
-                                    <IonInput
-                                        label="Last Name:"
-                                        fill="outline"
-                                        name="lname"
-                                        value={updatedFacultyInfo.lname}
-                                        placeholder="Last Name"
-                                        onIonChange={handleUpdateInputChange}
-                                    ></IonInput>
-                                </IonCol>
-                                <IonCol>
-                                    <IonInput
-                                        fill="outline"
-                                        name="employee_no"
-                                        type="number"
-                                        label="Employee No.:"
-                                        value={updatedFacultyInfo.employee_no}
-                                        placeholder="Employee Number"
-                                        onIonChange={handleUpdateInputChange}
-                                    ></IonInput>
-                                </IonCol>
-                                <div className="buttons-pref">
-                                    <IonButton onClick={handleUpdateFaculty}>Update</IonButton>
-                                    <div className="spacer-w-xxs" />
-                                </div>
+                                <IonRow>
+                                    <IonCol className="cell-class">
+                                        <IonText color={'dark'}>
+                                            <b>Faculty Name</b>
+                                        </IonText>
+                                    </IonCol>
+                                    <IonCol className="cell-class">
+                                        <IonText>
+                                            <b>Employee Number</b>
+                                        </IonText>
+                                    </IonCol>
+                                    <IonCol className="cell-class" size="3.5">
+                                        <IonText>
+                                            <b>Actions</b>
+                                        </IonText>
+                                    </IonCol>
+                                </IonRow>
+
+                                {archivedFacultyList.map((faculty: FacultyModel) => (
+
+                                    <IonRow key={faculty.employee_no} >
+                                        <IonCol className="cell-class">
+                                            <IonText color={'dark'}>
+                                                {faculty.title} {faculty.fname} {faculty.lname}
+                                            </IonText>
+                                        </IonCol>
+                                        <IonCol className="cell-class">
+                                            <IonText>{faculty.employee_no}</IonText>
+                                        </IonCol>
+                                        <IonCol size="3.5" className="cell-class">
+                                            <IonButton color={'primary'}
+                                                onClick={() => { openUpdateModal(faculty); }}
+                                                title="Update"
+                                                size="small"
+                                                fill="clear"
+                                            >
+                                                <IonIcon slot="icon-only" icon={create} />
+                                            </IonButton>
+
+                                            <IonButton
+                                                color={'tertiary'}
+                                                onClick={() => { restoreFaculty(faculty.employee_no); }}
+                                                title="Restore"
+                                                size="small"
+                                                fill="clear"
+                                            >
+                                                <IonIcon slot="icon-only" icon={refreshCircle} />
+                                            </IonButton>
+
+                                            <IonButton
+                                                color={'danger'}
+                                                onClick={() => { deleteFaculty(faculty.employee_no); }}
+                                                title="Delete"
+                                                size="small"
+                                                fill="clear"
+                                            >
+                                                <IonIcon slot="icon-only" icon={trash} />
+                                            </IonButton>
+                                        </IonCol>
+                                        <input type="hidden" value={faculty.employee_no !== null ? faculty.employee_no.toString() : ''} />
+                                    </IonRow>
+
+                                ))}
                             </IonGrid>
-                        </IonContent>
+
+                            {/* Check if there are no archived faculty */}
+                            {archivedFacultyList.length === 0 && (
+                                <>
+                                    <div className="spacer-h-s" />
+                                    <IonText><center>No archived faculty.</center></IonText>
+                                </>
+                            )}
+                        </div>
                     </IonModal>
                 </> : <>
                     <IonModal isOpen={showUpdateModal}
@@ -612,7 +824,117 @@ const Faculty: React.FC = () => {
                             </IonGrid>
                         </IonContent>
                     </IonModal>
+
+                    {/*ARCHIVE MODAL*/}
+                    <IonModal
+                        isOpen={archivedFacultyModal}
+                        onDidDismiss={closeArchiveModal}
+                        className="m-modal-props"
+                        initialBreakpoint={0.80}
+                        breakpoints={[0.5, 0.75, 1]}
+                        backdropDismiss={true}
+                        backdropBreakpoint={0.5}
+                    >
+                        <div className='modal-view'>
+                            <center>
+                                <h3><b>Archived Faculty</b></h3>
+                            </center>
+                            <IonItemDivider />
+
+                            <div className="spacer-h-m"></div>
+
+                            <IonGrid className="grid-propsss">
+                                <IonRow>
+                                    <IonCol className="cell-class" size="5">
+                                        <IonText color={'dark'}>
+                                            <b>Faculty Name</b>
+                                        </IonText>
+                                    </IonCol>
+                                    <IonCol className="cell-class" size="5">
+                                        <IonText>
+                                            <b>Employee No.</b>
+                                        </IonText>
+                                    </IonCol>
+                                    <IonCol className="cell-class">
+                                        <IonText>
+                                            <b>Actions</b>
+                                        </IonText>
+                                    </IonCol>
+                                </IonRow>
+
+                                {archivedFacultyList.map((faculty: FacultyModel) => (
+
+                                    <IonRow key={faculty.employee_no} >
+                                        <IonCol className="cell-class" size="5">
+                                            <IonText color={'dark'}>
+                                                {faculty.title} {faculty.fname} {faculty.lname}
+                                            </IonText>
+                                        </IonCol>
+                                        <IonCol className="cell-class" size="5">
+                                            <IonText>{faculty.employee_no}</IonText>
+                                        </IonCol>
+                                        <IonCol className="cell-class" >
+                                            <IonRow>
+                                                <IonButton fill="clear"
+                                                    onClick={(e) => setShowPopoverArchived({ isOpen: true, event: e.nativeEvent })}
+                                                    color={'dark'} size="small"
+                                                >
+                                                    <IonIcon icon={ellipsisHorizontal} />
+                                                </IonButton>
+
+
+                                                <IonPopover
+                                                    side="bottom"
+                                                    isOpen={showPopoverArchived.isOpen}
+                                                    event={showPopoverArchived.event}
+                                                    onDidDismiss={() => setShowPopoverArchived({ isOpen: false, event: undefined })}
+                                                >
+                                                    <IonContent class="ion-padding">
+                                                        <IonButton color={'primary'}
+                                                            onClick={() => { openUpdateModal(faculty); }}
+                                                            title="Update"
+                                                        >Update
+                                                            <IonIcon slot="start" icon={create} />
+                                                        </IonButton>
+
+                                                        <IonButton
+                                                            color={'tertiary'}
+                                                            onClick={() => { restoreFaculty(faculty.employee_no); }}
+                                                            title="Restore"
+                                                        >Restore
+                                                            <IonIcon slot="start" icon={refreshCircle} />
+                                                        </IonButton>
+
+                                                        <IonButton
+                                                            color={'danger'}
+                                                            onClick={() => { deleteFaculty(faculty.employee_no); }}
+                                                            title="Delete"
+                                                        >Delete
+                                                            <IonIcon slot="start" icon={trash} />
+                                                        </IonButton>
+                                                    </IonContent>
+                                                </IonPopover>
+
+
+                                            </IonRow>
+                                        </IonCol>
+                                        <input type="hidden" value={faculty.employee_no !== null ? faculty.employee_no.toString() : ''} />
+                                    </IonRow>
+
+                                ))}
+                            </IonGrid>
+
+                            {/* Check if there are no archived faculty */}
+                            {archivedFacultyList.length === 0 && (
+                                <>
+                                    <div className="spacer-h-s" />
+                                    <IonText><center>No archived faculty.</center></IonText>
+                                </>
+                            )}
+                        </div>
+                    </IonModal>
                 </>}
+
         </IonPage>
     );
 };

@@ -213,13 +213,13 @@ const Calendar: React.FC = () => {
 
                 </> : <>
                     {/*MOBILE*/}
-                    <IonContent>
+                    <IonContent color={'light'}>
                         <div className="spacer-h-xs"></div>
 
                         <div className="m-upload-cal-button">
                             <IonAccordionGroup>
                                 <IonAccordion value="first">
-                                    <IonItem slot="header" color="light">
+                                    <IonItem slot="header">
                                         <IonLabel>Add Event</IonLabel>
                                     </IonItem>
                                     <div className="ion-padding" slot="content">
@@ -271,20 +271,20 @@ const Calendar: React.FC = () => {
                                         return (
                                             <div key={event.cal_id}>
                                                 {index === 0 || (prevEventDate && currentDate.getMonth() !== prevEventDate.getMonth()) ? (
-                                                    <h3 className="month-year">{getFormattedMonth(currentDate)}</h3>
+                                                    <h4>{getFormattedMonth(currentDate)}</h4>
                                                 ) : null}
 
                                                 <IonItem>
                                                     <IonLabel>
-                                                        <h2>{event.event_name}</h2>
-                                                        <p>{event.description}</p>
-                                                        <p>Start Date: {getFormattedDate(event.start_date)}</p>
+                                                        <h4>{event.event_name}</h4>
+                                                        <h5>{event.description}</h5>
+                                                        <h5>Start: {getFormattedDate(event.start_date)}</h5>
                                                         {event.end_date ? (
-                                                            <p>End Date: {getFormattedDate(event.end_date)}</p>
+                                                            <h5>End: {getFormattedDate(event.end_date)}</h5>
                                                         ) : null}
                                                     </IonLabel>
-                                                    <IonButton fill="clear" color="danger" onClick={() => handleDeleteEvent(event.cal_id)}>
-                                                        Delete
+                                                    <IonButton slot="end" fill="clear" color="danger" onClick={() => handleDeleteEvent(event.cal_id)}>
+                                                        <IonIcon icon={trash}/>
                                                     </IonButton>
                                                 </IonItem>
                                             </div>

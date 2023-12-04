@@ -167,10 +167,14 @@ const Profile = () => {
         const schedule_link = userData.class_schedule;
 
         // Open a new window to display the image
-        const viewUrl = `https://studentportal.lcsinhs.com/schedule_imgs/${schedule_link}`;
-        window.open(viewUrl, '_blank');
-    };
 
+        const viewUrl = `https://studentportal.lcsinhs.com/schedule_imgs/${schedule_link}`;
+        if (schedule_link) {
+            window.open(viewUrl, '_blank');
+        } else {
+            window.alert("No schedule available.");
+        }
+    };
 
     //FOR SURVEY
 
@@ -744,7 +748,7 @@ const Profile = () => {
                                 <div className="spacer-h-m" />
                                 <IonLabel>Upload 1x1 Picture:</IonLabel>
                             </div>
-                            
+
                             <div>
                                 <IonItem>
                                     <label htmlFor="avatar"></label>

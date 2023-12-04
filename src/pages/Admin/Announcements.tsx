@@ -292,6 +292,7 @@ const Announcements: React.FC = () => {
                             <center>
                                 <h3><b>Create Announcement</b></h3>
                             </center>
+                            <IonItemDivider />
 
                             <div className="spacer-h-m"></div>
                             <div className="spacer-h-m"></div>
@@ -333,10 +334,7 @@ const Announcements: React.FC = () => {
                                 </IonButton>
                             </div>
                         </div>
-
                     </IonModal>
-
-
                 </> : <>
                     {/*MOBILE*/}
                     <IonModal
