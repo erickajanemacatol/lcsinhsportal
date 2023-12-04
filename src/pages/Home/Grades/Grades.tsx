@@ -106,6 +106,7 @@ const Grades = () => {
             const teacherPromises = subjects.map((subject) => (
                 axios.get(`https://studentportal.lcsinhs.com/scripts/teachers-fetch.php?subject_code=${subject.subject_code}`)
                     .then((teacherResponse) => {
+                        console.log('teachers: ', teacherResponse)
                         return { subjectCode: subject.subject_code, teachers: teacherResponse.data };
                     })
                     .catch((error) => {
@@ -238,9 +239,6 @@ const Grades = () => {
 
                                         {subjects.map((subject: GradeData, subjectIndex) => (
                                             <IonRow key={subjectIndex}>
-
-
-
                                                 {gradeLevel && gradeLevel >= 7 && gradeLevel <= 10 ? (
                                                     <>
                                                         <IonCol class="col-border" size="5">
@@ -248,12 +246,12 @@ const Grades = () => {
                                                         </IonCol>
 
                                                         <IonCol class="col-border" size="3">
-                                                            {(teachers[subject.subject_code] ?? []).map((teacher, teacherIndex) => (
-                                                                <div key={teacherIndex}>{teacher.teacher_name || "-"}</div>
+                                                            {(teachers[subject.subject_code] || []).map((teacher, teacherIndex) => (
+                                                                <div key={teacherIndex}>{teacher.teacher_name || "Unassigned"}</div>
                                                             ))}
                                                         </IonCol>
 
-                                                        {['q1', 'q2', 'q3', 'q4'].map((quarter, quarterIndex) => (
+                                                        {["q1", "q2", "q3", "q4"].map((quarter, quarterIndex) => (
                                                             <IonCol className="col-border" key={quarterIndex}>
                                                                 {grades
                                                                     .filter((g) => g.subject_code === subject.subject_code)
@@ -265,42 +263,41 @@ const Grades = () => {
                                                             </IonCol>
                                                         ))}
                                                     </>
-                                                ) :
-                                                    (
-                                                        <>
-                                                          <IonCol className="cell-class" size="1.5">
-                                                                <IonText>
-                                                                    {subject.semester === 1
-                                                                        ? <IonText color={'success'}>1st </IonText>
-                                                                        : subject.semester === 2
-                                                                            ? <IonText color={'primary'}>2nd </IonText>
-                                                                            : null
-                                                                    }
-                                                                </IonText>
-                                                            </IonCol>
-                                                            <IonCol class="col-border" size="5">
-                                                                {subject.subject_name}
-                                                            </IonCol>
+                                                ) : (
+                                                    <>
+                                                        <IonCol className="cell-class" size="1.5">
+                                                            <IonText>
+                                                                {subject.semester === 1 ? (
+                                                                    <IonText color={"success"}>1st </IonText>
+                                                                ) : subject.semester === 2 ? (
+                                                                    <IonText color={"primary"}>2nd </IonText>
+                                                                ) : null}
+                                                            </IonText>
+                                                        </IonCol>
+                                                        <IonCol class="col-border" size="5">
+                                                            {subject.subject_name}
+                                                        </IonCol>
 
-                                                            <IonCol class="col-border" size="4">
-                                                                {(teachers[subject.subject_code] ?? []).map((teacher, teacherIndex) => (
-                                                                    <div key={teacherIndex}>{teacher.teacher_name || "-"}</div>
+                                                        <IonCol class="col-border" size="4">
+                                                            {(teachers[subject.subject_code] || []).map((teacher, teacherIndex) => (
+                                                                <div key={teacherIndex}>{teacher.teacher_name || "Unassigned"}</div>
+                                                            ))}
+                                                        </IonCol>
+                                                        <IonCol className="col-border">
+                                                            {grades
+                                                                .filter((g) => g.subject_code === subject.subject_code)
+                                                                .map((grade, gradeIndex) => (
+                                                                    <div key={gradeIndex}>
+                                                                        {/* Replace with the appropriate property for SHS grading */}
+                                                                        {grade.grades.grade !== null ? grade.grades.grade : "-"}
+                                                                    </div>
                                                                 ))}
-                                                            </IonCol>
-                                                            <IonCol className="col-border">
-                                                                {grades
-                                                                    .filter((g) => g.subject_code === subject.subject_code)
-                                                                    .map((grade, gradeIndex) => (
-                                                                        <div key={gradeIndex}>
-                                                                            {/* Replace with the appropriate property for SHS grading */}
-                                                                            {grade.grades.grade !== null ? grade.grades.grade : "-"}
-                                                                        </div>
-                                                                    ))}
-                                                            </IonCol>
-                                                        </>
-                                                    )}
+                                                        </IonCol>
+                                                    </>
+                                                )}
                                             </IonRow>
                                         ))}
+
                                     </IonGrid>
                                 </div>
                             </IonCardContent>
